@@ -1,0 +1,21 @@
+{block #title}Chyba{/block}
+
+{block #content}
+
+<div class="page-header">
+	<h1>{_sales_funnel.frontend.cancel_page.title}</h1>
+	<p class="lead">
+		{_sales_funnel.frontend.cancel_page.message}
+	</p>
+</div>
+
+<div class="row">
+	<div class="col-md-12">
+		<a target="_top" href="{plink :SalesFunnel:SalesFunnelFrontend:show
+    	    funnel => $funnel->url_key,
+    	    referer => $payment->referer,
+    	    payment_gateway_id => $payment->payment_gateway_id,
+    	    subscription_type_id => $payment->subscription_type_id,
+        }" class="btn btn-primary">{_sales_funnel.frontend.cancel_page.back}</a>
+	</div>
+</div>

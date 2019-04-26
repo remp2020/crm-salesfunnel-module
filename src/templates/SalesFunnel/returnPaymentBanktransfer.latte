@@ -1,0 +1,38 @@
+{block #title}{_payments.frontend.banktransfer.title}{/block}
+
+{block #content}
+
+{php $params = ['payment' => $payment, 'note' => $note]; }
+
+<div class="page-header">
+	<h1>{_payments.frontend.banktransfer.title}</h1>
+	<p class="lead">
+		{_payments.frontend.banktransfer.lead}
+	</p>
+</div>
+
+<div class="row">
+	<div class="col-md-8">
+		<blockquote>
+			<p class="lead">
+				{_payments.frontend.banktransfer.account_number}: {$bankNumber}
+				{if !empty($bankIban)}
+					(IBAN: {$bankIban}{if $bankSwift} SWIFT: {$bankSwift}{/if})
+				{/if}
+				<br><br>
+				{_payments.frontend.banktransfer.amount}: <strong>{$payment->amount|price}</strong><br>
+				{_payments.frontend.banktransfer.variable_symbol}: <strong>{$payment->variable_symbol}</strong><br>
+				{_payments.frontend.banktransfer.recipient_message}: <strong>{$note}</strong><br>
+			</p>
+		</blockquote>
+
+		<p class="text-muted">
+			{_payments.frontend.banktransfer.delay_info}
+		</p>
+
+		<h3>{_payments.frontend.banktransfer.thank_you}</h3>
+	</div>
+	<div class="col-md-4" style="max-height: 280px;">
+		{control simpleWidget 'payments.banktransfer.right', $params}
+	</div>
+</div>

@@ -1,0 +1,40 @@
+<div class="col-md-10">
+    <table class="table table-striped table-hover table-bordered">
+        <thead>
+        <tr>
+            <th>#ID</th>
+            <th>{_sales_funnel.admin.distribution.email}</th>
+            <th>{_sales_funnel.admin.distribution.source}</th>
+            <th>{_sales_funnel.admin.distribution.status}</th>
+            <th>{_sales_funnel.admin.distribution.created_at}</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr n:foreach="$users as $u">
+            <td class="text-muted">{$u->id}</td>
+            <td>
+                <a n:href=":Users:UsersAdmin:show $u->id">
+                    {$u->email}
+                </a>
+                <span n:if="$u->is_institution" class="label label-danger">{_sales_funnel.admin.distribution.institution}</span>
+                <span n:if="$u->role === \Crm\UsersModule\Repository\UsersRepository::ROLE_ADMIN" class="label label-warning">admin</span>
+                {control simpleWidget 'admin.user.list.emailcolumn', $u}
+            </td>
+            <td class="text-muted">{$u->source}</td>
+            <td>
+                {$u->active|activelabel|noescape}
+            </td>
+            <td>
+              <span class="text-muted">
+                <small>
+                  <i n:if="$u->confirmed_at" class="text-success fa fa-check fa-fw"></i>
+                  <i n:if="!$u->confirmed_at" class="text-danger fa fa-times fa-fw"></i>
+                </small>
+                  {$u->created_at|userDate}
+                  <small n:if="$u->current_sign_in_ip">/ {$u->current_sign_in_ip}</small>
+              </span>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>

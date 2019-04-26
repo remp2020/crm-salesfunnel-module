@@ -1,0 +1,38 @@
+services:
+	moduleManager:
+		setup:
+			- addModule(Crm\SalesFunnelModule\SalesFunnelModule())
+
+	paymentCompleteRedirect:
+	 	class: Crm\SalesFunnelModule\Model\PaymentCompleteRedirectManager
+
+
+	sales_route:
+		class: Crm\SalesFunnelModule\SalesFunnelRoute
+		autowired: no
+
+	- Crm\SalesFunnelModule\Api\ListPaymentsPublicMetaHandler
+	- Crm\SalesFunnelModule\Api\TrackStatsHandler
+	- Crm\SalesFunnelModule\Components\NewSubscriptionWidget
+	- Crm\SalesFunnelModule\Components\SubscriptionTypesInSalesFunnelsWidget
+	- Crm\SalesFunnelModule\Components\FinishRegistrationWidget
+	- Crm\SalesFunnelModule\Components\WindowPreviewControlFactoryInterface
+	- Crm\SalesFunnelModule\Components\AmountDistributionWidget
+	- Crm\SalesFunnelModule\Components\AmountDistributionWidgetFactory
+	- Crm\SalesFunnelModule\Components\PaymentDistributionWidget
+	- Crm\SalesFunnelModule\Components\PaymentDistributionWidgetFactory
+	- Crm\SalesFunnelModule\Components\DaysFromLastSubscriptionDistributionWidget
+	- Crm\SalesFunnelModule\Components\DaysFromLastSubscriptionDistributionWidgetFactory
+	- Crm\SalesFunnelModule\Components\SalesFunnelUserListingWidget
+	- Crm\SalesFunnelModule\DataProvider\PaymentsAdminFilterFormDataProvider
+	- Crm\SalesFunnelModule\Distribution\SubscriptionDaysDistribution
+	- Crm\SalesFunnelModule\Events\PaymentStatusChangeHandler
+	- Crm\SalesFunnelModule\Events\SalesFunnelHandler
+	- Crm\SalesFunnelModule\Forms\SalesFunnelAdminFormFactory
+	- Crm\SalesFunnelModule\Repository\SalesFunnelsRepository
+	- Crm\SalesFunnelModule\Repository\SalesFunnelsSubscriptionTypesRepository
+	- Crm\SalesFunnelModule\Repository\SalesFunnelsPaymentGatewaysRepository
+	- Crm\SalesFunnelModule\Repository\SalesFunnelsStatsRepository
+	- Crm\SalesFunnelModule\Repository\SalesFunnelsMetaRepository
+	- Crm\SalesFunnelModule\SalesFunnelsCache(%redis.host%, %redis.port%)
+	- Crm\SalesFunnelModule\Seeders\ConfigsSeeder

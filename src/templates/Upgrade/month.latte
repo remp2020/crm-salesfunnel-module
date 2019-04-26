@@ -1,0 +1,173 @@
+{block #headstart}
+
+{/block}
+
+
+{block #content}
+
+<link href="https://fonts.googleapis.com/css?family=Open+Sans:300&subset=latin-ext" rel="stylesheet">
+
+<style>
+    .upgrade {
+        /* background-image: url("/layouts/dennikn/images/upgrade_background_pattern.png"); */
+        background-repeat: repeat-x;
+        background-color: #ffffff;
+        padding-top:0px;
+        font-family: 'Open Sans', sans-serif;
+    }
+    .header img {
+        width: 100%;
+        margin: 15px 0;
+    }
+    .upgrade h1 {
+        font-size: 26px;
+        margin:0;
+        padding-top: 40px;
+    }
+    .upgrade .header {
+        margin-bottom: 20px;
+    }
+    .upgrade .btn {
+        border-radius: 0;
+        font-weight: bold;
+        font-size: 19px;
+    }
+    .upgrade .btn-outline {
+        border: 2px solid #c4c4c4;
+        color: black;
+        padding: 5px 30px;
+        margin-top: 10px;
+    }
+    .upgrade .btn-buy {
+        background-color: #46b864;
+        color:white;
+        padding: 15px 25px;
+    }
+    .upgrade a.btn-buy:hover {
+        text-decoration: underline;
+    }
+    .upgrade .image {
+        margin-top: 20px;
+        margin-bottom:20px;
+        border-radius: 0;
+    }
+    .upgrade .image img {
+        max-width: 680px;
+    }
+    .upgrade .buttons {
+        margin-bottom:40px;
+    }
+    .upgrade .image img {
+        width: 100%;
+    }
+
+    .upgrade .upgrade-description {
+    {* padding-top: 60px; *}
+    }
+
+    @media screen and (max-width: 760px) {
+        .upgrade .btn  {
+            font-size: 15px;
+        }
+    }
+
+    @media screen and (max-width: 736px) {
+        .upgrade .btn  {
+            font-size: 15px;
+        }
+        .upgrade .btn-buy, .upgrade .btn-outline {
+            padding: 10px 20px;
+            white-space: normal;
+        }
+        .upgrade .btn-outline {
+            padding: 5px 15px;
+        }
+        .upgrade .header {
+            margin-bottom: 0;
+        }
+        .buttons .text-right {
+            text-align: center;
+        }
+        .buttons .col-xs-12 {
+            margin-bottom: 10px;
+        }
+        .buttons .col-xs-12 {
+            text-align:center;
+        }
+    }
+
+</style>
+
+{var $actualSubscription = $upgrade->getSubscription()}
+
+<div class="container upgrade">
+    {control snippet 'upgrade-header'}
+
+    <div n:if="!$upgrade->canUpgrade()" class="alert alert-danger text-center"><h3 class="margin-top margin-bottom-lg"><i class="fa fa-meh-o"></i> {$upgrade->getMessage()|noescape}</h3></div>
+
+    <div n:if="$upgrade->canUpgrade()" class="row buttons">
+        {foreach $upgrade->getAvailableUpgraders() as $upgrader}
+            {var $upgradeSubscriptionType = $upgrader->getToSubscriptionType()}
+            {var $price = $upgrader->getChargePrice()}
+
+            <div class="buttons row">
+                <div class="col-md-6 col-sm-6 col-xs-12 text-right">
+
+                    <form method="get" action="{link monthUpgrade}" target="_parent">
+
+                        <input type="hidden" name="service" value="{$service}">
+                        <input type="hidden" name="subscription_type" value="{$upgradeSubscriptionType->id}">
+
+                        <button name="submit" type="submit" class="btn btn-large btn-buy text-right">
+                            {_sales_funnel.frontend.upgrade.subscription.confirm_modal.submit} {if $price > 0}({$price|price}){/if}
+                        </button>
+
+                        <div n:if="in_array($upgrader->getType(),  ['paid_extend', 'special'])" class="col-md-12">
+                            <div id="payment-types" class="col-md-8 text-left pull-right">
+                                <div class="row">
+                                    <h4>{_sales_funnel.frontend.upgrade.subscription.select_payment_gateway}</h4>
+                                </div>
+                                {foreach $upgrade->getPaymentGateways() as $gatewayWrapper}
+                                    <div class="row">
+                                        <label class="radio-inline payment-type {$gatewayWrapper->gateway->code}">
+                                            <input type="radio" value="{$gatewayWrapper->gateway->id}"
+                                                   name="payment_gateway"> {$gatewayWrapper->description|noescape}
+                                        </label>
+                                    </div>
+                                {/foreach}
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <a href="{$cmsUrl}" class="btn btn-outline"
+                       target="_top">{_sales_funnel.frontend.upgrade.subscription.back}</a>
+                </div>
+            </div>
+
+            <div class="row">
+
+                <div class="col-md-12 text-center upgrade-description">
+                    {include "subscriptionInfoText.latte" upgrader=>$upgrader, upgrade=>$upgrade}
+                </div>
+            </div>
+
+            {breakIf 1 == 1}
+        {/foreach}
+    </div>
+
+    <div n:if="$upgrade->canUpgrade()" class="row">
+        <div class="col-md-12 text-center">
+
+            <hr>
+            <p n:if="$actualSubscription" class="text-muted">
+                {_sales_funnel.frontend.upgrade.subscription.actual_subscription} {$actualSubscription->subscription_type|typeContent|noescape}
+                ({$actualSubscription->start_time|userDate} - {$actualSubscription->end_time|userDate})
+            </p>
+        </div>
+    </div>
+
+</div>
+
+<script type="text/javascript" src="/layouts/default/js/iframeResizer.contentWindow.min.js"></script>

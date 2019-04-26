@@ -1,0 +1,164 @@
+menu:
+	sales_funnels: Okná
+
+data:
+	sales_funnels:
+		fields:
+			name: Názov
+			url_key: Url
+			is_active: Aktívny
+			segment_id: Segment
+			start_at: Platný od
+			end_at: Platný do
+			body: HTML obsah
+			no_access_html: HTML stránka pre nedovolený prístup
+			error_html: HTML stránka pre chybový výpis
+			head: Kód HTML do hlavičky
+			created_at: Vytvorený
+			payment_gateway: Platobné brány
+			subscription_type: Typy predplatných
+			total_show: Celkovo zobrazení
+			total_conversions: Počet konverzii
+			total_paid_amount: Celkovo zaplatené
+			total_errors: Počet chýb
+			last_use: Posledné použitie
+			last_conversion: Posledná konverzia
+			only_logged: Iba prihlásení
+			only_not_logged: Iba neprihlásení
+			segment: Segment
+		placeholder:
+			name: napríklad Špeciálna zimná akcia
+			url_key: napríklad 'winter-sale'
+			start_at: napríklad 14.2.2016
+			end_at: napríklad 14.2.2016
+			body: ľubovoľné html
+
+frontend:
+	error:
+		title: Chyba
+	inactive:
+		title: Neaktívne
+	invalid:
+		title: Chybný vstup
+	no_access:
+		title: Nemáte prístup
+	sign_in:
+		title: Pre využitie tejto akcie sa musíte prihlásiť
+	success_page:
+		title: Ďakujeme!
+		payment_success: Vaša platba prebehla v poriadku
+		zlavomat_success: Zľavomat kupón bol úspešne použitý. Vaša objednávka prebehla v poriadku.
+		pass_sent: Heslo sme vám poslali e-mailom na %email%.
+		foreign_country: "Pre informácie o doručení do zahraničia nás, prosím, kontaktujte na <a href=\"mailto:%contactEmail%\">%contactEmail%</a>"
+		complete_registration: Dokončenie registrácie
+		complete_registration_info: "Ak ste vyplnili všetky údaje, dokončite registráciu<br> prejdite na nastavenia e-mail newslettru."
+	error_page:
+		title: Chyba
+		message: "Bohužiaľ, vaša platba nebola úspešná."
+		reason_default: "Prosím, skúste ju zopakovať ešte raz alebo kontaktujte našu technickú podporu."
+	cancel_page:
+		title: Platba zrušená
+		message: "Vaša platba bola zrušená. Toto okno môžete zavrieť alebo pokračovať na ponuku predplatného."
+		reason_default: "Späť na ponuku"
+	not_settled_page:
+		title: Platba nezúčtovaná
+		message: "Platba bola realizovaná počas technickej prestávky banky prevádzkujúcej platobnú bránu a nie je možné potvrdiť jej stav. Platba bude potvrdená hneď, ako nám ju potvrdí banka."
+	invalid_email:
+		title: Zadaný email nie je platný
+	invalid_credentials:
+		title: Nepodarilo sa prihlásiť so zadaným heslom
+	disabled_auto_login:
+	    title: Vypnuté automatické prihlasovanie po zaplatení pre admin usera
+	upgrade:
+		error:
+			title: Chyba
+			message: Vaše predplatné sa nepodarilo zmeniť. Prosím kontaktujte zákaznícku podporu.
+			my_subscriptions: Moje predplatné
+			not_available: 'Aktuálne nemáte žiadne predplatné alebo nie ste prihlásený. Prosím, <a target="_top" href="/sign/in">prihláste sa</a> alebo si vyberte z našej <a href="/" target="_top">ponuky predplatných</a>.'
+			no_base_payment: 'Prechod na vyšší balíček predplatného z vášho konta nie je možné vykonať automaticky, prosím, napíšte nám na info@dennikn.sk a radi vám pomôžeme.'
+			already_upgraded: 'Tento vyšší balíček predplatného už teraz máte aktívny, upgrade cez túto stránku teda nie je potrebný.'
+			no_upgrade_possible: 'Váš aktuálny typ predplatného nie je možné zmeniť na vyšší typ.'
+			card_expiring: 'Vaša karta ma blízku dobu expirácie. Nie je možné zmeniť na vyšší typ.'
+			choose_gateway: Pre pokračovanie musíte vybrať spôsob platby.
+		success: Vaše predplatné bolo úspešne zmenené
+		payment_gateway_timeout: Platobná brána je dočasne nedostupná. Prosím opakujte akciu neskôr.
+		subscription:
+			confirm_modal:
+				title: Prejsť na vyšší balíček?
+				submit: "Áno, prejsť na vyšší balíček"
+				close: Zatvoriť
+			select_payment_gateway: Vyberte spôsob platby
+			back: Späť na titulku
+			actual_subscription: Vaše aktuálne predplatné obsahuje
+		subscription_info:
+			actual_subscription: Aktuálne máte zakúpený pristup za
+			valid_to: platný do
+			short_confirmation: "Ak potvrdíte prechod na vyššie predplatné s aplikáciami, dnešné predplatné vám „rozmeníme“ na drahšie klubové predplatné – nemusíte teraz nič doplácať, len sa skráti čas, dokedy vaše predplatné potrvá. Váše predplatné bude platné do"
+			paid_extend_confirmation: "Pri prechode na vyšší balíček Vás požiadame o novú platbu. Jej výška sa zníži o sumu vášho doteraz nevyčerpaného aktuálneho predplatného. Nové predplatné bude platiť do"
+			special_confirmation: "Pre prechod na vyšší balíček je potrebné doplatiť 1 eur."
+			actual_price: Momentálne platíte za prístup
+			payment_period: každých <strong>%count%</strong> dní
+			new_price: "Vaša nová cena za prístup k webu, aplikáciám a Klub N bude od nasledujúceho obnovenia"
+			less_than_5_days: "Ak máte zapnuté automatické obnovovanie predplatného z platobnej karty a do konca aktuálneho predplatného vám zostáva menej ako 5 dní, pri požiadavke na upgrade získate prístup k výhodám Klubu N okamžite a cenu vyššieho balíka zaplatíte až pri najbližšom obnovení predplatného."
+			more_than_5_days: "Ak zostáva viac ako 5 dní, zaplatíte len pomernú časť doplatku za obdobie, ktoré zostáva do konca vášho predplatného (pri dnešnej akciovej ponuke je to približne 50 centov za týždeň)"
+
+admin:
+	sales_funnels:
+		default:
+			title: Platobné okná
+			new: Nové platobné okno
+		edit:
+			title: Úprava platobného okna
+			back: späť na platobné okno
+		show:
+			back: späť na zoznam okien
+			edit: Upraviť platobné okno
+			preview: Zobraziť platobné okno
+			basic_informations: Základné informácie
+			stats: Štatistiky
+			users: Používatelia s platbou
+			meta: Meta info
+			last_payments: Posledné platby
+			no_payment_gateway_message: Žiadna platobná brána
+			add_payment_gateway: Pridaj platobnú bránu
+			no_subscription_type_message: Žiadne typy predplatného
+			add_subscription_type: Pridaj typ predplatného
+			distribution:
+				label: Distribúcia
+				amounts: Koľko zaplatil pred zakúpením cez toto okno
+				payments: Koľko platieb spravil pred zakúpením cez toto okno
+				subscriptions: Pred koľkými dňami mu skončilo posledné predplatné
+				hadNever: Nemal nikdy
+				hadActive: Mal aktívne
+		preview:
+			back: späť na platobné okno
+			header: Náhľad okna
+		new:
+			title: Nové platobné okno
+			back: spať na platobné okná
+		messages:
+			sales_funnel_not_found: Platobné okno sa nenašlo
+			funnel_created: Platobné okno bolo úspešne vytvorené
+			funnel_updated: Platobné okno bolo úspešne zmenené
+		window_preview:
+			logged_user: Prihlásený užívateľ
+			unlogged_user: Neprihlásený užívateľ
+
+	distribution:
+		email: E-mail
+		source: Zdroj
+		status: Stav
+		created_at: Vytvorený
+		back_to_funnel: Návrat na okno
+
+	component:
+		subscriptions_graph:
+			title: Zakúpené položky
+			help: Počet zakúpených položiek na platbách
+		sales_funnel_user_listing_widget:
+			funnel: Okno
+
+# components
+subscription_types_in_sales_funnels:
+	header: Dostupné v oknách
+	no_sales_funnels_message: Tento typ predplatného nie je priradený ku žiadnemu platobnému oknu.

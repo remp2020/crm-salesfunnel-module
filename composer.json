@@ -1,0 +1,17 @@
+{
+  "name": "remp/crm-salesfunnel-module",
+  "description": "CRM SalesFunnel Module",
+  "type": "library",
+  "homepage": "https://remp2020.com",
+  "license": "MIT",
+  "require": {
+    "php": "^7.2"
+  },
+  "minimum-stability": "dev",
+  "autoload": {
+    "psr-4": {
+      "Crm\\SalesFunnelModule\\": "src/"
+    },
+    "classmap": ["src/"]
+  }
+}

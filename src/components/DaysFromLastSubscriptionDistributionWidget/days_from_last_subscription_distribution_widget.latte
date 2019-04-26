@@ -1,0 +1,23 @@
+<div class="col-md-2">
+    <div class="panel panel-default">
+        <div class="panel-heading">{_sales_funnel.admin.sales_funnels.show.distribution.subscriptions}</div>
+        <ul class="list-group">
+
+            {var $lastKey = 0}
+            <li n:foreach="$distribution as $key => $value" class="list-group-item">
+                <strong>
+                    {if $key === -1}{_sales_funnel.admin.sales_funnels.show.distribution.hadNever}
+                    {elseif $key === 0}{_sales_funnel.admin.sales_funnels.show.distribution.hadActive}
+                    {else}{$lastKey} < {$key}
+                    {/if}
+                </strong>
+                <span class="pull-right">
+                    <a href="{plink :SalesFunnel:DistributionAdmin:daysFromLastSubscription $funnelId, $lastKey, $key}">
+                        {$value}
+                    </a>
+                </span>
+                {var $lastKey = $key}
+            </li>
+        </ul>
+    </div>
+</div>

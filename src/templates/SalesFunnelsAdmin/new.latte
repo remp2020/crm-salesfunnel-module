@@ -1,0 +1,18 @@
+{block #content}
+
+<div class="row">
+  <div class="col-md-12">
+    <a n:href="default"><i class="fa fa-angle-left"></i> {_sales_funnel.admin.sales_funnels.new.back}</a>
+    <div class="page-header">
+      <h1 n:block="title">
+        {_sales_funnel.admin.sales_funnels.new.title}
+      </h1>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-8">
+    {control salesFunnelForm}
+  </div>
+</div>

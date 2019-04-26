@@ -1,0 +1,247 @@
+{block #title}{$funnel->name}{/block}
+
+{block head}
+  <link rel="stylesheet" href="{$basePath}/layouts/admin/vendors/highlight/styles/monokai.css">
+  <script src="{$basePath}/layouts/admin/vendors/highlight/highlight.pack.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+{/block}
+
+{block #content}
+
+<div class="row">
+  <div class="col-md-12">
+    <a n:href="default"><i class="fa fa-angle-left"></i> {_sales_funnel.admin.sales_funnels.show.back}</a>
+
+    <div class="page-header">
+      <h1>
+        {$funnel->name}
+        <a n:href="edit $funnel->id" class="btn btn-primary btn-lg pull-right"><i class="fa fa-edit"></i>  {_sales_funnel.admin.sales_funnels.show.edit}</a>
+        <a n:href="preview $funnel->id" class="btn btn-default btn-lg pull-right" style="margin-right:10px"><i class="fa fa-eye"></i>  {_sales_funnel.admin.sales_funnels.show.preview}</a>
+      </h1>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-6">
+    <div class="panel panel-default">
+      <div class="panel-heading">{_sales_funnel.admin.sales_funnels.show.basic_informations}</div>
+      <ul class="list-group">
+        <li class="list-group-item text-muted"><b>{_system.fields.created}:</b> <span class="text-muted">{$funnel->created_at|userDate}</span></li>
+        <li class="list-group-item"><b>{_sales_funnel.data.sales_funnels.fields.url_key}:</b> <code>{$funnel->url_key}</code> <a href="{plink :SalesFunnel:SalesFunnelFrontend:Show $funnel->url_key}" class="btn btn-xs btn-default" target="_blank"><i class="fa fa-share"></i></a></li>
+        <li class="list-group-item"><b>{_sales_funnel.data.sales_funnels.fields.start_at}:</b> {if $funnel->start_at}{$funnel->start_at|userDate}{else}<span class="text-muted">n/a</span>{/if}</li>
+        <li class="list-group-item"><b>{_sales_funnel.data.sales_funnels.fields.end_at}:</b> {if $funnel->end_at}{$funnel->end_at|userDate}{else}<span class="text-muted">n/a</span>{/if}</li>
+        <li class="list-group-item">
+          <span n:if="$funnel->is_active" class="label label-primary">{_sales_funnel.data.sales_funnels.fields.is_active}</span>
+          <span n:if="$funnel->only_logged" class="label label-default">{_sales_funnel.data.sales_funnels.fields.only_logged}</span>
+          <span n:if="$funnel->only_not_logged" class="label label-default">{_sales_funnel.data.sales_funnels.fields.only_not_logged}</span>
+        </li>
+        <li n:if="$funnel->segment_id" class="list-group-item">
+          <b>{_sales_funnel.data.sales_funnels.fields.segment}:</b> <a n:href=":Segment:StoredSegments:show $funnel->segment_id">{$funnel->segment->name}</a>
+        </li>
+      </ul>
+     </div>
+  </div>
+  <div class="col-md-6">
+    <div class="panel panel-default">
+      <div class="panel-heading">{_sales_funnel.admin.sales_funnels.show.stats}</div>
+      <ul class="list-group">
+        <li class="list-group-item"><b>{_sales_funnel.data.sales_funnels.fields.total_show}:</b> {$funnel->total_show}</li>
+        <li class="list-group-item"><b>{_sales_funnel.data.sales_funnels.fields.total_conversions}:</b> {$funnel->total_conversions}</li>
+        <li class="list-group-item"><b>{_sales_funnel.data.sales_funnels.fields.total_paid_amount}:</b> {$total_paid_amount|price}</li>
+        <li class="list-group-item"><b>{_sales_funnel.data.sales_funnels.fields.total_errors}:</b> {$funnel->total_errors}</li>
+        <li class="list-group-item"><b>{_sales_funnel.data.sales_funnels.fields.last_use}:</b> {if $funnel->last_use}{$funnel->last_use|userDate}{else}n/a{/if}</li>
+        <li class="list-group-item"><b>{_sales_funnel.data.sales_funnels.fields.last_conversion}:</b> {if $funnel->last_conversion}{$funnel->last_conversion|userDate}{else}n/a{/if}</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    {control funnelGraph}
+  </div>
+  <div class="col-md-12">
+    {control funnelShowGraph}
+  </div>
+</div>
+
+
+<div class="row">
+
+  {snippet subscriptionTypesForm}
+    <style type="text/css">
+      .select2.select2-container.select2-container--default {
+        width: 100% !important;
+      }
+    </style>
+    <div class="col-md-6">
+      <h2 class="page-header">{_sales_funnel.data.sales_funnels.fields.subscription_type}</h2>
+      {var $pairs = $funnel->related('sales_funnels_subscription_types')}
+      {if $pairs->count('*')}
+        <ul class="list-group">
+          <li n:foreach="$pairs as $pair" class="list-group-item">
+            <a n:href=":Subscriptions:SubscriptionTypesAdmin:show $pair->subscription_type_id">{$pair->subscription_type->name}</a>
+            <span class="label label-default">
+            {ifset $subscriptionTypesPaymentsMap[$pair->subscription_type_id]}
+              <b>{$subscriptionTypesPaymentsMap[$pair->subscription_type_id]}</b>
+            {else}
+              <b>0</b>
+            {/ifset}
+            </span>
+            <span class="text-muted">&nbsp; x {$pair->subscription_type->price|price}</span>
+            <code>{$pair->subscription_type->code}</code>
+            <a n:href="RemoveSubscriptionType! $pair->subscription_type_id" class="btn btn-default btn-xs pull-right ajax"><i class="fa fa-trash"></i> {_system.delete}</a>
+          </li>
+        </ul>
+      {else}
+        <p class="text-muted well text-center">{_sales_funnel.admin.sales_funnels.show.no_subscription_type_message}</p>
+      {/if}
+      <a class="btn btn-default btn-xs" href="#addSubscriptionType" onclick="$('#addSubscriptionType').toggle(); return false;">{_sales_funnel.admin.sales_funnels.show.add_subscription_type}</a>
+
+      <div id="addSubscriptionType" class="col-md-12" style="display:none">
+        {control subscriptionTypeForm}
+      </div>
+
+    </div>
+    <script type="text/javascript">
+      $(function() {
+        initSelect2();
+      });
+    </script>
+  {/snippet}
+
+  {snippet paymentGatewayForm}
+    <style type="text/css">
+      .select2.select2-container.select2-container--default {
+        width: 100% !important;
+      }
+    </style>
+    <div class="col-md-6">
+      <h2 class="page-header">{_sales_funnel.data.sales_funnels.fields.payment_gateway}</h2>
+      {var $pairs = $funnel->related('sales_funnels_payment_gateways')}
+      {if $pairs->count('*')}
+        <ul class="list-group">
+          <li n:foreach="$pairs as $pair" class="list-group-item">
+            <a n:href=":Payments:PaymentGatewaysAdmin:show $pair->payment_gateway_id">{$pair->payment_gateway->name}</a>
+            <code>{$pair->payment_gateway->code}</code>
+            <a n:href="RemovePaymentGateway! $pair->payment_gateway_id" class="btn btn-default btn-xs pull-right ajax"><i class="fa fa-trash"></i> {_system.delete}</a>
+          </li>
+        </ul>
+      {else}
+        <p class="text-muted well text-center">{_sales_funnel.admin.sales_funnels.show.no_payment_gateway_message}</p>
+      {/if}
+      <a class="btn btn-default btn-xs" href="#addPaymentGateway" onclick="$('#addPaymentGateway').toggle(); return false;">{_sales_funnel.admin.sales_funnels.show.add_payment_gateway}</a>
+
+      <div id="addPaymentGateway" class="col-md-12" style="display:none">
+        {control paymentGatewayForm}
+      </div>
+
+    </div>
+    <script type="text/javascript">
+      $(function() {
+        initSelect2();
+      });
+    </script>
+  {/snippet}
+
+</div>
+
+<div class="row" style="margin-top:2em">
+  <div class="col-md-6">
+    {control subscriptionsGraph}
+  </div>
+  <div class="col-md-6">
+    {control paymentGatewaysGraph}
+  </div>
+
+  <div class="col-md-12">
+    <hr>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <h2 class="page-header">{_sales_funnel.admin.sales_funnels.show.distribution.label}</h2>
+
+    {control simpleWidget 'sales_funnels.admin.show.distribution', $funnel->id}
+
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <h2 class="page-header">{_sales_funnel.admin.sales_funnels.show.last_payments}</h2>
+    {control lastPayments}
+  </div>
+</div>
+
+<div n:if="$meta" class="row">
+  <div class="col-md-12">
+    <h2 class="page-header">{_sales_funnel.admin.sales_funnels.show.meta}</h2>
+    <ul class="list-group">
+      <li n:foreach="$meta as $key => $value" class="list-group-item">
+        <b>{$key}</b>
+        <span class="pull-right">{$value}</span>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <h2 class="page-header">{_sales_funnel.admin.sales_funnels.show.users}</h2>
+    <table class="table table-responsive table-bordered">
+      <thead>
+        <tr>
+          <th>Email</th>
+          <th>Date</th>
+          <th>Amount</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr n:foreach="$payments as $payment">
+          <td><a n:href=":Users:UsersAdmin:show $payment->user_id">{$payment->user->email}</a></td>
+          <td><span class="text-muted">{$payment->paid_at|userDate}</span></td>
+          <td>
+            {$payment->amount|price}
+            <span n:if="$payment->additional_type" class="label label-primary">
+              {$payment->additional_amount|price} donation
+              {if $payment->additional_type == 'recurrent'} recurrent{/if}
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    {control paymentsvp}
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <h2 class="page-header">{_sales_funnel.data.sales_funnels.fields.head}</h2>
+    <pre><code class="html">{$funnel->head}</code></pre>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <h2 class="page-header">{_sales_funnel.data.sales_funnels.fields.body}</h2>
+    <pre><code class="html">{$funnel->body}</code></pre>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <h2 class="page-header">{_sales_funnel.data.sales_funnels.fields.no_access_html}</h2>
+    <pre><code class="html">{$funnel->no_access_html}</code></pre>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <h2 class="page-header">{_sales_funnel.data.sales_funnels.fields.error_html}</h2>
+    <pre><code class="html">{$funnel->error_html}</code></pre>
+  </div>
+</div>

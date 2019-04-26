@@ -1,0 +1,21 @@
+{block #title}{_sales_funnel.admin.sales_funnels.edit.title} #{$funnel->id}{/block}
+
+{block #content}
+
+<div class="row">
+  <div class="col-md-12">
+    <a n:href="show $funnel->id"><i class="fa fa-angle-left"></i> {_sales_funnel.admin.sales_funnels.edit.back}</a>
+    <div class="page-header">
+      <h1>
+        {$funnel->name}
+        <small>[{$funnel->id}]</small>
+      </h1>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-8">
+    {control salesFunnelForm}
+  </div>
+</div>

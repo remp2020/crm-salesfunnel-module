@@ -1,0 +1,21 @@
+{block title}{_sales_funnel.frontend.error.title}{/block}
+
+{block #content}
+
+<div class="container">
+    <div class="clearfix">
+        {ifset $errorHtml}
+            {$errorHtml|noescape}
+        {else}
+            {control snippet 'funnel-error'}
+        {/ifset}
+    </div>
+</div>
+
+<script>
+    if (window.top) {
+        $('.head').hide();
+        $('#header').hide();
+        $('footer').addClass('hidden');
+    }
+</script>

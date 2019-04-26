@@ -1,0 +1,57 @@
+{block #content}
+
+<style>
+    .iframe_wrapper {
+        min-height: 64px;
+        position: relative;
+    }
+    .iframe_wrapper img.preloader {
+        position: absolute;
+        top:50%;
+        left:50%;
+        margin:-32px 0 0 -32px;
+        z-index: 2;
+    }
+    .iframe_wrapper::before {
+        content: "";
+        position:absolute;
+        top:0;
+        left:0;
+        width:100%;
+        height:100%;
+        background: #fff;
+        display: block;
+    }
+    .iframe_wrapper.init::before {
+        content: none;
+    }
+</style>
+
+<div class="container_custom">
+    <div class="iframe_wrapper">
+        <img id="iframe_preloader" src="/layouts/default/images/iframe_preloader.gif" class="preloader" alt="preloader">
+        <iframe
+            id="myiframe"
+            src="/sales-funnel/upgrade/month"
+            border="0"
+            frameborder="0"
+            marginwidth="0"
+            marginheight="0"
+            scrolling="no"
+            width="100%"
+            style="border:0; overflow-y:hidden; overflow-x:hidden; background: transparent; height: 600px;"></iframe>
+    </div>
+</div>
+
+<script type="text/javascript" src="/layouts/default/js/iframeResizer.min.js"></script>
+
+<script type="text/javascript">
+    $( window ).load(function() {
+        $('#myiframe').iFrameResize();
+    });
+    $
+    $('#myiframe').load(function() {
+        $(this).siblings('.preloader').remove();
+        $(this).parents('.iframe_wrapper').addClass('init');
+    })
+</script>

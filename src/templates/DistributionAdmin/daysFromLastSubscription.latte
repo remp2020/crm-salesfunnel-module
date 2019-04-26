@@ -1,0 +1,30 @@
+{block #title}{$funnel->name} ({$fromLevel} < {$toLevel}){/block}
+
+{block #content}
+
+<div class="row">
+    <div class="col-md-12">
+        <a n:href=":SalesFunnel:SalesFunnelsAdmin:show $funnel->id"><i class="fa fa-angle-left"></i> {_sales_funnel.admin.distribution.back_to_funnel}</a>
+
+        <div class="page-header">
+            <h1>
+                {_sales_funnel.admin.sales_funnels.show.distribution.subscriptions}:
+                {if intval($toLevel) === -1}{_sales_funnel.admin.sales_funnels.show.distribution.hadNever}
+                {elseif intval($toLevel) === 0}{_sales_funnel.admin.sales_funnels.show.distribution.hadActive}
+                {else}{$fromLevel} < {$toLevel}
+                {/if}
+
+                <small>
+                    <br/>({$funnel->name})
+                    / {_system.total} {count($users)}
+                </small>
+            </h1>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    {include userList.latte}
+
+    {control daysFromLastSubscriptionDistribution $funnel->id}
+</div>

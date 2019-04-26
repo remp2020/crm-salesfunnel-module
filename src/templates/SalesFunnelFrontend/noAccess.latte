@@ -1,0 +1,13 @@
+{block title}{_sales_funnel.frontend.no_access.title}{/block}
+
+{block #content}
+
+<div class="container">
+    <div class="clearfix">
+        {ifset $noAccessHtml}
+            {$noAccessHtml|noescape}
+        {else}
+            {control snippet 'funnel-no-access'}
+        {/ifset}
+    </div>
+</div>

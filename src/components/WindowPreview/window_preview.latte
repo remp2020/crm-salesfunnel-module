@@ -1,0 +1,11 @@
+<h2>{_sales_funnel.admin.sales_funnels.window_preview.logged_user}</h2>
+<div class="embed-responsive embed-responsive-4by3" style="padding-bottom: 50%;">
+    <iframe src="{plink :SalesFunnel:SalesFunnelFrontend:show $salesFunnel->url_key, preview => user}"></iframe>
+</div>
+
+<hr />
+
+<h2>{_sales_funnel.admin.sales_funnels.window_preview.unlogged_user}</h2>
+<div class="embed-responsive embed-responsive-4by3" style="padding-bottom: 50%;">
+    <iframe src="{plink :SalesFunnel:SalesFunnelFrontend:show $salesFunnel->url_key, preview => no-user}"></iframe>
+</div>

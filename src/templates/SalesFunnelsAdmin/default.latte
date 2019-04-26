@@ -1,0 +1,54 @@
+{block #title}{_sales_funnel.admin.sales_funnels.default.title}{/block}
+
+{block #content}
+
+<style>
+  .inactive a.segment_link {
+    color: #b1b1b1;
+  }
+</style>
+
+<div class="row">
+  <div class="col-md-12">
+    <h2>
+      {_sales_funnel.admin.sales_funnels.default.title}
+      <small> / {_system.total} {$funnels->count('*')}</small>
+      <a n:href="new" class="btn btn-success btn-lg pull-right"><i class="fa fa-coffee"></i>  {_sales_funnel.admin.sales_funnels.default.new}</a>
+    </h2>
+    <hr>
+  </div>
+  <div class="col-md-12">
+    <table class="table table-striped table-hover table-bordered">
+      <thead>
+        <tr>
+          <th>{_sales_funnel.data.sales_funnels.fields.name}</th>
+          <th>{_sales_funnel.data.sales_funnels.fields.url_key}</th>
+          <th>{_sales_funnel.data.sales_funnels.fields.last_conversion}</th>
+          <th>{_sales_funnel.data.sales_funnels.fields.created_at}</th>
+          <th>{_system.actions}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr n:foreach="$funnels as $funnel" n:class="!$funnel->is_active ? inactive">
+          <td>
+            <a n:href="show $funnel->id" class="segment_link">
+              {$funnel->name}
+            </a>
+            <span n:if="$funnel->only_logged" class="label label-default">{_sales_funnel.data.sales_funnels.fields.only_logged}</span>
+            <span n:if="$funnel->only_not_logged" class="label label-default">{_sales_funnel.data.sales_funnels.fields.only_not_logged}</span>
+          </td>
+          <td><code>{$funnel->url_key}</code></td>
+          <td class="text-muted">{$funnel->last_conversion}</td>
+          <td class="text-muted">{$funnel->created_at}</td>
+          <td>
+            <p class="text-nowrap">
+              <a n:href="show $funnel->id" class="btn btn-sm btn-info" title="{_system.show}"><i class="fa fa-eye"></i> </a>
+              <a n:href="edit $funnel->id" class="btn btn-sm btn-primary" title="{_system.edit}"><i class="fa fa-edit"></i> </a>
+            </p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+

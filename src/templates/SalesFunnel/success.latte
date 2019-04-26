@@ -1,0 +1,192 @@
+{block #head}
+    {control simpleWidget 'frontend.payment.success.head_tracking', $payment}
+
+    <link rel="stylesheet" type="text/css" href="{$basePath}/layouts/default/css/thank-you.css">
+{/block}
+
+{block #content}
+
+<div class="row">
+    <div class="col-md-12 thank-you-header">
+        <h1 class="thank-you-title">
+            <span n:block=title>{_sales_funnel.frontend.success_page.title}</span>
+            <span class="thank-you-text">
+                <i class="fa fa-check" aria-hidden="true"></i> {_sales_funnel.frontend.success_page.payment_success}
+            </span>
+        </h1>
+
+        <div class="additionalform">
+            {snippet paymentSuccessTop}
+                {control simpleWidget 'frontend.payment.success.top'}
+            {/snippet}
+        </div>
+
+    </div>
+
+    <div n:if="$subscription && $subscription->user->created_at > \Nette\Utils\DateTime::from('-1 hour')" class="col-md-12">
+        <p>
+            {_sales_funnel.frontend.success_page.pass_sent, ['email' => $subscription->user->email]|noescape}
+            {control snippet 'success-message'}
+        </p>
+    </div>
+
+    <div class="col-md-12">
+        <div class="additionalform">
+            <div class="thank-you-warn">
+                {control snippet 'success-attention'}
+            </div>
+
+            {control simpleWidget 'frontend.payment.success.forms', $payment}
+
+            <hr/>
+
+            <div id="finish">
+                {control simpleWidget 'frontend.payment.success.finish_registration', $payment}
+            </div>
+        </div>
+    </div>
+</div>
+{/block}
+
+{block #scripts}
+<script>
+    // Forms registered via widget need to have possibility to save form data on final submit direting user away.
+    // We need to wait for confirmation that forms succeeded and no validation errors occurred.
+    var finishCallbacks = [];
+    var finished = 0;
+    var errorred = 0;
+
+    function registerFormCallback(callback) {
+        finishCallbacks.push(callback);
+        console.log("registered callback")
+    }
+
+    function finishCallback() {
+        finished += 1;
+    }
+
+    function errorCallback() {
+        errorred += 1;
+    }
+
+    function handleFormSaved(headerSelector) {
+        var $header = $(headerSelector),
+            $open = $header.find('.open').hide(),
+            $done = $header.find('.done').show();
+
+        setTimeout(function () {
+            $done.fadeOut(300, function () {
+                $open.fadeIn();
+            });
+        }, 3200);
+    }
+
+    $(function () {
+        $(document).on('click', '.additionalform-header-box', function () {
+            var target = $(this).data('target');
+            $(target).toggle();
+        });
+
+        $('#finish').on('click', function (e) {
+            e.preventDefault();
+
+            finished = 0;
+            errorred = 0;
+
+            var $finishBtn = $(this).find('.btn');
+            $finishBtn.attr('disabled', true);
+            var targetHref = $(this).find('a').attr('href');
+
+            for (var i=0; i < finishCallbacks.length; i++) {
+                var cb = finishCallbacks[i];
+                setTimeout(cb, 0);
+            }
+
+            var callbackCheck = setInterval(function() {
+                console.log("finished callbacks:", finished);
+                if (finishCallbacks.length === finished + errorred) {
+                    clearInterval(callbackCheck);
+
+                    $finishBtn.attr('disabled', false);
+
+                    if (errorred === 0) {
+                        console.log("redirecting to:", targetHref);
+                        window.location = targetHref;
+                    } else {
+                        console.log("callbacks with errors, staying here");
+                    }
+                }
+            }, 200);
+
+            return false;
+        });
+    });
+</script>
+
+<script>
+    (function() {
+        var lastTime = 0;
+        var vendors = ['ms', 'moz', 'webkit', 'o'];
+        for(var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
+            window.requestAnimationFrame = window[vendors[x]+'RequestAnimationFrame'];
+            window.cancelAnimationFrame = window[vendors[x]+'CancelAnimationFrame']
+                || window[vendors[x]+'CancelRequestAnimationFrame'];
+        }
+
+        if (!window.requestAnimationFrame)
+            window.requestAnimationFrame = function(callback, element) {
+                var currTime = new Date().getTime();
+                var timeToCall = Math.max(0, 16 - (currTime - lastTime));
+                var id = window.setTimeout(function() { callback(currTime + timeToCall); },
+                    timeToCall);
+                lastTime = currTime + timeToCall;
+                return id;
+            };
+
+        if (!window.cancelAnimationFrame)
+            window.cancelAnimationFrame = function(id) {
+                clearTimeout(id);
+            };
+    }());
+</script>
+
+<script>
+    (function () {
+        if (window === parent || parent.document.getElementById('bankIframe') === null) return;
+
+        var $parentIframe = $(parent.document.getElementById('bankIframe')),
+            $top = $('#top'),
+            contentHeight = getContentHeight();
+
+        var $parentModal = $(parent.document.getElementById('payment-modal-dialog'));
+
+        function getContentHeight() {
+            return $top.height() + 50;
+        }
+
+        function setIframeHeight(height) {
+            $parentIframe.css({
+                'height': height
+            });
+        }
+
+        function contentResizeHandler() {
+            if (contentHeight !== getContentHeight()) {
+                contentHeight = getContentHeight();
+                setIframeHeight(contentHeight);
+            }
+
+            window.requestAnimationFrame(contentResizeHandler);
+        }
+
+        $(document).on('ready', function() {
+            $('html').css('overflow-x', 'hidden');
+            $parentModal.css({
+                'width': '700px',
+            });
+            setIframeHeight(contentHeight);
+            window.requestAnimationFrame(contentResizeHandler);
+        });
+    })()
+</script>
+{/block}

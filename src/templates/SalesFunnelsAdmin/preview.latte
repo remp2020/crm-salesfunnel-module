@@ -1,0 +1,27 @@
+{block #title}{$funnel->name}{/block}
+
+{block head}
+  <link rel="stylesheet" href="{$basePath}/layouts/admin/vendors/highlight/styles/monokai.css">
+  <script src="{$basePath}/layouts/admin/vendors/highlight/highlight.pack.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+{/block}
+
+{block #content}
+
+<div class="row">
+  <div class="col-md-12">
+    <a n:href="show $funnel->id"><i class="fa fa-angle-left"></i> {_sales_funnel.admin.sales_funnels.preview.back}</a>
+
+    <div class="page-header">
+      <h1>
+          {_sales_funnel.admin.sales_funnels.preview.header} <small>[{$funnel->id}]</small> {$funnel->name}
+      </h1>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+      {control windowPreview}
+  </div>
+</div>

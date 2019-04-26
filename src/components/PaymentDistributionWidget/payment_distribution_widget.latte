@@ -1,0 +1,24 @@
+<div class="col-md-2">
+    <div class="panel panel-default">
+        <div class="panel-heading">{_sales_funnel.admin.sales_funnels.show.distribution.payments}</div>
+        <ul class="list-group">
+
+            {var $lastKey = 0}
+            <li n:foreach="$distribution as $key => $value" class="list-group-item">
+                {var $nextLevel = isset($levels[$key+1]) ? $levels[$key+1] : null}
+                <strong>
+                    {if $key === 0} 0
+                    {elseif !isset($levels[$key+1])} {$levels[$key]}+
+                    {else} {$levels[$key]} - {$levels[$key+1]-1}
+                    {/if}
+                </strong>
+                <span class="pull-right">
+                    <a href="{plink :SalesFunnel:DistributionAdmin:payment $funnelId, $levels[$key], $nextLevel}">
+                        {$value}
+                    </a>
+                </span>
+                {var $lastKey = $key}
+            </li>
+        </ul>
+    </div>
+</div>

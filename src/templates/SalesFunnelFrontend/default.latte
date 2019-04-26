@@ -1,0 +1,89 @@
+{block title}{$funnel->name}{/block}
+
+{block #headstart}{/block}
+
+{block head}
+    {$funnel->head|noescape}
+{/block}
+
+{block #content}
+
+{*
+<style>
+    @media only screen {
+        #outside {
+            width: 100%;
+        }
+    }
+
+    @media only screen
+    and (min-device-width: 320px)
+    and (max-device-width: 568px)
+    and (-webkit-min-device-pixel-ratio: 2) {
+        #outside {
+            width: 350px;
+        }
+    }
+
+    @media only screen
+    and (min-device-width: 375px)
+    and (max-device-width: 667px)
+    and (-webkit-min-device-pixel-ratio: 2) {
+        #outside {
+            width: 375px;
+        }
+    }
+</style>
+*}
+
+<style>
+    .iframe_wrapper {
+        min-height: 64px;
+        position: relative;
+    }
+    .iframe_wrapper img.preloader {
+        position: absolute;
+        top:50%;
+        left:50%;
+        margin:-32px 0 0 -32px;
+        z-index: 2;
+    }
+    .iframe_wrapper::before {
+        content: "";
+        position:absolute;
+        top:0;
+        left:0;
+        width:100%;
+        height:100%;
+        background: #fff;
+        display: block;
+    }
+    .iframe_wrapper.init::before {
+        content: none;
+    }
+</style>
+
+<div class="clearfix">
+  <div class="payment">
+    <div class="iframe_wrapper">
+      <img id="iframe_preloader" src="{$basePath}/layouts/default/images/iframe_preloader.gif" class="preloader" alt="preloader">
+      <iframe id="myiframe"
+        width="100%" scrolling="no"
+        {* src="{link :SalesFunnel:SalesFunnel:funnelNewpaymentPopup referer => $referer, payment_gateway_id => $paymentGatewayId, subscription_type_id => $subscriptionTypeId}" *}
+        src="{link :SalesFunnel:SalesFunnelFrontend:show $funnel->url_key, referer => $referer}&{$queryString}"
+      ></iframe>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript" src="{$basePath}/layouts/default/js/iframeResizer.min.js"></script>
+
+<script type="text/javascript">
+    $( window ).load(function() {
+        iFrameResize({ log: false, heightCalculationMethod: 'max' }, '#myiframe');
+    });
+    $('#myiframe').load(function() {
+        $(this).siblings('.preloader').remove();
+        $(this).parents('.iframe_wrapper').addClass('init');
+    })
+</script>
