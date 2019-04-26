@@ -20,6 +20,7 @@ use Crm\SalesFunnelModule\Repository\SalesFunnelsStatsRepository;
 use Crm\UsersModule\Auth\Access\AccessToken;
 use Crm\UsersModule\Repository\UserMetaRepository;
 use Crm\UsersModule\Repository\UsersRepository;
+use League\Event\Emitter;
 use Nette;
 use Nette\Application\BadRequestException;
 use Nette\Database\Table\ActiveRow;
@@ -69,6 +70,9 @@ class SalesFunnelPresenter extends FrontendPresenter
     
     /** @persistent */
     public $VS;
+
+    /** @var Emitter @inject */
+    public $emitter;
 
     public function startup()
     {
