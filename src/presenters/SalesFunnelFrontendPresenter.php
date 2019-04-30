@@ -389,6 +389,7 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
 
         $source = $this->getHttpRequest()->getPost('registration_source', 'funnel');
 
+        $user = null;
         try {
             $userError = null;
             $user = $this->user($email, $password, $funnel, $source, $referer, $needAuth);
