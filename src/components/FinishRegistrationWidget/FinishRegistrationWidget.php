@@ -4,6 +4,12 @@ namespace Crm\SalesFunnelModule\Components;
 
 use Crm\ApplicationModule\Widget\BaseWidget;
 
+/**
+ * Simple registration success page widget.
+ * Renders button to complete registration.
+ *
+ * @package Crm\SalesFunnelModule\Components
+ */
 class FinishRegistrationWidget extends BaseWidget
 {
     private $templateName = 'finish_registration_widget.latte';

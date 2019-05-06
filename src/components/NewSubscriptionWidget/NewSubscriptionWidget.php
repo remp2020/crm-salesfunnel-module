@@ -10,7 +10,10 @@ use Nette\Application\BadRequestException;
 use Nette\Http\Request;
 
 /**
+ * Widget that renders page with iframe containing sales funnels.
+ *
  * @property FrontendPresenter $presenter
+ * @package Crm\SalesFunnelModule\Components
  */
 class NewSubscriptionWidget extends BaseWidget
 {

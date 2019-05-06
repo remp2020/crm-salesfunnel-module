@@ -6,6 +6,14 @@ use Crm\ApplicationModule\Widget\BaseWidget;
 use Crm\ApplicationModule\Widget\WidgetManager;
 use Crm\SalesFunnelModule\Repository\SalesFunnelsRepository;
 
+/**
+ * This widget fetches stats from sales funnel repository
+ * and renders table with levels as lines (distribution).
+ *
+ * Shows how much user paid before buying via this sales funnel.
+ *
+ * @package Crm\SalesFunnelModule\Components
+ */
 class AmountDistributionWidget extends BaseWidget
 {
     private $templateName = 'amount_distribution_widget.latte';

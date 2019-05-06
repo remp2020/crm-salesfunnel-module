@@ -182,3 +182,81 @@ And initialize listener in `ExampleModule\ExampleModule.php`
   ```
 
 Newly created payment by SalesFunnel will now contain specific donation if sales funnel received this field.
+
+## Components
+
+**AmountDistributionWidget**
+
+Admin sales funnel detail distribution stats component.
+
+![alt text](docs/_static/amount_distribution.png "AmountDistributionWidget")
+
+[Source code](https://github.com/remp2020/crm-salesfunnel-module/blob/23fdf1103d5c37f9ffe1f941cbb6025194d16720/src/components/AmountDistributionWidget/AmountDistributionWidget.php#L1)
+
+[How to use](https://github.com/remp2020/crm-salesfunnel-module/blob/23fdf1103d5c37f9ffe1f941cbb6025194d16720/src/presenters/DistributionAdminPresenter.php#L33)
+
+**DaysFromLastSubscriptionDistributionWidget**
+
+Admin sales funnel detail distribution stats component.
+
+![alt text](docs/_static/days_since_ending.png "DaysFromLastSubscriptionDistributionWidget")
+
+[Source code](https://github.com/remp2020/crm-salesfunnel-module/blob/23fdf1103d5c37f9ffe1f941cbb6025194d16720/src/components/DaysFromLastSubscriptionDistributionWidget/DaysFromLastSubscriptionDistributionWidget.php#L1)
+
+[How to use](https://github.com/remp2020/crm-salesfunnel-module/blob/23fdf1103d5c37f9ffe1f941cbb6025194d16720/src/presenters/DistributionAdminPresenter.php#L65)
+
+**FinishRegistrationWidget**
+
+Frontend successful payment/registration widget.
+
+![alt text](docs/_static/finish_registration.png "FinishRegistrationWidget")
+
+[Source code](https://github.com/remp2020/crm-salesfunnel-module/blob/23fdf1103d5c37f9ffe1f941cbb6025194d16720/src/components/FinishRegistrationWidget/FinishRegistrationWidget.php#L1)
+
+[How to use](https://github.com/remp2020/crm-salesfunnel-module/blob/23fdf1103d5c37f9ffe1f941cbb6025194d16720/src/SalesFunnelModule.php#L134)
+
+**NewSubscriptionWidget**
+
+Frontend new subscription widget with iframe containing sales funnel.
+
+[Source code](https://github.com/remp2020/crm-salesfunnel-module/blob/23fdf1103d5c37f9ffe1f941cbb6025194d16720/src/components/NewSubscriptionWidget/NewSubscriptionWidget.php#L1)
+
+[How to use](https://github.com/remp2020/crm-salesfunnel-module/blob/23fdf1103d5c37f9ffe1f941cbb6025194d16720/src/SalesFunnelModule.php#L123)
+
+**PaymentDistributionWidget**
+
+Admin sales funnel detail stats widget.
+
+![alt text](docs/_static/payments_before.png "PaymentDistributionWidget")
+
+[Source code](https://github.com/remp2020/crm-salesfunnel-module/blob/23fdf1103d5c37f9ffe1f941cbb6025194d16720/src/components/PaymentDistributionWidget/PaymentDistributionWidget.php#L1)
+
+[How to use](https://github.com/remp2020/crm-salesfunnel-module/blob/23fdf1103d5c37f9ffe1f941cbb6025194d16720/src/presenters/DistributionAdminPresenter.php#L49)
+
+**SalesFunnelUserListingWidget**
+
+Admin user listing widget.
+
+![alt text](docs/_static/payments_listing_funnel.png "SalesFunnelUserListingWidget")
+
+[Source code](https://github.com/remp2020/crm-salesfunnel-module/blob/23fdf1103d5c37f9ffe1f941cbb6025194d16720/src/components/SalesFunnelUserListingWidget/SalesFunnelUserListingWidget.php#L1)
+
+[How to use](https://github.com/remp2020/crm-salesfunnel-module/blob/23fdf1103d5c37f9ffe1f941cbb6025194d16720/src/SalesFunnelModule.php#L152)
+
+**SubscriptionTypesInSalesFunnelsWidget**
+
+Admin sales funnel detail subscription types listing.
+
+![alt text](docs/_static/subscription_types_in_salesfunnel.png "SubscriptionTypesInSalesFunnelsWidget")
+
+[Source code](https://github.com/remp2020/crm-salesfunnel-module/blob/23fdf1103d5c37f9ffe1f941cbb6025194d16720/src/components/SubscriptionTypesInSalesFunnelsWidget/SubscriptionTypesInSalesFunnelsWidget.php#L1)
+
+[How to use](https://github.com/remp2020/crm-salesfunnel-module/blob/23fdf1103d5c37f9ffe1f941cbb6025194d16720/src/SalesFunnelModule.php#L128)
+
+**WindowPreview**
+
+Admin sales funnel detail preview. 
+
+[Source code](https://github.com/remp2020/crm-salesfunnel-module/blob/23fdf1103d5c37f9ffe1f941cbb6025194d16720/src/components/WindowPreview/WindowPreview.php#L1)
+
+[How to use](https://github.com/remp2020/crm-salesfunnel-module/blob/23fdf1103d5c37f9ffe1f941cbb6025194d16720/src/presenters/SalesFunnelsAdminPresenter.php#L373)

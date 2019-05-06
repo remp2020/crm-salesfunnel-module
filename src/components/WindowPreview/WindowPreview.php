@@ -5,6 +5,12 @@ namespace Crm\SalesFunnelModule\Components;
 use Crm\ApplicationModule\Widget\WidgetManager;
 use Crm\SalesFunnelModule\Repository\SalesFunnelsRepository;
 
+/**
+ * Widget that renders page with iframe containing sales funnel.
+ * Used in admin to preview sales funnel.
+ *
+ * @package Crm\SalesFunnelModule\Components
+ */
 class WindowPreview extends \Crm\ApplicationModule\Widget\BaseWidget
 {
     private $view = 'window_preview';

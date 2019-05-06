@@ -6,6 +6,14 @@ use Crm\ApplicationModule\Widget\BaseWidget;
 use Crm\ApplicationModule\Widget\WidgetManager;
 use Crm\SalesFunnelModule\Repository\SalesFunnelsRepository;
 
+/**
+ * This widget fetches stats from sales funnel repository
+ * and renders table with levels as lines (distribution).
+ *
+ * Shows days since ending of last subscription (pre-payment)
+ *
+ * @package Crm\SalesFunnelModule\Components
+ */
 class DaysFromLastSubscriptionDistributionWidget extends BaseWidget
 {
     private $templateName = 'days_from_last_subscription_distribution_widget.latte';

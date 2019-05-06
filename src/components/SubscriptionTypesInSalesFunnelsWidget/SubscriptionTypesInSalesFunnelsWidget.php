@@ -6,6 +6,12 @@ use Crm\ApplicationModule\Widget\BaseWidget;
 use Crm\ApplicationModule\Widget\WidgetManager;
 use Crm\SalesFunnelModule\Repository\SalesFunnelsRepository;
 
+/**
+ * This widget renders listing of sales funnels for specific subscription type.
+ * Used in subscription type detail.
+ *
+ * @package Crm\SalesFunnelModule\Components
+ */
 class SubscriptionTypesInSalesFunnelsWidget extends BaseWidget
 {
     private $templateName = 'subscription_types_in_sales_funnels_widget.latte';

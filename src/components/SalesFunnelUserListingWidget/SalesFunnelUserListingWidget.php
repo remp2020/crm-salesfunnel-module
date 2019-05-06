@@ -5,6 +5,12 @@ namespace Crm\SalesFunnelModule\Components;
 use Crm\ApplicationModule\Widget\BaseWidget;
 use Nette\Database\Table\ActiveRow;
 
+/**
+ * Simple listing item widget. Used in payments listing.
+ * Shows sales funnel used for specific payment.
+ *
+ * @package Crm\SalesFunnelModule\Components
+ */
 class SalesFunnelUserListingWidget extends BaseWidget
 {
     private $templateName = 'sales_funnel_user_listing_widget.latte';
