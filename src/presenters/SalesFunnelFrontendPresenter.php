@@ -375,10 +375,6 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
         $this->validateSubscriptionType($subscriptionType, $funnel);
 
         $paymentGateway = $this->paymentGatewaysRepository->findByCode(filter_input(INPUT_POST, 'payment_gateway'));
-
-//        dump($paymentGateway);
-//        die();
-
         $this->validateGateway($paymentGateway, $funnel);
 
         $additionalAmount = 0;
