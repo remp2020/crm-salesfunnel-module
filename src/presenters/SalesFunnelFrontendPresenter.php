@@ -181,6 +181,7 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
             'referer' => urlencode($referer),
             'values' => $values ? Json::decode($values, Json::FORCE_ARRAY) : null,
             'errors' => $errors ? Json::decode($errors, Json::FORCE_ARRAY) : null,
+            'backLink' => $this->storeRequest(),
         ];
 
         if ($isLoggedIn) {
