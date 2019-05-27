@@ -72,7 +72,7 @@ class SalesFunnelPresenter extends FrontendPresenter
     public $VS;
 
     /** @var Emitter @inject */
-    public $emitter;
+    public $hermesEmitter;
 
     public function startup()
     {
@@ -372,7 +372,7 @@ class SalesFunnelPresenter extends FrontendPresenter
         if (!$recurrentPayment) {
             $funnel = $this->salesFunnelsRepository->find($payment->sales_funnel_id);
 
-            $this->emitter->emit(new SalesFunnelEvent($funnel, $this->getUser(), SalesFunnelsStatsRepository::TYPE_ERROR));
+            $this->hermesEmitter->emit(new SalesFunnelEvent($funnel, $this->getUser(), SalesFunnelsStatsRepository::TYPE_ERROR));
             $this->redirect('error');
         }
 

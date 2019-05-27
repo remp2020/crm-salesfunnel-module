@@ -20,7 +20,7 @@ class FixUpgradePresenter extends FrontendPresenter
     private $paymentProcessor;
 
     /** @var Emitter @inject */
-    public $emitter;
+    public $hermesEmitter;
 
     public function __construct(
         Expander $expander,
@@ -45,7 +45,7 @@ class FixUpgradePresenter extends FrontendPresenter
     public function renderSubscription($id = 'mobile')
     {
         $user = $this->getUser();
-        $this->emitter->emit(new HermesMessage('sales-funnel', [
+        $this->hermesEmitter->emit(new HermesMessage('sales-funnel', [
             'type' => 'checkout',
             'user_id' => $user->id,
             'browser_id' => (isset($_COOKIE['browser_id']) ? $_COOKIE['browser_id'] : null),

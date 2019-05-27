@@ -14,7 +14,7 @@ class UpgradePresenter extends FrontendPresenter
     const SALES_FUNNEL_UPGRADE = 'viac';
     const SALES_FUNNEL_UPGRADE_MONTH = 'viac-akcia';
 
-    public $emitter;
+    public $hermesEmitter;
 
     private $expander;
 
@@ -28,7 +28,7 @@ class UpgradePresenter extends FrontendPresenter
         parent::__construct();
         $this->expander = $expander;
         $this->paymentProcessor = $paymentProcessor;
-        $this->emitter = $emitter;
+        $this->hermesEmitter = $emitter;
     }
 
     public function startup()
@@ -44,7 +44,7 @@ class UpgradePresenter extends FrontendPresenter
     public function renderSubscription($id = 'mobile')
     {
         $user = $this->getUser();
-        $this->emitter->emit(new HermesMessage('sales-funnel', [
+        $this->hermesEmitter->emit(new HermesMessage('sales-funnel', [
             'type' => 'checkout',
             'user_id' => $user->id,
             'browser_id' => (isset($_COOKIE['browser_id']) ? $_COOKIE['browser_id'] : null),
@@ -99,7 +99,7 @@ class UpgradePresenter extends FrontendPresenter
     public function renderMonth()
     {
         $user = $this->getUser();
-        $this->emitter->emit(new HermesMessage('sales-funnel', [
+        $this->hermesEmitter->emit(new HermesMessage('sales-funnel', [
             'type' => 'checkout',
             'user_id' => $user->id,
             'browser_id' => (isset($_COOKIE['browser_id']) ? $_COOKIE['browser_id'] : null),

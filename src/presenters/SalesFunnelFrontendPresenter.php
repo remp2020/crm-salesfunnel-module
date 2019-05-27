@@ -54,8 +54,6 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
 
     private $segmentFactory;
 
-    private $emitter;
-
     private $hermesEmitter;
 
     private $authorizator;
@@ -80,7 +78,6 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
         PaymentProcessor $paymentProcessor,
         SegmentFactory $segmentFactory,
         ActualUserSubscription $actualUserSubscription,
-        Emitter $emitter,
         \Tomaj\Hermes\Emitter $hermesEmitter,
         Authorizator $authorizator,
         AddressesRepository $addressesRepository,
@@ -98,7 +95,6 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
         $this->paymentsRepository = $paymentsRepository;
         $this->segmentFactory = $segmentFactory;
         $this->actualUserSubscription = $actualUserSubscription;
-        $this->emitter = $emitter;
         $this->hermesEmitter = $hermesEmitter;
         $this->authorizator = $authorizator;
         $this->addressesRepository = $addressesRepository;
