@@ -87,15 +87,15 @@
             $(target).toggle();
         });
 
-        $('#finish').on('click', function (e) {
+        $('#finish a').on('click', function (e) {
             e.preventDefault();
 
             finished = 0;
             errorred = 0;
 
-            var $finishBtn = $(this).find('.btn');
+            var $finishBtn = $(this);
+            var targetHref = $finishBtn.attr('href');
             $finishBtn.attr('disabled', true);
-            var targetHref = $(this).find('a').attr('href');
 
             for (var i=0; i < finishCallbacks.length; i++) {
                 var cb = finishCallbacks[i];
@@ -103,14 +103,12 @@
             }
 
             var callbackCheck = setInterval(function() {
-                console.log("finished callbacks:", finished);
                 if (finishCallbacks.length === finished + errorred) {
                     clearInterval(callbackCheck);
 
                     $finishBtn.attr('disabled', false);
 
                     if (errorred === 0) {
-                        console.log("redirecting to:", targetHref);
                         window.location = targetHref;
                     } else {
                         console.log("callbacks with errors, staying here");
