@@ -26,7 +26,6 @@ use Crm\UsersModule\Auth\InvalidEmailException;
 use Crm\UsersModule\Auth\UserManager;
 use Crm\UsersModule\Repository\AddressesRepository;
 use Crm\UsersModule\Repository\UsersRepository;
-use League\Event\Emitter;
 use Nette\Application\BadRequestException;
 use Nette\Application\Responses\TextResponse;
 use Nette\Application\UI\Form;
@@ -35,6 +34,7 @@ use Nette\Security\AuthenticationException;
 use Nette\Utils\DateTime;
 use Nette\Utils\Json;
 use Tomaj\Form\Renderer\BootstrapRenderer;
+use Tomaj\Hermes\Emitter;
 
 class SalesFunnelFrontendPresenter extends FrontendPresenter
 {
@@ -78,7 +78,7 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
         PaymentProcessor $paymentProcessor,
         SegmentFactory $segmentFactory,
         ActualUserSubscription $actualUserSubscription,
-        \Tomaj\Hermes\Emitter $hermesEmitter,
+        Emitter $hermesEmitter,
         Authorizator $authorizator,
         AddressesRepository $addressesRepository,
         UserManager $userManager,

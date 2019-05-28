@@ -20,7 +20,6 @@ use Crm\SalesFunnelModule\Repository\SalesFunnelsStatsRepository;
 use Crm\UsersModule\Auth\Access\AccessToken;
 use Crm\UsersModule\Repository\UserMetaRepository;
 use Crm\UsersModule\Repository\UsersRepository;
-use League\Event\Emitter;
 use Nette;
 use Nette\Application\BadRequestException;
 use Nette\Database\Table\ActiveRow;
@@ -70,9 +69,6 @@ class SalesFunnelPresenter extends FrontendPresenter
     
     /** @persistent */
     public $VS;
-
-    /** @var Emitter @inject */
-    public $hermesEmitter;
 
     public function startup()
     {
@@ -372,7 +368,7 @@ class SalesFunnelPresenter extends FrontendPresenter
         if (!$recurrentPayment) {
             $funnel = $this->salesFunnelsRepository->find($payment->sales_funnel_id);
 
-            $this->hermesEmitter->emit(new SalesFunnelEvent($funnel, $this->getUser(), SalesFunnelsStatsRepository::TYPE_ERROR));
+            $this->emitter->emit(new SalesFunnelEvent($funnel, $this->getUser(), SalesFunnelsStatsRepository::TYPE_ERROR));
             $this->redirect('error');
         }
 
