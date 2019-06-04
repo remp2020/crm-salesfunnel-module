@@ -13,6 +13,7 @@ use Crm\PaymentsModule\PaymentProcessor;
 use Crm\PaymentsModule\Repository\PaymentGatewaysRepository;
 use Crm\PaymentsModule\Repository\PaymentsRepository;
 use Crm\PaymentsModule\Repository\RecurrentPaymentsRepository;
+use Crm\SalesFunnelModule\Events\PaymentItemContainerReadyEvent;
 use Crm\SalesFunnelModule\Events\SalesFunnelEvent;
 use Crm\SalesFunnelModule\Repository\SalesFunnelsMetaRepository;
 use Crm\SalesFunnelModule\Repository\SalesFunnelsRepository;
@@ -435,6 +436,13 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
             }
             $paymentItemContainer->addItem(new DonationPaymentItem($this->translator->translate('payments.admin.donation'), $additionalAmount, $donationPaymentVat));
         }
+
+        // let modules add own items to PaymentItemContainer before payment is created
+        $this->emitter->emit(new PaymentItemContainerReadyEvent(
+            $paymentItemContainer,
+            $this->getHttpRequest()->getPost()
+        ));
+
         $payment = $this->paymentsRepository->add(
             $subscriptionType,
             $paymentGateway,

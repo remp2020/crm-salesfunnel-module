@@ -112,3 +112,62 @@ and display payment gateway within iframe of a modal window.
 
 If the form is valid, backend will create new unfinished payment for the user and the server response will contain
 redirection to payment gateway.
+
+
+## Events and handlers
+
+### PaymentItemContainerReadyEvent
+
+This event is emitted from `SalesFunnelFrontedPresenter::renderSubmit` after `PaymentItemContainer` was initialized and filled with base payment items _(eg `SubscriptionTypePaymentItem`)_ but before payment is created.
+
+All handlers which register listener for this event have access to whole `PaymentItemContainer`. It can be used to add payment items before payment is created and before customer is redirected to payment provider.
+
+#### ExampleModule implementation
+
+For example - your sales funnel contains specific donation input field with name `specific_donation` and you want to add it to the payment.
+
+Create handler `Crm\ExampleModule\Events\PaymentItemContainerReadyEventHandler`:
+
+```php
+<?php
+
+namespace Crm\ExampleModule\Events;
+
+use Crm\PaymentsModule\PaymentItem\DonationPaymentItem;
+use League\Event\AbstractListener;
+use League\Event\EventInterface;
+
+class PaymentItemContainerReadyEventHandler extends AbstractListener
+{
+    public function handle(EventInterface $event)
+    {
+        $paymentData = $event->getPaymentData();
+        if (isset($paymentData['specific_donation']))
+        {
+            $paymentItemContainer = $event->getPaymentItemContainer();
+            $paymentItemContainer->addItem(
+                new DonationPaymentItem(
+                    $name = 'Specific donation',
+                    $price = $paymentData['specific_donation'],
+                    $vat = 0
+                )
+            );
+        }
+    }
+}
+```
+
+And initialize listener in `ExampleModule\ExampleModule.php`
+
+  ```php
+    public function registerEventHandlers(\League\Event\Emitter $emitter)
+  {
+    //...
+    $emitter->addListener(
+      \Crm\SalesFunnelModule\Events\PaymentItemContainerReadyEvent::class,
+      $this->getInstance(\Crm\ExampleModule\Events\PaymentItemContainerReadyEventHandler::class)
+    );
+    //...
+  ```
+
+Newly created payment by SalesFunnel will now contain specific donation if sales funnel received this field.
