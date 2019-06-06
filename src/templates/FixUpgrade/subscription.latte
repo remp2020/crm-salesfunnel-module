@@ -110,7 +110,7 @@
             {var $price = $upgrader->getChargePrice()}
 
             <div class="buttons row">
-                <div class="col-md-6 col-sm-6 col-xs-12 text-right">
+                <div class="col-md-8 col-sm-8 col-xs-12 text-right">
 
                     <form method="get" action="{link upgrade}" target="_parent">
 
@@ -118,13 +118,13 @@
                         <input type="hidden" name="subscription_type" value="{$upgradeSubscriptionType->id}">
 
                         <button name="submit" type="submit" class="btn btn-large btn-buy text-right">
-                            {_sales_funnel.frontent.upgrade.subscription.confirm_modal.submit} {if $price > 0}({$price|price}){/if}
+                            {_sales_funnel.frontend.upgrade.subscription.confirm_modal.submit} {if $price > 0}({$price|price}){/if}
                         </button>
 
                         <div n:if="$upgrader->getType() == 'paid_extend'" class="col-md-12">
                             <div id="payment-types" class="col-md-8 text-left pull-right">
                                 <div class="row">
-                                    <h4>{_sales_funnel.frontent.upgrade.subscription.select_payment_gateway}</h4>
+                                    <h4>{_sales_funnel.frontend.upgrade.subscription.select_payment_gateway}</h4>
                                 </div>
                                 {foreach $upgrade->getPaymentGateways() as $gatewayWrapper}
                                     <div class="row">
@@ -139,9 +139,9 @@
 
                     </form>
                 </div>
-                <div class="col-md-6 col-sm-6 col-xs-12">
+                <div class="col-md-4 col-sm-4 col-xs-12">
                     <a href="{$cmsUrl}" class="btn btn-outline"
-                       target="_top">{_sales_funnel.frontent.upgrade.subscription.back}</a>
+                       target="_top">{_sales_funnel.frontend.upgrade.subscription.back}</a>
                 </div>
             </div>
 
@@ -161,7 +161,7 @@
 
             <hr>
             <p n:if="$actualSubscription" class="text-muted">
-                {_sales_funnel.frontent.upgrade.subscription.actual_subscription} {$actualSubscription->subscription_type|typeContent|noescape}
+                {_sales_funnel.frontend.upgrade.subscription.actual_subscription} {$actualSubscription->subscription_type|typeContent|noescape}
                 ({$actualSubscription->start_time|userDate} - {$actualSubscription->end_time|userDate})
             </p>
         </div>
