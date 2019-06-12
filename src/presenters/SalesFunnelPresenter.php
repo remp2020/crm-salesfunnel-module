@@ -10,6 +10,7 @@ use Crm\PaymentsModule\Gateways\RecurrentPaymentInterface;
 use Crm\PaymentsModule\PaymentProcessor;
 use Crm\PaymentsModule\RecurrentPaymentsProcessor;
 use Crm\PaymentsModule\Repository\PaymentLogsRepository;
+use Crm\PaymentsModule\Repository\PaymentMetaRepository;
 use Crm\PaymentsModule\Repository\PaymentsRepository;
 use Crm\PaymentsModule\Repository\RecurrentPaymentsRepository;
 use Crm\SalesFunnelModule\Events\SalesFunnelEvent;
@@ -54,6 +55,9 @@ class SalesFunnelPresenter extends FrontendPresenter
 
     /** @var UserMetaRepository @inject */
     public $userMetaRepository;
+
+    /** @var PaymentMetaRepository @inject */
+    public $paymentMetaRepository;
 
     /** @var PaymentCompleteRedirectManager @inject */
     public $paymentCompleteRedirectManager;
@@ -218,6 +222,38 @@ class SalesFunnelPresenter extends FrontendPresenter
     public function renderReturnPaymentComfortPay()
     {
         return $this->returnPayment('comfortpay');
+    }
+
+    public function renderReturnPaymentGopay($id)
+    {
+        $meta = $this->paymentMetaRepository->findByMeta('gopay_transaction_reference', $id);
+        if (!$meta) {
+            $this->paymentLogsRepository->add(
+                'ERROR',
+                "Cannot find gopay transaction reference '{$id}'",
+                $this->actualUrl(),
+                null
+            );
+            $this->redirect('SalesFunnel:Error');
+        }
+
+        $payment = $meta->payment;
+
+        if (!in_array($payment->payment_gateway->code, ['gopay', 'gopay_recurrent'])) {
+            $this->paymentLogsRepository->add(
+                'ERROR',
+                "Return to wrong payment type 'gopay'",
+                $this->actualUrl(),
+                $payment->id
+            );
+            $this->redirect('SalesFunnel:Error');
+        }
+        return $this->processPayment($payment);
+    }
+
+    public function renderReturnPaymentGopayrecurrent($id)
+    {
+        return $this->renderReturnPaymentGopay($id);
     }
 
     public function renderReturnPaymentViamo()
