@@ -51,6 +51,6 @@
 <script type="text/javascript" src="{$basePath}/layouts/default/js/iframeResizer.min.js"></script>
 <script>
     $( window ).load(function() {
-        iFrameResize({ log: false, heightCalculationMethod: 'max' }, '#outside');
+        iFrameResize({ log: false, heightCalculationMethod: 'lowestElement' }, '#outside');
     });
 </script>
