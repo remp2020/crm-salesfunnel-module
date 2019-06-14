@@ -141,6 +141,10 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
         }
 
         $gateways = $this->loadGateways($salesFunnel);
+        $gateways['gopay'] = [];
+        $gateways['gopay_recurrent'] = [];
+//        dump($gateways);
+//        die();
         $subscriptionTypes = $this->loadSubscriptionTypes($salesFunnel);
         if ($this->getUser()->id) {
             $subscriptionTypes = $this->filterSubscriptionTypes($subscriptionTypes, $this->getUser()->id);
@@ -150,6 +154,8 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
         }
         $addresses = [];
         $body = $salesFunnel->body;
+
+        $body = file_get_contents(__DIR__ . '/../../../../app/modules/BurdaModule/seeders/sales_funnels/2019-05-apetit-month.html');
 
         $loader = new \Twig_Loader_Array([
             'funnel_template' => $body,
