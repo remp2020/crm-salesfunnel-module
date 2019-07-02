@@ -509,6 +509,7 @@ class SalesFunnelPresenter extends FrontendPresenter
             ->userRecurrentPayments($user->id)
             ->where(['payment_gateway.code = ?' => $payment->ref('payment_gateway')->code])
             ->where(['cid IS NOT NULL AND expires_at > ?' => new DateTime()])
+            ->order('id DESC, charge_at DESC')
             ->fetchAll();
 
         $cardsByExpiration = [];

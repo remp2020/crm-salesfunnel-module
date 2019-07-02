@@ -529,6 +529,7 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
             ->userRecurrentPayments($user->id)
             ->where(['payment_gateway.code = ?' => $paymentGateway->code])
             ->where(['cid IS NOT NULL AND expires_at > ?' => new DateTime()])
+            ->order('id DESC, charge_at DESC')
             ->count();
 
         return $usableRecurrentsCount > 0;
