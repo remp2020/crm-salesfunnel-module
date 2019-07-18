@@ -482,8 +482,6 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
         }
         $this->paymentsRepository->addMeta($payment, $metaData);
 
-        $this->getPaymentConfig($payment);
-
         $this->hermesEmitter->emit(new HermesMessage('sales-funnel', [
             'type' => 'payment',
             'user_id' => $user->id,

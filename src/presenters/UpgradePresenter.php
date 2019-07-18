@@ -83,7 +83,6 @@ class UpgradePresenter extends FrontendPresenter
             // taky jemny hack - ak sa nevari boolean ale vrati sa Irow ktory je paymenta
             // tak ju sprocesujeme
             try {
-                $this->getPaymentConfig($result);
                 $url = $this->paymentProcessor->begin($result);
                 $this->redirectUrl($url);
             } catch (CannotProcessPayment $err) {
@@ -134,7 +133,6 @@ class UpgradePresenter extends FrontendPresenter
             // taky jemny hack - ak sa nevari boolean ale vrati sa Irow ktory je paymenta
             // tak ju sprocesujeme
             try {
-                $this->getPaymentConfig($result);
                 $url = $this->paymentProcessor->begin($result);
                 $this->redirectUrl($url);
             } catch (CannotProcessPayment $err) {
