@@ -3,10 +3,6 @@ services:
 		setup:
 			- addModule(Crm\SalesFunnelModule\SalesFunnelModule())
 
-	paymentCompleteRedirect:
-	 	class: Crm\SalesFunnelModule\Model\PaymentCompleteRedirectManager
-
-
 	sales_route:
 		class: Crm\SalesFunnelModule\SalesFunnelRoute
 		autowired: no
