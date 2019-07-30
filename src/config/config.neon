@@ -32,3 +32,4 @@ services:
 	- Crm\SalesFunnelModule\Repository\SalesFunnelsMetaRepository
 	- Crm\SalesFunnelModule\SalesFunnelsCache(%redis.host%, %redis.port%)
 	- Crm\SalesFunnelModule\Seeders\ConfigsSeeder
+	- Crm\SalesFunnelModule\Seeders\SalesFunnelsSeeder

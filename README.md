@@ -113,6 +113,17 @@ and display payment gateway within iframe of a modal window.
 If the form is valid, backend will create new unfinished payment for the user and the server response will contain
 redirection to payment gateway.
 
+### Sample funnel
+
+Module provides seeder with single demo funnel which contain very barebone bootstrap-based design and simple javascript
+handler to ask and validate user's email/password.
+
+When the module is enabled, you can seed this funnel by running `php bin/command.php application:seed` and it will get
+available at `/sample` URL on your domain. You can (and should) also find your funnel in CRM admin
+(`/sales-funnel/sales-funnels-admin/)`as you still need to enable subscription types and gateways for this newly seeded
+funnel to work correctly.
+
+If you want to only view the sample implementation of funnel, you can [find it here](./src/seeders/sales_funnels/sample.twig).
 
 ## Events and handlers
 

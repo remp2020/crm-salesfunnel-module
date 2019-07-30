@@ -122,7 +122,7 @@ admin:
 			no_payment_gateway_message: No payment gatewaya
 			add_payment_gateway: Add payment gateway
 			no_subscription_type_message: No subscription types
-			add_subscription_type: Add subscription gateway
+			add_subscription_type: Add subscription type
 			distribution:
 				label: Distribution
 				amounts: How much paid before buying via this sales funnel

@@ -18,6 +18,7 @@ use Crm\SalesFunnelModule\Api\TrackStatsHandler;
 use Crm\SalesFunnelModule\DataProvider\PaymentsAdminFilterFormDataProvider;
 use Crm\SalesFunnelModule\Repository\SalesFunnelsRepository;
 use Crm\SalesFunnelModule\Seeders\ConfigsSeeder;
+use Crm\SalesFunnelModule\Seeders\SalesFunnelsSeeder;
 use Kdyby\Translation\Translator;
 use League\Event\Emitter;
 use Nette\Application\Routers\Route;
@@ -168,5 +169,6 @@ class SalesFunnelModule extends CrmModule
     public function registerSeeders(SeederManager $seederManager)
     {
         $seederManager->addSeeder($this->getInstance(ConfigsSeeder::class));
+        $seederManager->addSeeder($this->getInstance(SalesFunnelsSeeder::class));
     }
 }
