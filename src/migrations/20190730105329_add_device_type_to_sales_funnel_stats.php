@@ -11,10 +11,9 @@ class AddDeviceTypeToSalesFunnelStats extends AbstractMigration
             ->addColumn('device_type', 'string', ['null' => true])
             ->update();
 
-
         $this->table('sales_funnels_stats')
             ->removeIndex(['sales_funnel_id', 'date', 'type'])
             ->addIndex(['sales_funnel_id', 'date', 'type', 'device_type'], ['name' => 'sales_funnel_id', 'unique' => true])
-            ->save();
+            ->update();
     }
 }
