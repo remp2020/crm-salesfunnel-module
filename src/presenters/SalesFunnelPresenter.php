@@ -3,6 +3,7 @@
 namespace Crm\SalesFunnelModule\Presenters;
 
 use Crm\ApplicationModule\Presenters\FrontendPresenter;
+use Crm\ApplicationModule\Request;
 use Crm\PaymentsModule\CannotProcessPayment;
 use Crm\PaymentsModule\GatewayFactory;
 use Crm\PaymentsModule\Gateways\GatewayAbstract;
@@ -391,6 +392,8 @@ class SalesFunnelPresenter extends FrontendPresenter
 
     public function handleUseExistingCard(int $recurrentPaymentId, int $paymentId)
     {
+        $ua = Request::getUserAgent();
+
         $this->onlyLoggedIn();
 
         $payment = $this->paymentsRepository->find($paymentId);
@@ -404,7 +407,7 @@ class SalesFunnelPresenter extends FrontendPresenter
         if (!$recurrentPayment) {
             $funnel = $this->salesFunnelsRepository->find($payment->sales_funnel_id);
 
-            $this->emitter->emit(new SalesFunnelEvent($funnel, $this->getUser(), SalesFunnelsStatsRepository::TYPE_ERROR));
+            $this->emitter->emit(new SalesFunnelEvent($funnel, $this->getUser(), SalesFunnelsStatsRepository::TYPE_ERROR, $ua));
             $this->redirect('error');
         }
 

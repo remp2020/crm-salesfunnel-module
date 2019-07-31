@@ -19,6 +19,7 @@ class SalesFunnelsStatsRepository extends Repository
     public function add(
         IRow $salesFunnel,
         $type,
+        $deviceType,
         DateTime $date = null,
         $value = 1
     ) {
@@ -27,8 +28,8 @@ class SalesFunnelsStatsRepository extends Repository
         }
 
         $this->getDatabase()->query(
-            'INSERT INTO sales_funnels_stats (sales_funnel_id,date,type,value) ' .
-            " VALUES ({$salesFunnel->id},'{$date->format('Y-m-d H:i:s')}','{$type}', {$value}) " .
+            'INSERT INTO sales_funnels_stats (sales_funnel_id,date,type,device_type,value) ' .
+            " VALUES ({$salesFunnel->id},'{$date->format('Y-m-d H:i:s')}','{$type}', '{$deviceType}', {$value}) " .
             " ON DUPLICATE KEY UPDATE value=value+{$value}"
         );
     }

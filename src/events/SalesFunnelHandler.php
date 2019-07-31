@@ -38,6 +38,6 @@ class SalesFunnelHandler extends AbstractListener
         if ($event->getType() === SalesFunnelsStatsRepository::TYPE_ERROR) {
             $this->salesFunnelsRepository->incrementErrors($salesFunnel);
         }
-        $this->salesFunnelsStatsRepository->add($salesFunnel, $event->getType());
+        $this->salesFunnelsStatsRepository->add($salesFunnel, $event->getType(), $event->getDeviceType());
     }
 }

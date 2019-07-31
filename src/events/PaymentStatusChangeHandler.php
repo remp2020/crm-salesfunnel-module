@@ -44,7 +44,7 @@ class PaymentStatusChangeHandler extends AbstractListener
 
         if ($payment->status == PaymentsRepository::STATUS_PAID) {
             $salesFunnel = $payment->sales_funnel;
-            $this->emitter->emit(new SalesFunnelEvent($salesFunnel, $payment->user, SalesFunnelsStatsRepository::TYPE_OK));
+            $this->emitter->emit(new SalesFunnelEvent($salesFunnel, $payment->user, SalesFunnelsStatsRepository::TYPE_OK, $payment->user_agent));
         }
     }
 }

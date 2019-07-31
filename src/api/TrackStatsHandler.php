@@ -7,6 +7,7 @@ use Crm\ApiModule\Authorization\ApiAuthorizationInterface;
 use Crm\ApiModule\Params\InputParam;
 use Crm\ApiModule\Params\ParamsProcessor;
 use Crm\ApiModule\Api\ApiHandler;
+use Crm\ApplicationModule\Request;
 use Crm\SalesFunnelModule\Events\SalesFunnelEvent;
 use Crm\SalesFunnelModule\Repository\SalesFunnelsRepository;
 use League\Event\Emitter;
@@ -29,6 +30,7 @@ class TrackStatsHandler extends ApiHandler
         return [
             new InputParam(InputParam::TYPE_POST, 'url_key', InputParam::REQUIRED),
             new InputParam(InputParam::TYPE_POST, 'type', InputParam::REQUIRED),
+            new InputParam(InputParam::TYPE_POST, 'user_agent', InputParam::OPTIONAL),
         ];
     }
 
@@ -47,7 +49,9 @@ class TrackStatsHandler extends ApiHandler
             return $response;
         }
 
-        $this->emitter->emit(new SalesFunnelEvent($funnel, null, $params['type']));
+        $ua = $params['user_agent'] ?? Request::getUserAgent();
+
+        $this->emitter->emit(new SalesFunnelEvent($funnel, null, $params['type'], $ua));
 
         $result = [
             'status' => 'ok',

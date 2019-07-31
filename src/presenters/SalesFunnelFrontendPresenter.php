@@ -4,6 +4,7 @@ namespace Crm\SalesFunnelModule\Presenters;
 
 use Crm\ApplicationModule\Hermes\HermesMessage;
 use Crm\ApplicationModule\Presenters\FrontendPresenter;
+use Crm\ApplicationModule\Request;
 use Crm\PaymentsModule\CannotProcessPayment;
 use Crm\PaymentsModule\GatewayFactory;
 use Crm\PaymentsModule\Gateways\RecurrentPaymentInterface;
@@ -190,7 +191,8 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
         }
         $template = $twig->render('funnel_template', $params);
 
-        $this->emitter->emit(new SalesFunnelEvent($salesFunnel, $this->getUser(), SalesFunnelsStatsRepository::TYPE_SHOW));
+        $ua = Request::getUserAgent();
+        $this->emitter->emit(new SalesFunnelEvent($salesFunnel, $this->getUser(), SalesFunnelsStatsRepository::TYPE_SHOW, $ua));
 
         $userId = null;
         if ($this->getUser()->isLoggedIn()) {
@@ -237,24 +239,26 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
             return;
         }
 
+        $ua = Request::getUserAgent();
+
         if (!$funnel) {
-            $this->emitter->emit(new SalesFunnelEvent($funnel, $this->getUser(), SalesFunnelsStatsRepository::TYPE_NO_ACCESS));
+            $this->emitter->emit(new SalesFunnelEvent($funnel, $this->getUser(), SalesFunnelsStatsRepository::TYPE_NO_ACCESS, $ua));
             $this->redirect('inactive');
         }
 
         if (!$funnel->is_active) {
-            $this->emitter->emit(new SalesFunnelEvent($funnel, $this->getUser(), SalesFunnelsStatsRepository::TYPE_NO_ACCESS));
+            $this->emitter->emit(new SalesFunnelEvent($funnel, $this->getUser(), SalesFunnelsStatsRepository::TYPE_NO_ACCESS, $ua));
             $this->redirect('inactive');
             return;
         }
 
         if ($funnel->start_at && $funnel->start_at > new DateTime()) {
-            $this->emitter->emit(new SalesFunnelEvent($funnel, $this->getUser(), SalesFunnelsStatsRepository::TYPE_NO_ACCESS));
+            $this->emitter->emit(new SalesFunnelEvent($funnel, $this->getUser(), SalesFunnelsStatsRepository::TYPE_NO_ACCESS, $ua));
             $this->redirect('inactive');
         }
 
         if ($funnel->end_at && $funnel->end_at < new DateTime()) {
-            $this->emitter->emit(new SalesFunnelEvent($funnel, $this->getUser(), SalesFunnelsStatsRepository::TYPE_NO_ACCESS));
+            $this->emitter->emit(new SalesFunnelEvent($funnel, $this->getUser(), SalesFunnelsStatsRepository::TYPE_NO_ACCESS, $ua));
             $this->redirect('inactive');
         }
 
@@ -266,7 +270,7 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
         }
 
         if ($funnel->only_not_logged && $this->getUser()->isLoggedIn()) {
-            $this->emitter->emit(new SalesFunnelEvent($funnel, $this->getUser(), SalesFunnelsStatsRepository::TYPE_NO_ACCESS));
+            $this->emitter->emit(new SalesFunnelEvent($funnel, $this->getUser(), SalesFunnelsStatsRepository::TYPE_NO_ACCESS, $ua));
             $this->redirect('noAccess', $funnel->id);
         }
 
@@ -276,7 +280,7 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
                 $segment = $this->segmentFactory->buildSegment($segmentRow->code);
                 $inSegment = $segment->isIn('id', $this->getUser()->id);
                 if (!$inSegment) {
-                    $this->emitter->emit(new SalesFunnelEvent($funnel, $this->getUser(), SalesFunnelsStatsRepository::TYPE_NO_ACCESS));
+                    $this->emitter->emit(new SalesFunnelEvent($funnel, $this->getUser(), SalesFunnelsStatsRepository::TYPE_NO_ACCESS, $ua));
                     $this->redirect('noAccess', $funnel->id);
                 }
             }
@@ -285,46 +289,52 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
 
     private function validateSubscriptionType(ActiveRow $subscriptionType, ActiveRow $funnel)
     {
+        $ua = Request::getUserAgent();
+
         if (!$subscriptionType || !$funnel->related('sales_funnels_subscription_types')->where(['subscription_type_id' => $subscriptionType->id])) {
-            $this->emitter->emit(new SalesFunnelEvent($funnel, $this->getUser(), SalesFunnelsStatsRepository::TYPE_ERROR));
+            $this->emitter->emit(new SalesFunnelEvent($funnel, $this->getUser(), SalesFunnelsStatsRepository::TYPE_ERROR, $ua));
             $this->redirect('invalid');
         }
 
         if (!$subscriptionType->active) {
-            $this->emitter->emit(new SalesFunnelEvent($funnel, $this->getUser(), SalesFunnelsStatsRepository::TYPE_ERROR));
+            $this->emitter->emit(new SalesFunnelEvent($funnel, $this->getUser(), SalesFunnelsStatsRepository::TYPE_ERROR, $ua));
             $this->redirect('invalid');
         }
 
         $subscriptionTypes = $this->loadSubscriptionTypes($funnel);
 
         if (!isset($subscriptionTypes[$subscriptionType->code])) {
-            $this->emitter->emit(new SalesFunnelEvent($funnel, $this->getUser(), SalesFunnelsStatsRepository::TYPE_ERROR));
+            $this->emitter->emit(new SalesFunnelEvent($funnel, $this->getUser(), SalesFunnelsStatsRepository::TYPE_ERROR, $ua));
             $this->redirect('invalid');
         }
     }
 
     private function validateGateway(ActiveRow $paymentGateway, ActiveRow $funnel)
     {
+        $ua = Request::getUserAgent();
+
         if (!$paymentGateway || !$funnel->related('sales_funnels_payment_gateways')->where(['payment_gateway_id' => $paymentGateway->id])) {
-            $this->emitter->emit(new SalesFunnelEvent($funnel, $this->getUser(), SalesFunnelsStatsRepository::TYPE_ERROR));
+            $this->emitter->emit(new SalesFunnelEvent($funnel, $this->getUser(), SalesFunnelsStatsRepository::TYPE_ERROR, $ua));
             $this->redirect('invalid');
         }
 
         if (!$paymentGateway->visible) {
-            $this->emitter->emit(new SalesFunnelEvent($funnel, $this->getUser(), SalesFunnelsStatsRepository::TYPE_ERROR));
+            $this->emitter->emit(new SalesFunnelEvent($funnel, $this->getUser(), SalesFunnelsStatsRepository::TYPE_ERROR, $ua));
             $this->redirect('invalid');
         }
 
         $gateways = $this->loadGateways($funnel);
 
         if (!isset($gateways[$paymentGateway->code])) {
-            $this->emitter->emit(new SalesFunnelEvent($funnel, $this->getUser(), SalesFunnelsStatsRepository::TYPE_ERROR));
+            $this->emitter->emit(new SalesFunnelEvent($funnel, $this->getUser(), SalesFunnelsStatsRepository::TYPE_ERROR, $ua));
             $this->redirect('invalid');
         }
     }
 
     private function user($email, $password, ActiveRow $funnel, $source, $referer, bool $needAuth = true)
     {
+        $ua = Request::getUserAgent();
+
         if ($this->getUser() && $this->getUser()->isLoggedIn()) {
             return $this->userManager->loadUser($this->user);
         }
@@ -337,7 +347,7 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
         } else {
             $user = $this->userManager->addNewUser($email, true, $source, $referer);
             if (!$user) {
-                $this->emitter->emit(new SalesFunnelEvent($funnel, $this->getUser(), SalesFunnelsStatsRepository::TYPE_ERROR));
+                $this->emitter->emit(new SalesFunnelEvent($funnel, $this->getUser(), SalesFunnelsStatsRepository::TYPE_ERROR, $ua));
                 $this->redirect('error');
             }
             $this->usersRepository->update($user, [
@@ -352,11 +362,13 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
     {
         $funnel = $this->salesFunnelsRepository->findByUrlKey(filter_input(INPUT_POST, 'funnel_url_key'));
 
+        $ua = Request::getUserAgent();
+
         if (!$funnel) {
             throw new BadRequestException('Funnel not found');
         }
         if ($funnel) {
-            $this->emitter->emit(new SalesFunnelEvent($funnel, $this->getUser(), SalesFunnelsStatsRepository::TYPE_FORM));
+            $this->emitter->emit(new SalesFunnelEvent($funnel, $this->getUser(), SalesFunnelsStatsRepository::TYPE_FORM, $ua));
         }
 
         $this->validateFunnel($funnel);
