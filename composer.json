@@ -5,7 +5,8 @@
   "homepage": "https://remp2020.com",
   "license": "MIT",
   "require": {
-    "php": "^7.2"
+    "php": "^7.2",
+    "mobiledetect/mobiledetectlib": "^2.8"
   },
   "minimum-stability": "dev",
   "autoload": {
