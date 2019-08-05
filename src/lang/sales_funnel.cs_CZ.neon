@@ -144,3 +144,9 @@ admin:
 subscription_types_in_sales_funnels:
 	header: Dostupné v oknech
 	no_sales_funnels_message: Tento typ předplatného není přiřazený k žádnému platebnímu oknu.
+
+config:
+	category: Platební okna
+	default_sales_funnel_url_key:
+		name: Výchozí platební okno
+		description: "URL vybraného platebního okna (napr. default)"

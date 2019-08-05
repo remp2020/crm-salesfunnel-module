@@ -145,3 +145,9 @@ admin:
 subscription_types_in_sales_funnels:
 	header: Available in sales funnels
 	no_sales_funnels_message: This subscription type isn't used by any sales funnel
+
+config:
+	category: Sales funnels
+	default_sales_funnel_url_key:
+		name: Default sales funnel
+		description: "URL of chosen sales funnel (e.g. default)"

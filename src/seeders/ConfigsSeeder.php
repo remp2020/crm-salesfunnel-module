@@ -28,7 +28,14 @@ class ConfigsSeeder implements ISeeder
     }
     public function seed(OutputInterface $output)
     {
-        $category = $this->configCategoriesRepository->loadByName('Platby');
+        $categoryName = 'sales_funnel.config.category';
+        $category = $this->configCategoriesRepository->loadByName($categoryName);
+        if (!$category) {
+            $category = $this->configCategoriesRepository->add($categoryName, 'far fa-window-maximize', 100);
+            $output->writeln('  <comment>* config category <info>Všeobecne</info> created</comment>');
+        } else {
+            $output->writeln('  * config category <info>Všeobecne</info> exists');
+        }
 
         $name = 'default_sales_funnel_url_key';
         $value = 'default';
@@ -36,20 +43,29 @@ class ConfigsSeeder implements ISeeder
         if (!$config) {
             $this->configBuilder->createNew()
                 ->setName($name)
-                ->setDisplayName('Predvolené platobné okno')
+                ->setDisplayName('sales_funnel.config.default_sales_funnel_url_key.name')
                 ->setValue($value)
-                ->setDescription('URL key parameter vybraného platobného okna')
+                ->setDescription('sales_funnel.config.default_sales_funnel_url_key.description')
                 ->setType(ApplicationConfig::TYPE_STRING)
                 ->setAutoload(true)
                 ->setConfigCategory($category)
                 ->setSorting(900)
                 ->save();
             $output->writeln("  <comment>* config item <info>$name</info> created</comment>");
-        } elseif ($config->has_default_value && $config->value !== $value) {
-            $this->configsRepository->update($config, ['value' => $value, 'has_default_value' => true]);
-            $output->writeln("  <comment>* config item <info>$name</info> updated</comment>");
         } else {
             $output->writeln("  * config item <info>$name</info> exists");
+
+            if ($config->has_default_value && $config->value !== $value) {
+                $this->configsRepository->update($config, ['value' => $value, 'has_default_value' => true]);
+                $output->writeln("  <comment>* config item <info>$name</info> updated</comment>");
+            }
+
+            if ($config->category->name != $categoryName) {
+                $this->configsRepository->update($config, [
+                    'config_category_id' => $category->id
+                ]);
+                $output->writeln("  <comment>* config item <info>$name</info> updated</comment>");
+            }
         }
     }
 }
