@@ -69,38 +69,6 @@ frontend:
 		title: Could not login with entered credentials
 	disabled_auto_login:
 	    title: Disabled auto-login after payment because of ADMIN user
-	upgrade:
-		error:
-			title: Error
-			message: We couldn't upgrade your subscription. Please contact our customer support.
-			my_subscriptions: My subscriptions
-			not_available: 'You have no active subscription or you are not signed in. Please, <a target="_top" href="/sign/in">sign in</a> or choose from our <a href="/" target="_top">subscription offerings</a>.'
-			no_base_payment: 'System cannot perform and upgrade automatically. Please contact use at info@dennikn.sk and we will gladly help you.'
-			already_upgraded: 'You already have the upgraded package, no further upgrade is necessary.'
-			no_upgrade_possible: 'Your current type of subscription is not upgradeable.'
-			card_expiring: 'Upgrade is not possible, your card is expiring soon.'
-			choose_gateway: You must choose a form of payment to continue.
-		success: Your subscription has successfully been upgraded
-		payment_gateway_timeout: Payment gateways is temporarily unavailable. Please try again later.
-		subscription:
-			confirm_modal:
-				title: Do you really want to upgrade?
-				submit: "Yes, please, upgrade my subscription"
-				close: Close
-			select_payment_gateway: Select payment method
-			back: Back
-			actual_subscription: Your actual subscription grants you access to
-		subscription_info:
-			actual_subscription: You're currently having subscription for
-			valid_to: valid to
-			short_confirmation: "If you confirm the subscription upgrade, your current subscription will be changed to more expensive club subscription – you don't have to pay anything, we just shorten the remaining time of your subscription. Your new subscription would be valid to"
-			paid_extend_confirmation: "When upgrading, you'll be asked for a new payment. The payment amount will be discounted based on your current subscription price and remaining days. Your new subscription would be valid to"
-			special_confirmation: "You need to pay 1 eur to upgrade a subscription."
-			actual_price: You're currently having access for
-			payment_period: every <strong>%count%</strong> days
-			new_price: "Your new price for accessing web, apps and Club N will be since next charging"
-			less_than_5_days: "If you have enabled recurrent charges from your debit card and your current subscription ends in less than 5 days, you'll get an upgrade immediatelly and price of the higher package will be charged when your subscription ends."
-			more_than_5_days: "If you current subscription ends in more than 5 days, you'll pay proportional amount of money based on your remaining days and price of subscription you're upgrading to."
 
 admin:
 	sales_funnels:

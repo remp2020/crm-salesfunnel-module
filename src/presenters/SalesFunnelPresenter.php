@@ -153,20 +153,6 @@ class SalesFunnelPresenter extends FrontendPresenter
         $this->template->payment = $payment;
     }
 
-    public function renderUpgrade($id = 'mobile')
-    {
-        $this->template->service = $id;
-    }
-
-    public function renderFixUpgrade($id = 'mobile')
-    {
-        $this->template->service = $id;
-    }
-
-    public function renderMonthUpgrade()
-    {
-    }
-
     private function returnPayment($gatewayCode)
     {
         $payment = $this->getPayment();

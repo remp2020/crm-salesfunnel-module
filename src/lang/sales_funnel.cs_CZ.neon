@@ -67,38 +67,6 @@ frontend:
 		title: Se zadaným heslem se nepodařilo přihlásit
 	disabled_auto_login:
 		title: Zakázáno automatické přihlášení po zaplacení kvůli ADMIN uživateli
-	upgrade:
-		error:
-			title: Chyba
-			message: "Vaše předplatné se nepodařilo změnit. Prosím, kontaktujte zákaznickou podporu."
-			my_subscriptions: Moje předplatné
-			not_available: 'Aktuálně nemáte žádné předplatné, nebo nejste přihlášeni. Prosím, <a target="_top" href="/sign/in">přihlašte se</a>, nebo si vyberte z naší <a href="/" target="_top">nabídky předplatných</a>.'
-			no_base_payment: 'Přechod na vyšší balíček předplatného z účtu nelze provést automaticky, prosím, napište nám na info@denikn.cz a rádi vám pomůžeme.'
-			already_upgraded: 'Tento vyšší balíček předplatného už teď máte aktivní, upgrade přes tuto stránku tedy není nutný.'
-			no_upgrade_possible: 'Váš aktuální typ předplatného nelze změnit na vyšší typ.'
-			card_expiring: 'Vaše karta ma blízkou dobu expirace. Nelze změnit na vyšší typ. '
-			choose_gateway: Pro pokračování musíte zvolit způsob platby.
-		success: Vaše předplatné bylo úspěšně změněno
-		payment_gateway_timeout: Platební brána je dočasně nedostupná. Prosím opakujte akci později.
-		subscription:
-			confirm_modal:
-				title: Přejít na vyšší balíček?
-				submit: "Ano, přejít na vyšší balíček"
-				close: Zavřít
-			select_payment_gateway: Vyberte způsob platby
-			back: Zpět na titulku
-			actual_subscription: Vaše aktuální předplatné obsahuje
-		subscription_info:
-			actual_subscription: Aktuálně máte zakoupený přístup za
-			valid_to: platný do
-			short_confirmation: "Pokud potvrdíte přechod na vyšší předplatné s aplikacemi, dnešní předplatné vám „rozměníme“ na dražší klubové předplatné – nyní nemusíte nic doplácet jen se Vám zkrátí doba, do kdy potrvá Vaše předplatné. Váše předplatné bude platné do"
-			paid_extend_confirmation: "Při přechodu na vyšší balíček Vás požádáme o novou platbu. Její výše se sníží o sumu Vašeho doposud aktuálního předplatného. Nové předplatné bude platit do"
-			special_confirmation: ""
-			actual_price: Momentálně platíte za přístup
-			payment_period: každých <strong>%count%</strong> dní
-			new_price: "Vaše nová cena za přístup k webu, aplikacím a za Klub N bude od následujícího obnovení"
-			less_than_5_days: "Pokud máte zapnuté automatické obnovování předplatného z platební karty a do konce aktuálního předplatného Vám zbývá méně než 5 dní, při požadavku na upgrade získáte přístup k výhodám Klubu N okamžitě a cenu vyššího balíčku zaplatíte až při nejbližším obnovení předplatného."
-			more_than_5_days: "Pokud zůstává víc než 5 dní, zaplatíte jen poměrnou část doplatku za období, které zůstává do konce Vašeho předplatného"
 
 admin:
 	sales_funnels:
