@@ -92,7 +92,8 @@ class SalesFunnelModule extends CrmModule
         foreach ($this->salesFunnelsCache->all() as $salesFunnel) {
             $router[] = new Route("<funnel {$salesFunnel->url_key}>", 'SalesFunnel:SalesFunnelFrontend:default');
         }
-        $router[] = new Route('/sales-funnel/sales-funnel/success/<variableSymbol>', 'SalesFunnel:SalesFunnel:success');
+
+        $router[] = new Route('/sales-funnel/sales-funnel/<action>[/<variableSymbol>]', 'SalesFunnel:SalesFunnel:success');
     }
 
     public function cache(OutputInterface $output, array $tags = [])
