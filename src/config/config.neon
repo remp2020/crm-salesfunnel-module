@@ -33,3 +33,8 @@ services:
 	- Crm\SalesFunnelModule\SalesFunnelsCache(%redis.host%, %redis.port%)
 	- Crm\SalesFunnelModule\Seeders\ConfigsSeeder
 	- Crm\SalesFunnelModule\Seeders\SalesFunnelsSeeder
+	- Crm\SalesFunnelModule\SalesFunnelPaymentCompleteRedirectResolver
+
+	paymentCompleteRedirect:
+		setup:
+			- registerRedirectResolver(Crm\SalesFunnelModule\SalesFunnelPaymentCompleteRedirectResolver(), 100)

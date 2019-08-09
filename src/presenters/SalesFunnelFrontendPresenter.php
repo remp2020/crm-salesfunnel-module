@@ -508,7 +508,7 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
         }
 
         if ($this->hasStoredCard($user, $payment->payment_gateway)) {
-            $this->redirect('SalesFunnel:selectCard', $payment->id);
+            $this->redirect(':Payments:Recurrent:selectCard', $payment->id);
         }
 
         try {
