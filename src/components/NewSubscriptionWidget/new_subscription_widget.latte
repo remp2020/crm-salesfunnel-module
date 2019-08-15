@@ -44,6 +44,7 @@
         marginheight="0"
         scrolling="no"
         height="780"
+		onload="window.ScrollToTop()"
     	style="border:0; overflow-y:hidden; overflow-x:hidden; background: transparent;"></iframe>
   </div>
 </div>
@@ -53,4 +54,10 @@
     $( window ).load(function() {
         iFrameResize({ log: false, heightCalculationMethod: 'max' }, '#outside');
     });
+
+    window.ScrollToTop = function(){
+        $('html,body', window.document).animate({
+            scrollTop: '0px'
+        }, 'fast');
+    };
 </script>

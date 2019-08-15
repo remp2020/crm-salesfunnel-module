@@ -68,7 +68,7 @@
     <div class="iframe_wrapper">
       <img id="iframe_preloader" src="{$basePath}/layouts/default/images/iframe_preloader.gif" class="preloader" alt="preloader">
       <iframe id="myiframe"
-        width="100%" scrolling="no"
+        width="100%" scrolling="no" onload="window.ScrollToTop()"
         {* src="{link :SalesFunnel:SalesFunnel:funnelNewpaymentPopup referer => $referer, payment_gateway_id => $paymentGatewayId, subscription_type_id => $subscriptionTypeId}" *}
         src="{link :SalesFunnel:SalesFunnelFrontend:show $funnel->url_key, referer => $referer}&{$queryString}"
       ></iframe>
