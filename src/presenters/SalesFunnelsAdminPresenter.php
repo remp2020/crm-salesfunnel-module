@@ -276,6 +276,36 @@ class SalesFunnelsAdminPresenter extends AdminPresenter
         return $graph;
     }
 
+    protected function createComponentFunnelConversionRateGraph(GoogleLineGraphGroupControlFactoryInterface $factory)
+    {
+        $graph = $factory->create()
+            ->setGraphTitle('Sales funnel conversion rate by device')
+            ->setGraphHelp('Rate is computed as (finished_payments / number_of_shown_sales_funnels) * 100');
+
+        $deviceTypes = $this->salesFunnelsStatsRepository->getTable()
+            ->select('device_type')
+            ->where(['sales_funnel_id' => $this->params['id']])
+            ->group('device_type')
+            ->fetchAll();
+
+        $salesFunnelId = (int) $this->params['id'];
+
+        /** @var ActiveRow $row */
+        foreach ($deviceTypes as $row) {
+            $graphDataItem = new GraphDataItem();
+            $graphDataItem->setCriteria((new Criteria())
+                ->setTableName('sales_funnels_stats')
+                ->setTimeField('date')
+                ->setWhere("AND sales_funnel_id={$salesFunnelId} AND device_type='{$row->device_type}' AND type='ok'")
+                ->setValueField(" (SUM(value) / (SELECT SUM(value) FROM sales_funnels_stats WHERE type='show' AND sales_funnel_id={$salesFunnelId} AND DATE(sales_funnels_stats.`date`) = calendar.`date`)) * 100 ")
+                ->setStart('-1 month'))
+                ->setName($row->device_type);
+            $graph->addGraphDataItem($graphDataItem);
+        }
+
+        return $graph;
+    }
+
     protected function createComponentPaymentGatewaysGraph(GoogleBarGraphGroupControlFactoryInterface $factory)
     {
         $graphDataItem = new GraphDataItem();
