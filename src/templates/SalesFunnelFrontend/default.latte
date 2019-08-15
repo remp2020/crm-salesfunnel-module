@@ -82,6 +82,13 @@
     $( window ).load(function() {
         iFrameResize({ log: false, heightCalculationMethod: 'max' }, '#myiframe');
     });
+
+    window.ScrollToTop = function(){
+        $('html,body', window.document).animate({
+            scrollTop: '0px'
+        }, 'fast');
+    };
+
     $('#myiframe').load(function() {
         $(this).siblings('.preloader').remove();
         $(this).parents('.iframe_wrapper').addClass('init');
