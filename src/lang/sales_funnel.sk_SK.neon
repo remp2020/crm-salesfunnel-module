@@ -99,7 +99,7 @@ admin:
 				help: Štatistika platobného okna
 			graph_conversion_rate_stats:
 				title: Štatistika konverzného pomeru podľa zariadenia
-				help: Konverzný pomer sa počíta ako podiel počtu ukončených platieb a počtu zobrazení platobného okna
+				help: Konverzný pomer sa počíta ako podiel počtu ukončených platieb a počtu zobrazení platobného okna * 100
 			distribution:
 				label: Distribúcia
 				amounts: Koľko zaplatil pred zakúpením cez toto okno

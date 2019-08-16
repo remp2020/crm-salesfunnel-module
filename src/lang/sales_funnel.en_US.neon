@@ -99,7 +99,7 @@ admin:
 				help: All sales funnel stats
 			graph_conversion_rate_stats:
 				title: Sales funnel conversion rate by device
-				help: Rate is computed as ratio of finished payments and total number of sales funnel shows
+				help: Rate is computed as ratio of finished payments and total number of sales funnel shows * 100
 			distribution:
 				label: Distribution
 				amounts: How much paid before buying via this sales funnel
