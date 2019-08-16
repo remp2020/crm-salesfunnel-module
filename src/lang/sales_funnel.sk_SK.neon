@@ -91,6 +91,15 @@ admin:
 			add_payment_gateway: Pridaj platobnú bránu
 			no_subscription_type_message: Žiadne typy predplatného
 			add_subscription_type: Pridaj typ predplatného
+			graph_show_stats:
+				title: Štatistika zobrazenia platobného okna
+				help: Štatistika zobrazenia
+			graph_funnel_stats:
+				title: Štatistika platobného okna
+				help: Štatistika platobného okna
+			graph_conversion_rate_stats:
+				title: Štatistika konverzného pomeru podľa zariadenia
+				help: Konverzný pomer sa počíta ako podiel počtu ukončených platieb a počtu zobrazení platobného okna
 			distribution:
 				label: Distribúcia
 				amounts: Koľko zaplatil pred zakúpením cez toto okno

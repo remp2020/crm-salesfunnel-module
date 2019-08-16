@@ -89,6 +89,15 @@ admin:
 			add_payment_gateway: Přidej platební bránu
 			no_subscription_type_message: Žádné typy předplatného
 			add_subscription_type: Přidej typ předplatného
+			graph_show_stats:
+				title: Statistika zobrazení platebního okna
+				help: Statistika zobrazení
+			graph_funnel_stats:
+				title: Statistika platebního okna
+				help: Statistika platebního okna
+			graph_conversion_rate_stats:
+				title: Statistika konverzního poměru podle zařízení
+				help: Konverzní poměr se počítá jako podíl počtu ukončených plateb a počtu zobrazení platebního okna
 			distribution:
 				label: Distribuce
 				amounts: Kolik zaplatil před zakoupením prostřednictvím tohoto okna

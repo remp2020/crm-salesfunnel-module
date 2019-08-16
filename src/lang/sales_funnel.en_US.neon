@@ -91,6 +91,15 @@ admin:
 			add_payment_gateway: Add payment gateway
 			no_subscription_type_message: No subscription types
 			add_subscription_type: Add subscription type
+			graph_show_stats:
+				title: Sales funnel show stats
+				help: Show stats
+			graph_funnel_stats:
+				title: Sales funnel stats
+				help: All sales funnel stats
+			graph_conversion_rate_stats:
+				title: Sales funnel conversion rate by device
+				help: Rate is computed as ratio of finished payments and total number of sales funnel shows
 			distribution:
 				label: Distribution
 				amounts: How much paid before buying via this sales funnel

@@ -241,17 +241,16 @@ class SalesFunnelsAdminPresenter extends AdminPresenter
             ->setName('Show');
 
         return $factory->create()
-            ->setGraphTitle('Sales funnel show stats')
-            ->setGraphHelp('Show stats')
-            ->addGraphDataItem($graphDataItem)
-        ;
+            ->setGraphTitle($this->translator->translate('sales_funnel.admin.sales_funnels.show.graph_show_stats.title'))
+            ->setGraphHelp($this->translator->translate('sales_funnel.admin.sales_funnels.show.graph_show_stats.help'))
+            ->addGraphDataItem($graphDataItem);
     }
 
     protected function createComponentFunnelGraph(GoogleLineGraphGroupControlFactoryInterface $factory)
     {
         $graph = $factory->create()
-            ->setGraphTitle('Sales funnel stats')
-            ->setGraphHelp('All sales funnel stats');
+            ->setGraphTitle($this->translator->translate('sales_funnel.admin.sales_funnels.show.graph_funnel_stats.title'))
+            ->setGraphHelp($this->translator->translate('sales_funnel.admin.sales_funnels.show.graph_funnel_stats.help'));
 
         $types = $this->salesFunnelsStatsRepository->getTable()
             ->select('type')
@@ -270,6 +269,36 @@ class SalesFunnelsAdminPresenter extends AdminPresenter
                 ->setStart('-1 month'))
                 ->setName($row->type);
 
+            $graph->addGraphDataItem($graphDataItem);
+        }
+
+        return $graph;
+    }
+
+    protected function createComponentFunnelConversionRateGraph(GoogleLineGraphGroupControlFactoryInterface $factory)
+    {
+        $graph = $factory->create()
+            ->setGraphTitle($this->translator->translate('sales_funnel.admin.sales_funnels.show.graph_conversion_rate_stats.title'))
+            ->setGraphHelp($this->translator->translate('sales_funnel.admin.sales_funnels.show.graph_conversion_rate_stats.help'));
+
+        $deviceTypes = $this->salesFunnelsStatsRepository->getTable()
+            ->select('device_type')
+            ->where(['sales_funnel_id' => $this->params['id']])
+            ->group('device_type')
+            ->fetchAll();
+
+        $salesFunnelId = (int) $this->params['id'];
+
+        /** @var ActiveRow $row */
+        foreach ($deviceTypes as $row) {
+            $graphDataItem = new GraphDataItem();
+            $graphDataItem->setCriteria((new Criteria())
+                ->setTableName('sales_funnels_stats')
+                ->setTimeField('date')
+                ->setWhere("AND sales_funnel_id={$salesFunnelId} AND device_type='{$row->device_type}' AND type='ok'")
+                ->setValueField(" (SUM(value) / (SELECT SUM(value) FROM sales_funnels_stats WHERE type='show' AND sales_funnel_id={$salesFunnelId} AND DATE(sales_funnels_stats.`date`) = calendar.`date`)) * 100 ")
+                ->setStart('-1 month'))
+                ->setName($row->device_type);
             $graph->addGraphDataItem($graphDataItem);
         }
 
