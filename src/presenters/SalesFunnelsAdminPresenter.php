@@ -241,17 +241,16 @@ class SalesFunnelsAdminPresenter extends AdminPresenter
             ->setName('Show');
 
         return $factory->create()
-            ->setGraphTitle($this->translator->translate('sales_funnel.admin.sales_funnels.graph_show_stats.title'))
-            ->setGraphHelp($this->translator->translate('sales_funnel.admin.sales_funnels.graph_show_stats.help'))
+            ->setGraphTitle($this->translator->translate('sales_funnel.admin.sales_funnels.show.graph_show_stats.title'))
+            ->setGraphHelp($this->translator->translate('sales_funnel.admin.sales_funnels.show.graph_show_stats.help'))
             ->addGraphDataItem($graphDataItem);
     }
 
     protected function createComponentFunnelGraph(GoogleLineGraphGroupControlFactoryInterface $factory)
     {
         $graph = $factory->create()
-            ->setGraphTitle($this->translator->translate('sales_funnel.admin.sales_funnels.graph_show_stats.title'))
-            ->setGraphHelp($this->translator->translate('sales_funnel.admin.sales_funnels.graph_show_stats.help'))
-            ->setGraphHelp('All sales funnel stats');
+            ->setGraphTitle($this->translator->translate('sales_funnel.admin.sales_funnels.show.graph_funnel_stats.title'))
+            ->setGraphHelp($this->translator->translate('sales_funnel.admin.sales_funnels.show.graph_funnel_stats.help'));
 
         $types = $this->salesFunnelsStatsRepository->getTable()
             ->select('type')
@@ -279,8 +278,8 @@ class SalesFunnelsAdminPresenter extends AdminPresenter
     protected function createComponentFunnelConversionRateGraph(GoogleLineGraphGroupControlFactoryInterface $factory)
     {
         $graph = $factory->create()
-            ->setGraphTitle($this->translator->translate('sales_funnel.admin.sales_funnels.graph_conversion_rate_stats.title'))
-            ->setGraphHelp($this->translator->translate('sales_funnel.admin.sales_funnels.graph_conversion_rate_stats.help'));
+            ->setGraphTitle($this->translator->translate('sales_funnel.admin.sales_funnels.show.graph_conversion_rate_stats.title'))
+            ->setGraphHelp($this->translator->translate('sales_funnel.admin.sales_funnels.show.graph_conversion_rate_stats.help'));
 
         $deviceTypes = $this->salesFunnelsStatsRepository->getTable()
             ->select('device_type')
