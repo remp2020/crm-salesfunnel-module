@@ -97,7 +97,7 @@ admin:
 				help: Statistika platebního okna
 			graph_conversion_rate_stats:
 				title: Statistika konverzního poměru podle zařízení
-				help: Konverzní poměr se počítá jako podíl počtu ukončených plateb a počtu zobrazení platebního okna
+				help: Konverzní poměr se počítá jako podíl počtu ukončených plateb a počtu zobrazení platebního okna * 100
 			distribution:
 				label: Distribuce
 				amounts: Kolik zaplatil před zakoupením prostřednictvím tohoto okna
