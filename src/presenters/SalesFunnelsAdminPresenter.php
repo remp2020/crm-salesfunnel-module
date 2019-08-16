@@ -241,16 +241,16 @@ class SalesFunnelsAdminPresenter extends AdminPresenter
             ->setName('Show');
 
         return $factory->create()
-            ->setGraphTitle('Sales funnel show stats')
-            ->setGraphHelp('Show stats')
-            ->addGraphDataItem($graphDataItem)
-        ;
+            ->setGraphTitle($this->translator->translate('sales_funnel.admin.sales_funnels.graph_show_stats.title'))
+            ->setGraphHelp($this->translator->translate('sales_funnel.admin.sales_funnels.graph_show_stats.help'))
+            ->addGraphDataItem($graphDataItem);
     }
 
     protected function createComponentFunnelGraph(GoogleLineGraphGroupControlFactoryInterface $factory)
     {
         $graph = $factory->create()
-            ->setGraphTitle('Sales funnel stats')
+            ->setGraphTitle($this->translator->translate('sales_funnel.admin.sales_funnels.graph_show_stats.title'))
+            ->setGraphHelp($this->translator->translate('sales_funnel.admin.sales_funnels.graph_show_stats.help'))
             ->setGraphHelp('All sales funnel stats');
 
         $types = $this->salesFunnelsStatsRepository->getTable()
@@ -279,8 +279,8 @@ class SalesFunnelsAdminPresenter extends AdminPresenter
     protected function createComponentFunnelConversionRateGraph(GoogleLineGraphGroupControlFactoryInterface $factory)
     {
         $graph = $factory->create()
-            ->setGraphTitle('Sales funnel conversion rate by device')
-            ->setGraphHelp('Rate is computed as (finished_payments / number_of_shown_sales_funnels) * 100');
+            ->setGraphTitle($this->translator->translate('sales_funnel.admin.sales_funnels.graph_conversion_rate_stats.title'))
+            ->setGraphHelp($this->translator->translate('sales_funnel.admin.sales_funnels.graph_conversion_rate_stats.help'));
 
         $deviceTypes = $this->salesFunnelsStatsRepository->getTable()
             ->select('device_type')
