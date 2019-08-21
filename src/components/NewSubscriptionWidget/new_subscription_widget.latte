@@ -27,8 +27,6 @@
         .payment {
             -webkit-overflow-scrolling: touch;
             overflow-y: scroll;
-            padding-top: 20px;
-            background: #eee;
         }
     }
 </style>
@@ -51,7 +49,6 @@
     	frameborder="0"
         marginwidth="0"
         marginheight="0"
-        scrolling="no"
         height="780"
 		onload="window.ScrollToTop()"
     	style="border:0; overflow-y:hidden; overflow-x:hidden; background: transparent;"></iframe>
@@ -60,9 +57,14 @@
 
 <script type="text/javascript" src="{$basePath}/layouts/default/js/iframeResizer.min.js"></script>
 <script>
-    $( window ).load(function() {
-        iFrameResize({ log: false, heightCalculationMethod: 'max' }, '#outside');
-    });
+	// Keep iframe scrolling only if it's an iOS device. This is the only way how to preserve natural scrolling with
+	// momentum keeping on iOS. Rest of the devices should remain untouched.
+	if (!CSS.supports("-webkit-overflow-scrolling: touch")) {
+		$('iframe').prop("scrolling", "no");
+		$( window ).load(function() {
+			iFrameResize({ log: false, heightCalculationMethod: 'max' }, '#outside');
+		});
+	}
 
     window.ScrollToTop = function(){
         $('html,body', window.document).animate({
