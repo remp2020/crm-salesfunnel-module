@@ -21,6 +21,7 @@ use Crm\SalesFunnelModule\Repository\SalesFunnelsRepository;
 use Crm\SalesFunnelModule\Repository\SalesFunnelsStatsRepository;
 use Crm\SegmentModule\SegmentFactory;
 use Crm\SubscriptionsModule\PaymentItem\SubscriptionTypePaymentItem;
+use Crm\SubscriptionsModule\Repository\ContentAccessRepository;
 use Crm\SubscriptionsModule\Repository\SubscriptionTypesRepository;
 use Crm\SubscriptionsModule\Subscription\ActualUserSubscription;
 use Crm\UsersModule\Auth\Authorizator;
@@ -70,6 +71,8 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
 
     private $recurrentPaymentsRepository;
 
+    private $contentAccessRepository;
+
     public function __construct(
         SalesFunnelsRepository $salesFunnelsRepository,
         SalesFunnelsStatsRepository $salesFunnelsStatsRepository,
@@ -85,7 +88,8 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
         AddressesRepository $addressesRepository,
         UserManager $userManager,
         GatewayFactory $gatewayFactory,
-        RecurrentPaymentsRepository $recurrentPaymentsRepository
+        RecurrentPaymentsRepository $recurrentPaymentsRepository,
+        ContentAccessRepository $contentAccessRepository
     ) {
         parent::__construct();
         $this->salesFunnelsRepository = $salesFunnelsRepository;
@@ -103,6 +107,7 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
         $this->userManager = $userManager;
         $this->gatewayFactory = $gatewayFactory;
         $this->recurrentPaymentsRepository = $recurrentPaymentsRepository;
+        $this->contentAccessRepository = $contentAccessRepository;
     }
 
     public function startup()
@@ -169,12 +174,21 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
 
         $headEnd = $this->applicationConfig->get('header_block') . "\n\n" . $salesFunnel->head;
 
+        $contentAccess = [];
+        foreach ($subscriptionTypes as $index => $subscriptionType) {
+            $contentAccess[$subscriptionType['code']] = $this->contentAccessRepository->allForSubscriptionType($subscriptionType)->fetchPairs('name', 'name');
+
+            // casting to array for backwards compatibility and easier Twig access
+            $subscriptionTypes[$index] = $subscriptionType->toArray();
+        }
+
         $params = [
             'headEnd' => $headEnd,
             'funnel' => $salesFunnel,
             'isLogged' => $isLoggedIn,
             'gateways' => $gateways,
             'subscriptionTypes' => $subscriptionTypes,
+            'contentAccess' => $contentAccess,
             'addresses' => $addresses,
             'meta' => $this->salesFunnelsMetaRepository->all($salesFunnel),
             'jsDomain' => $this->getJavascriptDomain(),
@@ -228,7 +242,7 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
         $subscriptionTypesRows = $this->salesFunnelsRepository->getSalesFunnelSubscriptionTypes($salesFunnel);
         /** @var ActiveRow $subscriptionTypesRow */
         foreach ($subscriptionTypesRows as $subscriptionTypesRow) {
-            $subscriptionTypes[$subscriptionTypesRow->code] = $subscriptionTypesRow->toArray();
+            $subscriptionTypes[$subscriptionTypesRow->code] = $subscriptionTypesRow;
         }
         return $subscriptionTypes;
     }
