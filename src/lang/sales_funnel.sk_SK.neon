@@ -8,7 +8,7 @@ data:
 			url_key: Url
 			is_active: Aktívny
 			is_inactive: Neaktívny
-			redirect_funnel_id: Přesměrování
+			redirect_funnel_id: Presmerovanie
 			segment_id: Segment
 			start_at: Platný od
 			end_at: Platný do
