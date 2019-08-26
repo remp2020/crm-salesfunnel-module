@@ -53,7 +53,23 @@ class SalesFunnelAdminFormFactory
             ->setAttribute('placeholder', 'sales_funnel.data.sales_funnels.placeholder.name')
             ->setRequired();
 
-        $form->addCheckbox('is_active', 'sales_funnel.data.sales_funnels.fields.is_active');
+        $isActive = $form->addCheckbox('is_active', 'sales_funnel.data.sales_funnels.fields.is_active');
+
+        $activeFunnels = [];
+        foreach ($this->salesFunnelsRepository->active()->fetchAll() as $funnel) {
+            $activeFunnels[strval($funnel->id)] = "{$funnel->name} <small>({$funnel->url_key})</small>";
+        }
+
+        $redirectFunnelId = $form->addSelect('redirect_funnel_id', 'sales_funnel.data.sales_funnels.fields.redirect_funnel_id', $activeFunnels)
+            ->setPrompt('--')
+            ->setAttribute('placeholder', 'sales_funnel.data.sales_funnels.placeholder.redirect_funnel_id')
+            ->setOption('id', 'redirect_funnel_id')
+            ->setOption('description', 'sales_funnel.data.sales_funnels.description.redirect_funnel_id');
+
+        $redirectFunnelId->getControlPrototype()->addAttributes(['class' => 'select2']);
+
+        $isActive->addCondition(Form::EQUAL, false)
+            ->toggle('redirect_funnel_id');
 
         $form->addText('url_key', 'sales_funnel.data.sales_funnels.fields.url_key')
             ->setAttribute('placeholder', 'sales_funnel.data.sales_funnels.placeholder.url_key')
@@ -127,6 +143,9 @@ class SalesFunnelAdminFormFactory
         if ($values['head']) {
             $head = $values['head'];
         }
+        if ($values['is_active']) {
+            $values['redirect_funnel_id'] = null;
+        }
 
         if ($id) {
             $row = $this->salesFunnelsRepository->find($id);
@@ -146,7 +165,8 @@ class SalesFunnelAdminFormFactory
                 $values->only_not_logged,
                 $segment,
                 $values->no_access_html,
-                $values->error_html
+                $values->error_html,
+                $values->redirect_funnel_id
             );
             $this->salesFunnelsCache->add($row['id'], $values['url_key']);
             $this->onSave->__invoke($row);

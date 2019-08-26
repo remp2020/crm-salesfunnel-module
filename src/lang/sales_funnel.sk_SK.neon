@@ -7,6 +7,8 @@ data:
 			name: Názov
 			url_key: Url
 			is_active: Aktívny
+			is_inactive: Neaktívny
+			redirect_funnel_id: Přesměrování
 			segment_id: Segment
 			start_at: Platný od
 			end_at: Platný do
@@ -29,9 +31,12 @@ data:
 		placeholder:
 			name: napríklad Špeciálna zimná akcia
 			url_key: napríklad 'winter-sale'
+			redirect_funnel_id: napríklad 'default'
 			start_at: napríklad 14.2.2016
 			end_at: napríklad 14.2.2016
 			body: ľubovoľné html
+		description:
+			redirect_funnel_id: "Ak je presmerovanie vyplnené, používateľ bude presmerovaný na cieľové okno a neuvidí obrazovku informujúcu o nedostupnosti ponuky."
 
 frontend:
 	error:

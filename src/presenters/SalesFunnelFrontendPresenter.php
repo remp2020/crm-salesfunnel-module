@@ -130,6 +130,10 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
             throw new BadRequestException('Funnel not found');
         }
 
+        if ($salesFunnel->redirect_funnel) {
+            $this->redirect('default', array_merge(['funnel' => $salesFunnel->redirect_funnel->url_key], $_GET));
+        }
+
         $this->template->funnel = $salesFunnel;
         $this->template->referer = $this->getReferer();
     }

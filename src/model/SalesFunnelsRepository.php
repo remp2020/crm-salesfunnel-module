@@ -9,6 +9,7 @@ use Crm\SalesFunnelModule\Distribution\SubscriptionDaysDistribution;
 use DateTime;
 use Nette\Database\Context;
 use Nette\Database\Table\IRow;
+use Nette\Database\Table\Selection;
 
 class SalesFunnelsRepository extends Repository
 {
@@ -38,7 +39,8 @@ class SalesFunnelsRepository extends Repository
         $onlyNotLogged = false,
         IRow $segment = null,
         $noAccessHtml = null,
-        $errorHtml = null
+        $errorHtml = null,
+        $redirectFunnelId = null
     ) {
         return $this->insert([
             'name' => $name,
@@ -55,12 +57,18 @@ class SalesFunnelsRepository extends Repository
             'only_logged' => $onlyLogged,
             'only_not_logged' => $onlyNotLogged,
             'segment_id' => $segment ? $segment->id : null,
+            'redirect_funnel_id' => $redirectFunnelId,
         ]);
     }
 
     public function all()
     {
         return $this->getTable()->order('created_at DESC');
+    }
+
+    public function active(): Selection
+    {
+        return $this->all()->where(['is_active' => true]);
     }
 
     public function findByUrlKey($urlKey)

@@ -7,6 +7,8 @@ data:
 			name: Name
 			url_key: Url key
 			is_active: Active
+			is_inactive: Inactive
+			redirect_funnel_id: Redirect
 			segment_id: Segment
 			start_at: Valid from
 			end_at: Valid to
@@ -29,9 +31,12 @@ data:
 		placeholder:
 			name: for example Main funnel
 			url_key: for example 'winter-sale'
+			redirect_funnel_id: for example 'default'
 			start_at: for example 14.2.2016
 			end_at: for example 14.2.2016
 			body: any html
+		description:
+			redirect_funnel_id: "If filled, user will be redirected to the target sales funnel instead of seeing 'offer not available' message."
 
 frontend:
 	error:

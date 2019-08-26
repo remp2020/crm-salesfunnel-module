@@ -25,17 +25,26 @@
 <div class="row">
   <div class="col-md-6">
     <div class="panel panel-default">
-      <div class="panel-heading">{_sales_funnel.admin.sales_funnels.show.basic_informations}</div>
+      <div class="panel-heading">
+        {_sales_funnel.admin.sales_funnels.show.basic_informations}
+        {if $funnel->is_active}
+          <span class="label label-primary">{_sales_funnel.data.sales_funnels.fields.is_active}</span>
+        {else}
+          <span class="label label-default">{_sales_funnel.data.sales_funnels.fields.is_inactive}</span>
+        {/if}
+        <span n:if="$funnel->only_logged" class="label label-default">{_sales_funnel.data.sales_funnels.fields.only_logged}</span>
+        <span n:if="$funnel->only_not_logged" class="label label-default">{_sales_funnel.data.sales_funnels.fields.only_not_logged}</span>
+      </div>
       <ul class="list-group">
         <li class="list-group-item text-muted"><b>{_system.fields.created}:</b> <span class="text-muted">{$funnel->created_at|userDate}</span></li>
         <li class="list-group-item"><b>{_sales_funnel.data.sales_funnels.fields.url_key}:</b> <code>{$funnel->url_key}</code> <a href="{plink :SalesFunnel:SalesFunnelFrontend:Show $funnel->url_key}" class="btn btn-xs btn-default" target="_blank"><i class="fa fa-share"></i></a></li>
+        <li n:if="$funnel->redirect_funnel" class="list-group-item">
+          <b>{_sales_funnel.data.sales_funnels.fields.redirect_funnel_id}:</b>
+          <code>{$funnel->redirect_funnel->url_key}</code>
+          <a href="{plink :SalesFunnel:SalesFunnelFrontend:Show $funnel->redirect_funnel->url_key}" class="btn btn-xs btn-default" target="_blank"><i class="fa fa-share"></i></a>
+        </li>
         <li class="list-group-item"><b>{_sales_funnel.data.sales_funnels.fields.start_at}:</b> {if $funnel->start_at}{$funnel->start_at|userDate}{else}<span class="text-muted">n/a</span>{/if}</li>
         <li class="list-group-item"><b>{_sales_funnel.data.sales_funnels.fields.end_at}:</b> {if $funnel->end_at}{$funnel->end_at|userDate}{else}<span class="text-muted">n/a</span>{/if}</li>
-        <li class="list-group-item">
-          <span n:if="$funnel->is_active" class="label label-primary">{_sales_funnel.data.sales_funnels.fields.is_active}</span>
-          <span n:if="$funnel->only_logged" class="label label-default">{_sales_funnel.data.sales_funnels.fields.only_logged}</span>
-          <span n:if="$funnel->only_not_logged" class="label label-default">{_sales_funnel.data.sales_funnels.fields.only_not_logged}</span>
-        </li>
         <li n:if="$funnel->segment_id" class="list-group-item">
           <b>{_sales_funnel.data.sales_funnels.fields.segment}:</b> <a n:href=":Segment:StoredSegments:show $funnel->segment_id">{$funnel->segment->name}</a>
         </li>
