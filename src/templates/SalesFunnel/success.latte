@@ -83,6 +83,10 @@
 
     $(function () {
         $(document).on('click', '.additionalform-header-box', function () {
+            if ($(this).data('toggle') === 'collapse') {
+                // dont intervene with bootstrap collapsing;
+                return;
+            }
             var target = $(this).data('target');
             $(target).toggle();
         });
