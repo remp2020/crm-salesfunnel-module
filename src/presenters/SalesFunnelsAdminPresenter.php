@@ -296,7 +296,7 @@ class SalesFunnelsAdminPresenter extends AdminPresenter
                 ->setTableName('sales_funnels_stats')
                 ->setTimeField('date')
                 ->setWhere("AND sales_funnel_id={$salesFunnelId} AND device_type='{$row->device_type}' AND type='ok'")
-                ->setValueField(" (SUM(value) / (SELECT SUM(value) FROM sales_funnels_stats WHERE type='show' AND sales_funnel_id={$salesFunnelId} AND DATE(sales_funnels_stats.`date`) = calendar.`date`)) * 100 ")
+                ->setValueField(" (SUM(value) / (SELECT SUM(value) FROM sales_funnels_stats WHERE type='show' AND device_type='{$row->device_type}' AND sales_funnel_id={$salesFunnelId} AND DATE(sales_funnels_stats.`date`) = calendar.`date`)) * 100 ")
                 ->setStart('-1 month'))
                 ->setName($row->device_type);
             $graph->addGraphDataItem($graphDataItem);
