@@ -2,12 +2,16 @@
 
 namespace Crm\SalesFunnelModule\Components;
 
+use Crm\ApplicationModule\Presenters\FrontendPresenter;
 use Crm\ApplicationModule\Widget\BaseWidget;
 use Crm\ApplicationModule\Widget\WidgetManager;
 use Crm\SalesFunnelModule\Repository\SalesFunnelsRepository;
 use Nette\Application\BadRequestException;
 use Nette\Http\Request;
 
+/**
+ * @property FrontendPresenter $presenter
+ */
 class NewSubscriptionWidget extends BaseWidget
 {
     private $templateName = 'new_subscription_widget.latte';
@@ -44,11 +48,7 @@ class NewSubscriptionWidget extends BaseWidget
         }
         $this->template->salesFunnel = $salesFunnel->url_key;
 
-        $refererUrl = $this->request->getReferer();
-        $referer = '';
-        if ($refererUrl) {
-            $referer = $refererUrl->__toString();
-        }
+        $referer = $this->presenter->getReferer();
 
         $this->template->referer = $referer;
         $this->template->paymentGatewayId = null;
