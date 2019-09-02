@@ -6,6 +6,8 @@ use Crm\SalesFunnelModule\Repository\SalesFunnelsRepository;
 use Crm\SalesFunnelModule\Repository\SalesFunnelsStatsRepository;
 use League\Event\AbstractListener;
 use League\Event\EventInterface;
+use Sinergi\BrowserDetector\Browser;
+use Sinergi\BrowserDetector\UserAgent;
 
 class SalesFunnelHandler extends AbstractListener
 {
@@ -28,6 +30,14 @@ class SalesFunnelHandler extends AbstractListener
         }
 
         $salesFunnel = $event->getSalesFunnel();
+
+        if ($event->getUserAgent() !== null) {
+            $browser = new Browser($event->getUserAgent());
+            if ($browser->isRobot()) {
+                // Do not track robot visits
+                return;
+            }
+        }
 
         if ($event->getType() === SalesFunnelsStatsRepository::TYPE_SHOW) {
             $this->salesFunnelsRepository->incrementShows($salesFunnel);

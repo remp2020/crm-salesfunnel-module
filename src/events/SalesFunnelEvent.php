@@ -15,15 +15,17 @@ class SalesFunnelEvent extends AbstractEvent
 
     private $email;
 
-    private $deviceType = null;
+    private $deviceType;
+
+    private $userAgent;
 
     public function __construct(IRow $salesFunnel, $user, $type, $userAgent = null)
     {
         $this->salesFunnel = $salesFunnel;
         $this->type = $type;
 
-
         if ($userAgent) {
+            $this->userAgent = $userAgent;
             $detector = new MobileDetect(null, $userAgent);
             // Check for tablet first since it's a subset of mobile
             if ($detector->isTablet()) {
@@ -60,5 +62,10 @@ class SalesFunnelEvent extends AbstractEvent
     public function getDeviceType()
     {
         return $this->deviceType;
+    }
+
+    public function getUserAgent()
+    {
+        return $this->userAgent;
     }
 }
