@@ -7,7 +7,6 @@ use Crm\SalesFunnelModule\Repository\SalesFunnelsStatsRepository;
 use League\Event\AbstractListener;
 use League\Event\EventInterface;
 use Sinergi\BrowserDetector\Browser;
-use Sinergi\BrowserDetector\UserAgent;
 
 class SalesFunnelHandler extends AbstractListener
 {
