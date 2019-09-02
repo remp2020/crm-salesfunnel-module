@@ -302,6 +302,17 @@ class SalesFunnelsAdminPresenter extends AdminPresenter
             $graph->addGraphDataItem($graphDataItem);
         }
 
+        $graphDataItem = new GraphDataItem();
+        $graphDataItem->setCriteria((new Criteria())
+            ->setTableName('sales_funnels_stats')
+            ->setTimeField('date')
+            ->setWhere("AND sales_funnel_id={$salesFunnelId} AND type='ok'")
+            ->setValueField(" (SUM(value) / (SELECT SUM(value) FROM sales_funnels_stats WHERE type='show' AND sales_funnel_id={$salesFunnelId} AND DATE(sales_funnels_stats.`date`) = calendar.`date`)) * 100 ")
+            ->setStart('-1 month'))
+            ->setName($this->translator->translate('sales_funnel.admin.component.sales_funnel_stats_by_device.all_devices'));
+
+        $graph->addGraphDataItem($graphDataItem);
+
         return $graph;
     }
 

@@ -139,6 +139,8 @@ admin:
 			help: Počet zakúpených položiek na platbách
 		sales_funnel_user_listing_widget:
 			funnel: Okno
+		sales_funnel_stats_by_device:
+			all_devices: Všetky zariadenia
 
 # components
 subscription_types_in_sales_funnels:
