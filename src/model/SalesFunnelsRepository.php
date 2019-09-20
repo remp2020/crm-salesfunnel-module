@@ -241,12 +241,12 @@ LEFT JOIN users ON users.id = sub.user_id")->fetchAll();
 
     public function userSubscriptionsDistribution($funnelId, $levels)
     {
-        return $this->subscriptionDaysDistribution->distribution($this->getDatabase(), $funnelId, $levels);
+        return $this->subscriptionDaysDistribution->distribution($funnelId, $levels);
     }
 
     public function userSubscriptionsDistributionList($funnelId, $fromLevel, $toLevel)
     {
-        return $this->subscriptionDaysDistribution->distributionList($this->getDatabase(), $funnelId, $fromLevel, $toLevel);
+        return $this->subscriptionDaysDistribution->distributionList($funnelId, $fromLevel, $toLevel);
     }
 
     /**

@@ -6,7 +6,14 @@ use Nette\Database\Context;
 
 class SubscriptionDaysDistribution implements DistributionInterface
 {
-    public function distribution(Context $database, int $funnelId, array $levels): array
+    private $database;
+
+    public function __construct(Context $database)
+    {
+        $this->database = $database;
+    }
+
+    public function distribution(int $funnelId, array $levels): array
     {
         $levels[] = -1;
         $lastLevel = false;
@@ -15,7 +22,7 @@ class SubscriptionDaysDistribution implements DistributionInterface
             $skeleton = $this->getQuerySkeleton($level, $lastLevel, $funnelId);
             $query = "SELECT COUNT(*) AS result FROM ({$skeleton}) AS sub";
 
-            $res = $database->query($query)->fetch();
+            $res = $this->database->query($query)->fetch();
             $result[$level] = $res->result;
             $lastLevel = $level;
         }
@@ -23,12 +30,12 @@ class SubscriptionDaysDistribution implements DistributionInterface
         return $result;
     }
 
-    public function distributionList(Context $database, int $funnelId, float $fromLevel, float $toLevel = null): array
+    public function distributionList(int $funnelId, float $fromLevel, float $toLevel = null): array
     {
         $skeleton = $this->getQuerySkeleton($toLevel, $fromLevel, $funnelId);
         $query = "SELECT users.* FROM ({$skeleton}) AS sub LEFT JOIN users ON sub.user_id = users.id";
 
-        return $database->query($query)->fetchAll();
+        return $this->database->query($query)->fetchAll();
     }
 
     private function getQuerySkeleton(float $level, float $lastLevel, $funnelId)
