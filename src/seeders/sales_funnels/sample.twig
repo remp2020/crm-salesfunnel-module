@@ -27,6 +27,15 @@
 
     <h1>Buy new subscription</h1>
 
+    <div class="alert alert-warning" role="alert">
+        <p>This is a sample sales funnel generated during initial seeding. You can:</p>
+        <ul>
+            <li><a href="/sales-funnel/sales-funnels-admin/edit/{{ funnel.id }}">edit HTML</a> of this sales funnel</li>
+            <li><a href="/sales-funnel/sales-funnels-admin/show/{{ funnel.id }}">edit configuration</a> of this sales funnel (add/remove gateways and subscription types)</li>
+            <li><a href="/sales-funnel/sales-funnels-admin/new">create new</a> sales funnel</li>
+        </ul>
+    </div>
+
     <div class="row">
         <div class="col-md-6">
             <h3 class="show-error">Select type of subscription</h3>
@@ -37,7 +46,7 @@
                 <div class="show-error">
                     {% for subscriptionType in subscriptionTypes %}
                         <div class="radio">
-                            <label><input type="radio" name="subscription_type" value="{{ subscriptionType.code }}">{{ subscriptionType.user_label }}</label>
+                            <label><input type="radio" name="subscription_type" value="{{ subscriptionType.code }}">{{ subscriptionType.user_label }} ({{ subscriptionType.price }} EUR)</label>
                         </div>
                     {% endfor %}
                 </div>

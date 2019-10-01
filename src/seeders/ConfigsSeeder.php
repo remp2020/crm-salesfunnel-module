@@ -38,7 +38,7 @@ class ConfigsSeeder implements ISeeder
         }
 
         $name = 'default_sales_funnel_url_key';
-        $value = 'default';
+        $value = 'sample';
         $config = $this->configsRepository->loadByName($name);
         if (!$config) {
             $this->configBuilder->createNew()

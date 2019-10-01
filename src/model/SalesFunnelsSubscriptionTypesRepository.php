@@ -11,10 +11,16 @@ class SalesFunnelsSubscriptionTypesRepository extends Repository
 
     public function add(IRow $salesFunnel, IRow $subscriptionType)
     {
-        return $this->insert([
+        $data = [
             'sales_funnel_id' => $salesFunnel->id,
             'subscription_type_id' => $subscriptionType->id,
-        ]);
+        ];
+
+        $row = $this->getTable()->where($data)->fetch();
+        if (!$row) {
+            $row = $this->insert($data);
+        }
+        return $row;
     }
 
     public function findByBoth(IRow $salesFunnel, IRow $subscriptionType)

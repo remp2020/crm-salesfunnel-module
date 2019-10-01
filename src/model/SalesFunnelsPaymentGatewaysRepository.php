@@ -11,10 +11,16 @@ class SalesFunnelsPaymentGatewaysRepository extends Repository
 
     public function add(IRow $salesFunnel, IRow $paymentGateway)
     {
-        return $this->insert([
+        $data = [
             'sales_funnel_id' => $salesFunnel->id,
             'payment_gateway_id' => $paymentGateway->id,
-        ]);
+        ];
+
+        $row = $this->getTable()->where($data)->fetch();
+        if (!$row) {
+            $row = $this->insert($data);
+        }
+        return $row;
     }
 
     public function findByBoth(IRow $salesFunnel, IRow $paymentGateway)
