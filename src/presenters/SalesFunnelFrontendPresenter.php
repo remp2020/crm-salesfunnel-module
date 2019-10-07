@@ -458,6 +458,7 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
             }
         }
 
+        // container items
         $paymentItemContainer = (new PaymentItemContainer())->addItems(SubscriptionTypePaymentItem::fromSubscriptionType($subscriptionType));
         if ($additionalAmount) {
             $donationPaymentVat = $this->applicationConfig->get('donation_vat_rate');
@@ -489,29 +490,17 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
             $address
         );
 
-        $customNote = false;
-        if (isset($_POST['custom']) && is_array($_POST['custom']) && count($_POST['custom']) > 0) {
-            foreach ($_POST['custom'] as $key => $value) {
-                if ($value) {
-                    $customNote .= "$key: $value\n";
-                }
-            }
-        }
-        if ($customNote) {
-            $this->paymentsRepository->update($payment, ['note' => $customNote]);
-        }
-
+        // payment meta
         $metaData = $this->getHttpRequest()->getPost('payment_metadata', []);
-
-        $this->paymentsRepository->update($payment, ['sales_funnel_id' => $funnel->id]);
-        $browserId = $_COOKIE['browser_id'] ?? null;
         $metaData = array_merge($metaData, $this->trackingParams());
         $metaData['newsletters_subscribe'] = (bool) filter_input(INPUT_POST, 'newsletters_subscribe');
+        $browserId = $_COOKIE['browser_id'] ?? null;
         if ($browserId) {
             $metaData['browser_id'] = $browserId;
         }
         $this->paymentsRepository->addMeta($payment, $metaData);
 
+        $this->paymentsRepository->update($payment, ['sales_funnel_id' => $funnel->id]);
         $this->hermesEmitter->emit(new HermesMessage('sales-funnel', [
             'type' => 'payment',
             'user_id' => $user->id,
