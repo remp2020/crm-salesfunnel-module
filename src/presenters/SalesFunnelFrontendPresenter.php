@@ -477,6 +477,15 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
             $this->getHttpRequest()->getPost()
         ));
 
+        // prepare payment meta
+        $metaData = $this->getHttpRequest()->getPost('payment_metadata', []);
+        $metaData = array_merge($metaData, $this->trackingParams());
+        $metaData['newsletters_subscribe'] = (bool) filter_input(INPUT_POST, 'newsletters_subscribe');
+        $browserId = $_COOKIE['browser_id'] ?? null;
+        if ($browserId) {
+            $metaData['browser_id'] = $browserId;
+        }
+
         $payment = $this->paymentsRepository->add(
             $subscriptionType,
             $paymentGateway,
@@ -490,18 +499,10 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
             $additionalAmount,
             $additionalType,
             null,
-            $address
+            $address,
+            false,
+            $metaData
         );
-
-        // payment meta
-        $metaData = $this->getHttpRequest()->getPost('payment_metadata', []);
-        $metaData = array_merge($metaData, $this->trackingParams());
-        $metaData['newsletters_subscribe'] = (bool) filter_input(INPUT_POST, 'newsletters_subscribe');
-        $browserId = $_COOKIE['browser_id'] ?? null;
-        if ($browserId) {
-            $metaData['browser_id'] = $browserId;
-        }
-        $this->paymentsRepository->addMeta($payment, $metaData);
 
         $this->paymentsRepository->update($payment, ['sales_funnel_id' => $funnel->id]);
         $this->hermesEmitter->emit(new HermesMessage('sales-funnel', [
