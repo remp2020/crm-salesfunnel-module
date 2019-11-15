@@ -113,7 +113,11 @@
                     $finishBtn.attr('disabled', false);
 
                     if (errorred === 0) {
-                        window.location = targetHref;
+                        if (window === parent) {
+                            window.location = targetHref;
+                        } else {
+                            window.parent.location = targetHref;
+                        }
                     } else {
                         console.log("callbacks with errors, staying here");
                     }
