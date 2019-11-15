@@ -27,16 +27,15 @@ use Crm\SubscriptionsModule\Subscription\ActualUserSubscription;
 use Crm\UsersModule\Auth\Authorizator;
 use Crm\UsersModule\Auth\InvalidEmailException;
 use Crm\UsersModule\Auth\UserManager;
+use Crm\UsersModule\Forms\SignInFormFactory;
 use Crm\UsersModule\Repository\AddressesRepository;
 use Crm\UsersModule\Repository\UsersRepository;
 use Nette\Application\BadRequestException;
 use Nette\Application\Responses\TextResponse;
-use Nette\Application\UI\Form;
 use Nette\Database\Table\ActiveRow;
 use Nette\Security\AuthenticationException;
 use Nette\Utils\DateTime;
 use Nette\Utils\Json;
-use Tomaj\Form\Renderer\BootstrapRenderer;
 use Tomaj\Hermes\Emitter;
 
 class SalesFunnelFrontendPresenter extends FrontendPresenter
@@ -73,6 +72,8 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
 
     private $contentAccessRepository;
 
+    private $signInFormFactory;
+
     public function __construct(
         SalesFunnelsRepository $salesFunnelsRepository,
         SalesFunnelsStatsRepository $salesFunnelsStatsRepository,
@@ -89,7 +90,8 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
         UserManager $userManager,
         GatewayFactory $gatewayFactory,
         RecurrentPaymentsRepository $recurrentPaymentsRepository,
-        ContentAccessRepository $contentAccessRepository
+        ContentAccessRepository $contentAccessRepository,
+        SignInFormFactory $signInFormFactory
     ) {
         parent::__construct();
         $this->salesFunnelsRepository = $salesFunnelsRepository;
@@ -108,6 +110,7 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
         $this->gatewayFactory = $gatewayFactory;
         $this->recurrentPaymentsRepository = $recurrentPaymentsRepository;
         $this->contentAccessRepository = $contentAccessRepository;
+        $this->signInFormFactory = $signInFormFactory;
     }
 
     public function startup()
@@ -282,8 +285,8 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
 
         if ($funnel->only_logged && !$this->getUser()->isLoggedIn()) {
             $this->redirect('signIn', [
-                'referer' => isset($_GET['referer']) ? $_GET['referer'] : '',
-                'funnel' => isset($_GET['funnel']) ? $_GET['funnel'] : ''
+                'referer' => $this->getParameter('referer'),
+                'funnel' => $this->getParameter('funnel'),
             ]);
         }
 
@@ -584,44 +587,19 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
 
     protected function createComponentSignInForm()
     {
-        $form = new Form();
-        $form->setRenderer(new BootstrapRenderer());
-        $form->addProtection();
-        $form->addText('username', 'Email:')
-            ->setType('email')
-            ->setAttribute('autofocus')
-            ->setRequired('Prosím zadajte Váš email')
-            ->setAttribute('placeholder', 'Napríklad moj@email.sk');
-
-        $form->addPassword('password', 'Heslo:')
-            ->setRequired('Prosím zadajte Vaše heslo.')
-            ->setAttribute('placeholder', 'Vaše heslo');
+        $form = $this->signInFormFactory->create();
 
         $form->addHidden('referer');
         $form->addHidden('funnel');
-
-        $form->addSubmit('send', 'Prihlásiť');
-
         $form->setDefaults([
-            'remember' => true,
-            'referer' => isset($_GET['referer']) ? $_GET['referer'] : '',
-            'funnel' => isset($_GET['funnel']) ? $_GET['funnel'] : '',
+            'referer' => $this->getParameter('referer'),
+            'funnel' => $this->getParameter('funnel'),
         ]);
 
-        $form->onSuccess[] = [$this, 'signInFormSucceeded'];
-        return $form;
-    }
-
-    public function signInFormSucceeded($form, $values)
-    {
-        $this->getUser()->setExpiration('14 days', false);
-        try {
-            $this->getUser()->login(['username' => $values->username, 'password' => $values->password]);
-            $this->getUser()->setAuthorizator($this->authorizator);
+        $this->signInFormFactory->onAuthenticated = function ($form, $values, $user) {
             $this->redirect('show', ['referer' => $values->referer, 'funnel' => $values->funnel]);
-        } catch (AuthenticationException $e) {
-            $form->addError($e->getMessage());
-        }
+        };
+        return $form;
     }
 
     private function filterSubscriptionTypes(array $subscriptionTypes, int $userId)
