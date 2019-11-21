@@ -27,6 +27,11 @@
         .payment {
             -webkit-overflow-scrolling: touch;
             overflow-y: scroll;
+
+			/* Some iOS devices didn't render the sales funnel responsively. This should help. */
+			/* https://stackoverflow.com/questions/23083462/how-to-get-an-iframe-to-be-responsive-in-ios-safari */
+			width: 1px;
+			min-width: 100%;
         }
     }
 </style>
