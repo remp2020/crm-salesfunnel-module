@@ -55,8 +55,8 @@ frontend:
 		zlavomat_success: Zľavomat kupón bol úspešne použitý. Vaša objednávka prebehla v poriadku.
 		pass_sent: Heslo sme vám poslali e-mailom na %email%.
 		foreign_country: "Pre informácie o doručení do zahraničia nás, prosím, kontaktujte na <a href=\"mailto:%contactEmail%\">%contactEmail%</a>"
-		complete_registration: Dokončenie registrácie
-		complete_registration_info: "Ak ste vyplnili všetky údaje, dokončite registráciu<br> prejdite na nastavenia e-mail newslettru."
+		complete_registration: Návrat na článok
+		complete_registration_info: "Ak ste vyplnili všetky údaje,<br>pokračujte kde ste skončili."
 	error_page:
 		title: Chyba
 		message: "Bohužiaľ, vaša platba nebola úspešná."
