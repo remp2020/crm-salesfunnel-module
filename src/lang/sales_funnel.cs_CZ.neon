@@ -149,4 +149,4 @@ config:
 	category: Platební okna
 	default_sales_funnel_url_key:
 		name: Výchozí platební okno
-		description: "URL vybraného platebního okna (napr. default)"
+		description: "URL vybraného platebního okna (např. default)"
