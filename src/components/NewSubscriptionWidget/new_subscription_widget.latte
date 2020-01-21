@@ -66,10 +66,11 @@
 	// momentum keeping on iOS. Rest of the devices should remain untouched.
 	if (!CSS.supports("-webkit-overflow-scrolling: touch")) {
 		$('iframe').prop("scrolling", "no");
-		$( window ).load(function() {
-			iFrameResize({ log: false, heightCalculationMethod: 'max' }, '#outside');
-		});
 	}
+
+	$( window ).load(function() {
+		iFrameResize({ log: true, heightCalculationMethod: 'max' }, '#outside');
+	});
 
     window.ScrollToTop = function(){
         $('html,body', window.document).animate({
