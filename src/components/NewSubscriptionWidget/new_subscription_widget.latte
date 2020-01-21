@@ -1,45 +1,45 @@
 <style >
-    @media only screen {
-            #outside {
-                width: 100%;
-            }
-    }
+	@media only screen {
+		#outside {
+			width: 100%;
+		}
+	}
 
-    @media only screen
-      and (min-device-width: 320px)
-      and (max-device-width: 568px)
-      and (-webkit-min-device-pixel-ratio: 2) {
-        #outside {
-            width: 350px;
-        }
-    }
+	@media only screen
+	and (min-device-width: 320px)
+	and (max-device-width: 568px)
+	and (-webkit-min-device-pixel-ratio: 2) {
+		#outside {
+			width: 350px;
+		}
+	}
 
-    @media only screen
-      and (min-device-width: 375px)
-      and (max-device-width: 667px)
-      and (-webkit-min-device-pixel-ratio: 2) {
-        #outside {
-            width: 375px;
-        }
-    }
+	@media only screen
+	and (min-device-width: 375px)
+	and (max-device-width: 667px)
+	and (-webkit-min-device-pixel-ratio: 2) {
+		#outside {
+			width: 375px;
+		}
+	}
 
-    @supports (-webkit-overflow-scrolling: touch) {
-        .payment {
-            -webkit-overflow-scrolling: touch;
-            overflow-y: scroll;
+	@supports (-webkit-overflow-scrolling: touch) {
+		.payment {
+			-webkit-overflow-scrolling: touch;
+			overflow-y: scroll;
 
 			/* Some iOS devices didn't render the sales funnel responsively. This should help. */
 			/* https://stackoverflow.com/questions/23083462/how-to-get-an-iframe-to-be-responsive-in-ios-safari */
 			width: 1px;
 			min-width: 100%;
-        }
-    }
+		}
+	}
 </style>
 <div class="row">
-  <div class="col-md-12 payment">
-    <iframe
-        id="outside"
-        src="{plink :SalesFunnel:SalesFunnelFrontend:show
+	<div class="col-md-12 payment">
+		<iframe
+				id="outside"
+				src="{plink :SalesFunnel:SalesFunnelFrontend:show
     	    funnel => $salesFunnel,
     	    referer => $referer,
     	    payment_gateway_id => $paymentGatewayId,
@@ -50,14 +50,14 @@
     	    utm_content => $utmContent,
     	    banner_variant => $bannerVariant,
         }"
-    	border="0"
-    	frameborder="0"
-        marginwidth="0"
-        marginheight="0"
-        height="780"
-		onload="window.ScrollToTop()"
-    	style="border:0; overflow-y:hidden; overflow-x:hidden; background: transparent;"></iframe>
-  </div>
+				border="0"
+				frameborder="0"
+				marginwidth="0"
+				marginheight="0"
+				height="780"
+				onload="window.ScrollToTop()"
+				style="border:0; overflow-y:hidden; overflow-x:hidden; background: transparent;"></iframe>
+	</div>
 </div>
 
 <script type="text/javascript" src="{$basePath}/layouts/default/js/iframeResizer.min.js"></script>
@@ -66,15 +66,14 @@
 	// momentum keeping on iOS. Rest of the devices should remain untouched.
 	if (!CSS.supports("-webkit-overflow-scrolling: touch")) {
 		$('iframe').prop("scrolling", "no");
+		$( window ).load(function() {
+			iFrameResize({ log: false, heightCalculationMethod: 'max' }, '#outside');
+		});
 	}
 
-	$( window ).load(function() {
-		iFrameResize({ log: true, heightCalculationMethod: 'max' }, '#outside');
-	});
-
-    window.ScrollToTop = function(){
-        $('html,body', window.document).animate({
-            scrollTop: '0px'
-        }, 'fast');
-    };
+	window.ScrollToTop = function(){
+		$('html,body', window.document).animate({
+			scrollTop: '0px'
+		}, 'fast');
+	};
 </script>
