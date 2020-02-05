@@ -115,6 +115,7 @@ class SalesFunnelPresenter extends FrontendPresenter
 
         $this->template->payment = $payment;
         $this->template->subscription = $payment->subscription;
+        $this->template->destination = $this->paymentMetaRepository->values($payment, 'destination')->fetch()->value;
 
         // removing session created in SalesFunnelFrontendPresenter
         $this->getSession('sales_funnel')->remove();

@@ -42,6 +42,7 @@
 
             <div id="finish">
                 {control simpleWidget 'frontend.payment.success.finish_registration', $payment}
+        		<a n:if="$destination" class="btn btn-primary" href="{$destination}">Back to article</a>
             </div>
         </div>
     </div>
