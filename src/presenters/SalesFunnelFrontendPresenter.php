@@ -164,10 +164,10 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
         $addresses = [];
         $body = $salesFunnel->body;
 
-        $loader = new \Twig_Loader_Array([
+        $loader = new \Twig\Loader\ArrayLoader([
             'funnel_template' => $body,
         ]);
-        $twig = new \Twig_Environment($loader);
+        $twig = new \Twig\Environment($loader);
 
         $isLoggedIn = $this->getUser()->isLoggedIn();
         if ((isset($this->request->query['preview']) && $this->request->query['preview'] === 'no-user')
