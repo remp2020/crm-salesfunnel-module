@@ -9,7 +9,7 @@ class SalesFunnelsSubscriptionTypesRepository extends Repository
 {
     protected $tableName = 'sales_funnels_subscription_types';
 
-    public function add(IRow $salesFunnel, IRow $subscriptionType)
+    final public function add(IRow $salesFunnel, IRow $subscriptionType)
     {
         $data = [
             'sales_funnel_id' => $salesFunnel->id,
@@ -23,7 +23,7 @@ class SalesFunnelsSubscriptionTypesRepository extends Repository
         return $row;
     }
 
-    public function findByBoth(IRow $salesFunnel, IRow $subscriptionType)
+    final public function findByBoth(IRow $salesFunnel, IRow $subscriptionType)
     {
         return $this->getTable()->where([
             'sales_funnel_id' => $salesFunnel->id,

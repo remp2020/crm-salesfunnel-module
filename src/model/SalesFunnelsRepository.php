@@ -61,39 +61,39 @@ class SalesFunnelsRepository extends Repository
         ]);
     }
 
-    public function all()
+    final public function all()
     {
         return $this->getTable()->order('created_at DESC');
     }
 
-    public function active(): Selection
+    final public function active(): Selection
     {
         return $this->all()->where(['is_active' => true]);
     }
 
-    public function findByUrlKey($urlKey)
+    final public function findByUrlKey($urlKey)
     {
         return $this->getTable()->where('url_key', $urlKey)->fetch();
     }
 
-    public function update(IRow &$row, $data)
+    final public function update(IRow &$row, $data)
     {
         $data['updated_at'] = new DateTime();
         return parent::update($row, $data);
     }
 
-    public function incrementShows(IRow $funnel)
+    final public function incrementShows(IRow $funnel)
     {
         return $this->increment($funnel, 'total_show');
     }
 
-    public function incrementConversions(IRow $funnel)
+    final public function incrementConversions(IRow $funnel)
     {
         $this->update($funnel, ['last_conversion' => new DateTime()]);
         return $this->increment($funnel, 'total_conversions');
     }
 
-    public function incrementErrors(IRow $funnel)
+    final public function incrementErrors(IRow $funnel)
     {
         return $this->increment($funnel, 'total_errors');
     }
@@ -104,7 +104,7 @@ class SalesFunnelsRepository extends Repository
         return $this->getDatabase()->query("UPDATE sales_funnels SET {$field}={$field}+{$value}, last_use='{$date->format('Y-m-d H:i:s')}' WHERE id=" . $funnel->id);
     }
 
-    public function totalPaidAmount(IRow $funnel)
+    final public function totalPaidAmount(IRow $funnel)
     {
         return $this->getTable()
             ->where(':payments.status = ?', PaymentsRepository::STATUS_PAID)
@@ -112,12 +112,12 @@ class SalesFunnelsRepository extends Repository
             ->sum(':payments.amount');
     }
 
-    public function getSalesFunnelsBySubscriptionType(IRow $subscriptionType)
+    final public function getSalesFunnelsBySubscriptionType(IRow $subscriptionType)
     {
         return $this->getTable()->where([':sales_funnels_subscription_types.subscription_type_id' => $subscriptionType->id]);
     }
 
-    public function userSpentDistribution($funnelId, $levels)
+    final public function userSpentDistribution($funnelId, $levels)
     {
         $levelCount = count($levels);
         $result = array_fill(0, $levelCount, 0);
@@ -152,7 +152,7 @@ SQL;
         return $result;
     }
 
-    public function userSpentDistributionList($funnelId, $fromLevel, $toLevel)
+    final public function userSpentDistributionList($funnelId, $fromLevel, $toLevel)
     {
         if ($toLevel === 0) {
             $having = 'amount = 0';
@@ -181,7 +181,7 @@ SQL;
         return $res;
     }
 
-    public function userPaymentsCountDistribution($funnelId, $levels)
+    final public function userPaymentsCountDistribution($funnelId, $levels)
     {
         $levelCount = count($levels);
         $result = array_fill(0, $levelCount, 0);
@@ -213,7 +213,7 @@ SQL;
         return $result;
     }
 
-    public function userPaymentsCountDistributionList($funnelId, $fromLevel, $toLevel)
+    final public function userPaymentsCountDistributionList($funnelId, $fromLevel, $toLevel)
     {
         if ($fromLevel === 0) {
             $having = 'COUNT(DISTINCT old.id) = 0';
@@ -239,12 +239,12 @@ LEFT JOIN users ON users.id = sub.user_id")->fetchAll();
         return $res;
     }
 
-    public function userSubscriptionsDistribution($funnelId, $levels)
+    final public function userSubscriptionsDistribution($funnelId, $levels)
     {
         return $this->subscriptionDaysDistribution->distribution($funnelId, $levels);
     }
 
-    public function userSubscriptionsDistributionList($funnelId, $fromLevel, $toLevel)
+    final public function userSubscriptionsDistributionList($funnelId, $fromLevel, $toLevel)
     {
         return $this->subscriptionDaysDistribution->distributionList($funnelId, $fromLevel, $toLevel);
     }
@@ -253,7 +253,7 @@ LEFT JOIN users ON users.id = sub.user_id")->fetchAll();
      * @param IRow $funnel
      * @return array
      */
-    public function getSalesFunnelSubscriptionTypes(IRow $funnel)
+    final public function getSalesFunnelSubscriptionTypes(IRow $funnel)
     {
         $subscriptionTypes = [];
         foreach ($funnel->related('sales_funnels_subscription_types') as $row) {
@@ -263,7 +263,7 @@ LEFT JOIN users ON users.id = sub.user_id")->fetchAll();
         return $subscriptionTypes;
     }
 
-    public function getSalesFunnelDistribution(IRow $funnel)
+    final public function getSalesFunnelDistribution(IRow $funnel)
     {
         return $this->getTable()
             ->select(':payments.subscription_type_id, COUNT(*) AS count')
@@ -275,7 +275,7 @@ LEFT JOIN users ON users.id = sub.user_id")->fetchAll();
             ->fetchPairs('subscription_type_id', 'count');
     }
 
-    public function getSalesFunnelGateways(IRow $funnel)
+    final public function getSalesFunnelGateways(IRow $funnel)
     {
         $gateways = [];
         foreach ($funnel->related('sales_funnels_payment_gateways') as $row) {

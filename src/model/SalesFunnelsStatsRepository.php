@@ -16,7 +16,7 @@ class SalesFunnelsStatsRepository extends Repository
 
     protected $tableName = 'sales_funnels_stats';
     
-    public function add(
+    final public function add(
         IRow $salesFunnel,
         $type,
         $deviceType,

@@ -10,7 +10,7 @@ class SalesFunnelsMetaRepository extends Repository
 {
     protected $tableName = 'sales_funnels_meta';
 
-    public function add(IRow $salesFunnel, $key, $value)
+    final public function add(IRow $salesFunnel, $key, $value)
     {
         $this->insert([
             'sales_funnel_id' => $salesFunnel->id,
@@ -21,27 +21,27 @@ class SalesFunnelsMetaRepository extends Repository
         ]);
     }
 
-    public function exists(IRow $salesFunnel, $key)
+    final public function exists(IRow $salesFunnel, $key)
     {
         return $this->getTable()->where(['sales_funnel_id' => $salesFunnel->id, 'key' => $key])->count('*') > 0;
     }
 
-    public function updateValue(IRow $salesFunnel, $key, $value)
+    final public function updateValue(IRow $salesFunnel, $key, $value)
     {
         $salesFunnelMeta = $this->getTable()->where(['sales_funnel_id' => $salesFunnel->id, 'key' => $key])->fetch();
-        return parent::update($salesFunnelMeta, [
+        return $this->update($salesFunnelMeta, [
             'value' => $value,
             'updated_at' => new DateTime(),
         ]);
     }
 
-    public function incrementValue(IRow $salesFunnel, $key, $value = 1)
+    final public function incrementValue(IRow $salesFunnel, $key, $value = 1)
     {
         return $this->getTable()->where(['sales_funnel_id' => $salesFunnel->id, 'key' => $key])
             ->update(['value+=' => $value, 'updated_at' => new DateTime()]);
     }
 
-    public function get(IRow $salesFunnel, $key)
+    final public function get(IRow $salesFunnel, $key)
     {
         $row = $this->getTable()->where(['sales_funnel_id' => $salesFunnel->id, 'key' => $key])->limit(1)->fetch();
         if ($row) {
@@ -50,7 +50,7 @@ class SalesFunnelsMetaRepository extends Repository
         return false;
     }
 
-    public function all(IRow $salesFunnel)
+    final public function all(IRow $salesFunnel)
     {
         return $this->getTable()->where(['sales_funnel_id' => $salesFunnel->id])->fetchPairs('key', 'value');
     }

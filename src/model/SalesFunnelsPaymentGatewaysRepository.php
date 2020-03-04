@@ -9,7 +9,7 @@ class SalesFunnelsPaymentGatewaysRepository extends Repository
 {
     protected $tableName = 'sales_funnels_payment_gateways';
 
-    public function add(IRow $salesFunnel, IRow $paymentGateway)
+    final public function add(IRow $salesFunnel, IRow $paymentGateway)
     {
         $data = [
             'sales_funnel_id' => $salesFunnel->id,
@@ -23,7 +23,7 @@ class SalesFunnelsPaymentGatewaysRepository extends Repository
         return $row;
     }
 
-    public function findByBoth(IRow $salesFunnel, IRow $paymentGateway)
+    final public function findByBoth(IRow $salesFunnel, IRow $paymentGateway)
     {
         return $this->getTable()->where([
             'sales_funnel_id' => $salesFunnel->id,
