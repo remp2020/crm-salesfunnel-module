@@ -7,6 +7,12 @@ services:
 		class: Crm\SalesFunnelModule\SalesFunnelRoute
 		autowired: no
 
+	salesFunnelsRepository: Crm\SalesFunnelModule\Repository\SalesFunnelsRepository
+	salesFunnelsSubscriptionTypesRepository: Crm\SalesFunnelModule\Repository\SalesFunnelsSubscriptionTypesRepository
+	salesFunnelsPaymentGatewaysRepository: Crm\SalesFunnelModule\Repository\SalesFunnelsPaymentGatewaysRepository
+	salesFunnelsStatsRepository: Crm\SalesFunnelModule\Repository\SalesFunnelsStatsRepository
+	salesFunnelsMetaRepository: Crm\SalesFunnelModule\Repository\SalesFunnelsMetaRepository
+
 	- Crm\SalesFunnelModule\Api\ListPaymentsPublicMetaHandler
 	- Crm\SalesFunnelModule\Api\TrackStatsHandler
 	- Crm\SalesFunnelModule\Components\NewSubscriptionWidget
@@ -25,11 +31,6 @@ services:
 	- Crm\SalesFunnelModule\Events\PaymentStatusChangeHandler
 	- Crm\SalesFunnelModule\Events\SalesFunnelHandler
 	- Crm\SalesFunnelModule\Forms\SalesFunnelAdminFormFactory
-	- Crm\SalesFunnelModule\Repository\SalesFunnelsRepository
-	- Crm\SalesFunnelModule\Repository\SalesFunnelsSubscriptionTypesRepository
-	- Crm\SalesFunnelModule\Repository\SalesFunnelsPaymentGatewaysRepository
-	- Crm\SalesFunnelModule\Repository\SalesFunnelsStatsRepository
-	- Crm\SalesFunnelModule\Repository\SalesFunnelsMetaRepository
 	- Crm\SalesFunnelModule\SalesFunnelsCache(%redis.host%, %redis.port%)
 	- Crm\SalesFunnelModule\Seeders\ConfigsSeeder
 	- Crm\SalesFunnelModule\Seeders\SalesFunnelsSeeder
