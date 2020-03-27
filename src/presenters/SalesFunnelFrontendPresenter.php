@@ -295,17 +295,24 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
             $this->redirect('noAccess', $funnel->id);
         }
 
+        if ($this->getUser()->isLoggedIn() && $this->validateFunnelSegment($funnel, $this->getUser()->getId()) === false) {
+            $this->emitter->emit(new SalesFunnelEvent($funnel, $this->getUser(), SalesFunnelsStatsRepository::TYPE_NO_ACCESS, $ua));
+            $this->redirect('noAccess', $funnel->id);
+        }
+    }
+
+    private function validateFunnelSegment(ActiveRow $funnel, int $userId): bool
+    {
         if ($funnel->segment_id) {
             $segmentRow = $funnel->segment;
             if ($segmentRow) {
                 $segment = $this->segmentFactory->buildSegment($segmentRow->code);
-                $inSegment = $segment->isIn('id', $this->getUser()->id);
-                if (!$inSegment) {
-                    $this->emitter->emit(new SalesFunnelEvent($funnel, $this->getUser(), SalesFunnelsStatsRepository::TYPE_NO_ACCESS, $ua));
-                    $this->redirect('noAccess', $funnel->id);
-                }
+
+                return $segment->isIn('id', $userId);
             }
         }
+
+        return true;
     }
 
     private function validateSubscriptionType(ActiveRow $subscriptionType, ActiveRow $funnel)
@@ -447,6 +454,11 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
                 ]),
                 $userError
             );
+        }
+
+        if ($this->validateFunnelSegment($funnel, $user->id) === false) {
+            $this->emitter->emit(new SalesFunnelEvent($funnel, $this->getUser(), SalesFunnelsStatsRepository::TYPE_NO_ACCESS, $ua));
+            $this->redirect('noAccess', $funnel->id);
         }
 
         if (!$this->validateSubscriptionTypeCounts($subscriptionType, $user)) {
