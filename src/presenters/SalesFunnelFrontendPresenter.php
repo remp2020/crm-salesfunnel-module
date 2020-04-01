@@ -264,27 +264,27 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
 
         if (!$funnel) {
             $this->emitter->emit(new SalesFunnelEvent($funnel, $this->getUser(), SalesFunnelsStatsRepository::TYPE_NO_ACCESS, $ua));
-            $this->redirect('inactive');
+            $this->redirectOrSendJson('inactive');
         }
 
         if (!$funnel->is_active) {
             $this->emitter->emit(new SalesFunnelEvent($funnel, $this->getUser(), SalesFunnelsStatsRepository::TYPE_NO_ACCESS, $ua));
-            $this->redirect('inactive');
+            $this->redirectOrSendJson('inactive');
             return;
         }
 
         if ($funnel->start_at && $funnel->start_at > new DateTime()) {
             $this->emitter->emit(new SalesFunnelEvent($funnel, $this->getUser(), SalesFunnelsStatsRepository::TYPE_NO_ACCESS, $ua));
-            $this->redirect('inactive');
+            $this->redirectOrSendJson('inactive');
         }
 
         if ($funnel->end_at && $funnel->end_at < new DateTime()) {
             $this->emitter->emit(new SalesFunnelEvent($funnel, $this->getUser(), SalesFunnelsStatsRepository::TYPE_NO_ACCESS, $ua));
-            $this->redirect('inactive');
+            $this->redirectOrSendJson('inactive');
         }
 
         if ($funnel->only_logged && !$this->getUser()->isLoggedIn()) {
-            $this->redirect('signIn', [
+            $this->redirectOrSendJson('signIn', [
                 'referer' => $this->getParameter('referer'),
                 'funnel' => $this->getParameter('funnel'),
             ]);
@@ -292,12 +292,12 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
 
         if ($funnel->only_not_logged && $this->getUser()->isLoggedIn()) {
             $this->emitter->emit(new SalesFunnelEvent($funnel, $this->getUser(), SalesFunnelsStatsRepository::TYPE_NO_ACCESS, $ua));
-            $this->redirect('noAccess', $funnel->id);
+            $this->redirectOrSendJson('noAccess', $funnel->id);
         }
 
         if ($this->getUser()->isLoggedIn() && $this->validateFunnelSegment($funnel, $this->getUser()->getId()) === false) {
             $this->emitter->emit(new SalesFunnelEvent($funnel, $this->getUser(), SalesFunnelsStatsRepository::TYPE_NO_ACCESS, $ua));
-            $this->redirect('noAccess', $funnel->id);
+            $this->redirectOrSendJson('noAccess', $funnel->id);
         }
     }
 
@@ -321,19 +321,19 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
 
         if (!$subscriptionType || !$funnel->related('sales_funnels_subscription_types')->where(['subscription_type_id' => $subscriptionType->id])) {
             $this->emitter->emit(new SalesFunnelEvent($funnel, $this->getUser(), SalesFunnelsStatsRepository::TYPE_ERROR, $ua));
-            $this->redirect('invalid');
+            $this->redirectOrSendJson('invalid');
         }
 
         if (!$subscriptionType->active) {
             $this->emitter->emit(new SalesFunnelEvent($funnel, $this->getUser(), SalesFunnelsStatsRepository::TYPE_ERROR, $ua));
-            $this->redirect('invalid');
+            $this->redirectOrSendJson('invalid');
         }
 
         $subscriptionTypes = $this->loadSubscriptionTypes($funnel);
 
         if (!isset($subscriptionTypes[$subscriptionType->code])) {
             $this->emitter->emit(new SalesFunnelEvent($funnel, $this->getUser(), SalesFunnelsStatsRepository::TYPE_ERROR, $ua));
-            $this->redirect('invalid');
+            $this->redirectOrSendJson('invalid');
         }
     }
 
@@ -343,19 +343,19 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
 
         if (!$paymentGateway || !$funnel->related('sales_funnels_payment_gateways')->where(['payment_gateway_id' => $paymentGateway->id])) {
             $this->emitter->emit(new SalesFunnelEvent($funnel, $this->getUser(), SalesFunnelsStatsRepository::TYPE_ERROR, $ua));
-            $this->redirect('invalid');
+            $this->redirectOrSendJson('invalid');
         }
 
         if (!$paymentGateway->visible) {
             $this->emitter->emit(new SalesFunnelEvent($funnel, $this->getUser(), SalesFunnelsStatsRepository::TYPE_ERROR, $ua));
-            $this->redirect('invalid');
+            $this->redirectOrSendJson('invalid');
         }
 
         $gateways = $this->loadGateways($funnel);
 
         if (!isset($gateways[$paymentGateway->code])) {
             $this->emitter->emit(new SalesFunnelEvent($funnel, $this->getUser(), SalesFunnelsStatsRepository::TYPE_ERROR, $ua));
-            $this->redirect('invalid');
+            $this->redirectOrSendJson('invalid');
         }
     }
 
@@ -458,11 +458,11 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
 
         if ($this->validateFunnelSegment($funnel, $user->id) === false) {
             $this->emitter->emit(new SalesFunnelEvent($funnel, $this->getUser(), SalesFunnelsStatsRepository::TYPE_NO_ACCESS, $ua));
-            $this->redirect('noAccess', $funnel->id);
+            $this->redirectOrSendJson('noAccess', $funnel->id);
         }
 
         if (!$this->validateSubscriptionTypeCounts($subscriptionType, $user)) {
-            $this->redirect('limitReached', $funnel->id);
+            $this->redirectOrSendJson('limitReached', $funnel->id);
         }
 
         $addressId = filter_input(INPUT_POST, 'address_id');
@@ -525,22 +525,17 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
             'payment_id' => $payment->id,
         ]));
 
-        $allowRedirect = true;
-        if (isset($_POST['allow_redirect']) && ($_POST['allow_redirect'] == '0' || $_POST['allow_redirect'] == 'false')) {
-            $allowRedirect = false;
-        }
-
         if ($this->hasStoredCard($user, $payment->payment_gateway)) {
-            $this->redirect(':Payments:Recurrent:selectCard', $payment->id);
+            $this->redirectOrSendJson(':Payments:Recurrent:selectCard', $payment->id);
         }
 
         try {
-            $result = $this->paymentProcessor->begin($payment, $allowRedirect);
+            $result = $this->paymentProcessor->begin($payment, $this->isAllowedRedirect());
             if ($result) {
                 $this->sendJson(['status' => 'ok', 'url' => $result]);
             }
         } catch (CannotProcessPayment $err) {
-            $this->redirect('error');
+            $this->redirectOrSendJson('error');
         }
     }
 
@@ -646,5 +641,26 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
             return false;
         }
         return true;
+    }
+
+    private function isAllowedRedirect(): bool
+    {
+        if (isset($_POST['allow_redirect']) && ($_POST['allow_redirect'] == '0' || $_POST['allow_redirect'] == 'false')) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private function redirectOrSendJson($destination = null, $args = []): void
+    {
+        if ($this->isAllowedRedirect() === true) {
+            $this->redirect($destination, $args);
+        }
+
+        $this->sendJson([
+            'status' => 'error',
+            'url' => $this->link($destination, $args)
+        ]);
     }
 }
