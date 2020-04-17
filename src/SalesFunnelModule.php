@@ -2,10 +2,10 @@
 
 namespace Crm\SalesFunnelModule;
 
+use Crm\ApiModule\Api\ApiRoutersContainerInterface;
 use Crm\ApiModule\Authorization\NoAuthorization;
 use Crm\ApiModule\Router\ApiIdentifier;
 use Crm\ApiModule\Router\ApiRoute;
-use Crm\ApiModule\Api\ApiRoutersContainerInterface;
 use Crm\ApplicationModule\CrmModule;
 use Crm\ApplicationModule\DataProvider\DataProviderManager;
 use Crm\ApplicationModule\Event\EventsStorage;
@@ -126,7 +126,7 @@ class SalesFunnelModule extends CrmModule
             100
         );
         $widgetManager->registerWidget(
-            'subscription_types_admin.show.middle',
+            'subscription_types_admin.show.right',
             $this->getInstance(\Crm\SalesFunnelModule\Components\SubscriptionTypesInSalesFunnelsWidget::class),
             200
         );
