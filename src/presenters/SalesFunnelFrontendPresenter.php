@@ -476,7 +476,7 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
         // container items
         $paymentItemContainer = (new PaymentItemContainer())->addItems(SubscriptionTypePaymentItem::fromSubscriptionType($subscriptionType));
         if ($additionalAmount) {
-            $donationPaymentVat = $this->applicationConfig->get('donation_vat_rate');
+            $donationPaymentVat = (int)$this->applicationConfig->get('donation_vat_rate');
             if ($donationPaymentVat === null) {
                 throw new \Exception("Config 'donation_vat_rate' is not set");
             }
