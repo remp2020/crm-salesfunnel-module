@@ -476,11 +476,11 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
         // container items
         $paymentItemContainer = (new PaymentItemContainer())->addItems(SubscriptionTypePaymentItem::fromSubscriptionType($subscriptionType));
         if ($additionalAmount) {
-            $donationPaymentVat = (int)$this->applicationConfig->get('donation_vat_rate');
+            $donationPaymentVat = $this->applicationConfig->get('donation_vat_rate');
             if ($donationPaymentVat === null) {
                 throw new \Exception("Config 'donation_vat_rate' is not set");
             }
-            $paymentItemContainer->addItem(new DonationPaymentItem($this->translator->translate('payments.admin.donation'), $additionalAmount, $donationPaymentVat));
+            $paymentItemContainer->addItem(new DonationPaymentItem($this->translator->translate('payments.admin.donation'), $additionalAmount, (int)$donationPaymentVat));
         }
 
         // let modules add own items to PaymentItemContainer before payment is created
