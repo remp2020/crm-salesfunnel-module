@@ -541,11 +541,6 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
 
     private function hasStoredCard(ActiveRow $user, ActiveRow $paymentGateway)
     {
-        // TODO remove admin check after test
-        if ($user->role !== UsersRepository::ROLE_ADMIN) {
-            return false;
-        }
-
         $gateway = $this->gatewayFactory->getGateway($paymentGateway->code);
 
         // Only gateways supporting recurrent payments have support for stored cards
