@@ -29,7 +29,6 @@ use Crm\UsersModule\Auth\InvalidEmailException;
 use Crm\UsersModule\Auth\UserManager;
 use Crm\UsersModule\Forms\SignInFormFactory;
 use Crm\UsersModule\Repository\AddressesRepository;
-use Crm\UsersModule\Repository\UsersRepository;
 use Nette\Application\BadRequestException;
 use Nette\Application\Responses\TextResponse;
 use Nette\Database\Table\ActiveRow;
