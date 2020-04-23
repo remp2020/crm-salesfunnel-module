@@ -31,7 +31,7 @@ services:
 	- Crm\SalesFunnelModule\Events\PaymentStatusChangeHandler
 	- Crm\SalesFunnelModule\Events\SalesFunnelHandler
 	- Crm\SalesFunnelModule\Forms\SalesFunnelAdminFormFactory
-	- Crm\SalesFunnelModule\SalesFunnelsCache(%redis.host%, %redis.port%)
+	salesFunnelsCache: Crm\SalesFunnelModule\SalesFunnelsCache
 	- Crm\SalesFunnelModule\Seeders\ConfigsSeeder
 	- Crm\SalesFunnelModule\Seeders\SalesFunnelsSeeder
 	- Crm\SalesFunnelModule\SalesFunnelPaymentCompleteRedirectResolver
