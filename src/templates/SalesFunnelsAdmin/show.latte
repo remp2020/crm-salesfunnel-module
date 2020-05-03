@@ -213,7 +213,7 @@
       </thead>
       <tbody>
         <tr n:foreach="$payments as $payment">
-          <td><a n:href=":Users:UsersAdmin:show $payment->user_id">{$payment->user->email}</a></td>
+          <td><a n:href=":Users:UsersAdmin:show $payment->user_id">{$payment->user->public_name}</a></td>
           <td><span class="text-muted">{$payment->paid_at|userDate}</span></td>
           <td>
             {$payment->amount|price}

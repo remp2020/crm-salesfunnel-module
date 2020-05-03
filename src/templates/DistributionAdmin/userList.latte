@@ -14,7 +14,7 @@
             <td class="text-muted">{$u->id}</td>
             <td>
                 <a n:href=":Users:UsersAdmin:show $u->id">
-                    {$u->email}
+                    {$u->public_name}
                 </a>
                 <span n:if="$u->is_institution" class="label label-danger">{_sales_funnel.admin.distribution.institution}</span>
                 <span n:if="$u->role === \Crm\UsersModule\Repository\UsersRepository::ROLE_ADMIN" class="label label-warning">admin</span>
