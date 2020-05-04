@@ -189,7 +189,7 @@ Newly created payment by SalesFunnel will now contain specific donation if sales
 
 Admin sales funnel detail distribution stats component.
 
-![alt text](docs/_static/amount_distribution.png "AmountDistributionWidget")
+![alt text](docs/amount_distribution.png "AmountDistributionWidget")
 
 [Source code](https://github.com/remp2020/crm-salesfunnel-module/blob/23fdf1103d5c37f9ffe1f941cbb6025194d16720/src/components/AmountDistributionWidget/AmountDistributionWidget.php#L1)
 
@@ -199,7 +199,7 @@ Admin sales funnel detail distribution stats component.
 
 Admin sales funnel detail distribution stats component.
 
-![alt text](docs/_static/days_since_ending.png "DaysFromLastSubscriptionDistributionWidget")
+![alt text](docs/days_since_ending.png "DaysFromLastSubscriptionDistributionWidget")
 
 [Source code](https://github.com/remp2020/crm-salesfunnel-module/blob/23fdf1103d5c37f9ffe1f941cbb6025194d16720/src/components/DaysFromLastSubscriptionDistributionWidget/DaysFromLastSubscriptionDistributionWidget.php#L1)
 
@@ -209,7 +209,7 @@ Admin sales funnel detail distribution stats component.
 
 Frontend successful payment/registration widget.
 
-![alt text](docs/_static/finish_registration.png "FinishRegistrationWidget")
+![alt text](docs/finish_registration.png "FinishRegistrationWidget")
 
 [Source code](https://github.com/remp2020/crm-salesfunnel-module/blob/23fdf1103d5c37f9ffe1f941cbb6025194d16720/src/components/FinishRegistrationWidget/FinishRegistrationWidget.php#L1)
 
@@ -227,7 +227,7 @@ Frontend new subscription widget with iframe containing sales funnel.
 
 Admin sales funnel detail stats widget.
 
-![alt text](docs/_static/payments_before.png "PaymentDistributionWidget")
+![alt text](docs/payments_before.png "PaymentDistributionWidget")
 
 [Source code](https://github.com/remp2020/crm-salesfunnel-module/blob/23fdf1103d5c37f9ffe1f941cbb6025194d16720/src/components/PaymentDistributionWidget/PaymentDistributionWidget.php#L1)
 
@@ -237,7 +237,7 @@ Admin sales funnel detail stats widget.
 
 Admin user listing widget.
 
-![alt text](docs/_static/payments_listing_funnel.png "SalesFunnelUserListingWidget")
+![alt text](docs/payments_listing_funnel.png "SalesFunnelUserListingWidget")
 
 [Source code](https://github.com/remp2020/crm-salesfunnel-module/blob/23fdf1103d5c37f9ffe1f941cbb6025194d16720/src/components/SalesFunnelUserListingWidget/SalesFunnelUserListingWidget.php#L1)
 
@@ -247,7 +247,7 @@ Admin user listing widget.
 
 Admin sales funnel detail subscription types listing.
 
-![alt text](docs/_static/subscription_types_in_salesfunnel.png "SubscriptionTypesInSalesFunnelsWidget")
+![alt text](docs/subscription_types_in_salesfunnel.png "SubscriptionTypesInSalesFunnelsWidget")
 
 [Source code](https://github.com/remp2020/crm-salesfunnel-module/blob/23fdf1103d5c37f9ffe1f941cbb6025194d16720/src/components/SubscriptionTypesInSalesFunnelsWidget/SubscriptionTypesInSalesFunnelsWidget.php#L1)
 
