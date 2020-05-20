@@ -489,9 +489,16 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
         ));
 
         // prepare payment meta
-        $metaData = $this->getHttpRequest()->getPost('payment_metadata', []);
+        $metaData = [];
         $metaData = array_merge($metaData, $this->trackingParams());
         $metaData['newsletters_subscribe'] = (bool) filter_input(INPUT_POST, 'newsletters_subscribe');
+
+        foreach ($this->getHttpRequest()->getPost('payment_metadata', []) as $key => $submittedMeta) {
+            if ($submittedMeta !== "") {
+                $metaData[$key] = $submittedMeta;
+            }
+        }
+
         $browserId = $_COOKIE['browser_id'] ?? null;
         if ($browserId) {
             $metaData['browser_id'] = $browserId;
