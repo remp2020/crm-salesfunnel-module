@@ -372,7 +372,7 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
                 $this->getUser()->getAuthenticator()->authenticate(['username' => $email, 'password' => $password]);
             }
         } else {
-            $user = $this->userManager->addNewUser($email, true, $source, $referer);
+            $user = $this->userManager->addNewUser($email, true, $source, $referer, true, null, false);
             if (!$user) {
                 $this->emitter->emit(new SalesFunnelEvent($funnel, $this->getUser(), SalesFunnelsStatsRepository::TYPE_ERROR, $ua));
                 $this->redirect('error');
