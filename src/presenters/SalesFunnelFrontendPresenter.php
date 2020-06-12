@@ -154,7 +154,7 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
 
         $gateways = $this->loadGateways($salesFunnel);
         $subscriptionTypes = $this->loadSubscriptionTypes($salesFunnel);
-        if ($this->getUser()->id) {
+        if ($this->getUser()->isLoggedIn()) {
             $subscriptionTypes = $this->filterSubscriptionTypes($subscriptionTypes, $this->getUser()->id);
         }
         if (count($subscriptionTypes) == 0) {
