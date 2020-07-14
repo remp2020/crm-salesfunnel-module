@@ -26,6 +26,7 @@ services:
 	- Crm\SalesFunnelModule\Components\DaysFromLastSubscriptionDistributionWidget
 	- Crm\SalesFunnelModule\Components\DaysFromLastSubscriptionDistributionWidgetFactory
 	- Crm\SalesFunnelModule\Components\SalesFunnelUserListingWidget
+	- Crm\SalesFunnelModule\DataProvider\RetentionAnalysisDataProvider
 	- Crm\SalesFunnelModule\DataProvider\PaymentsAdminFilterFormDataProvider
 	- Crm\SalesFunnelModule\Distribution\SubscriptionDaysDistribution
 	- Crm\SalesFunnelModule\Events\PaymentStatusChangeHandler

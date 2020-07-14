@@ -16,6 +16,7 @@ use Crm\ApplicationModule\SeederManager;
 use Crm\ApplicationModule\Widget\WidgetManagerInterface;
 use Crm\SalesFunnelModule\Api\TrackStatsHandler;
 use Crm\SalesFunnelModule\DataProvider\PaymentsAdminFilterFormDataProvider;
+use Crm\SalesFunnelModule\DataProvider\RetentionAnalysisDataProvider;
 use Crm\SalesFunnelModule\Repository\SalesFunnelsRepository;
 use Crm\SalesFunnelModule\Seeders\ConfigsSeeder;
 use Crm\SalesFunnelModule\Seeders\SalesFunnelsSeeder;
@@ -165,6 +166,11 @@ class SalesFunnelModule extends CrmModule
         $dataProviderManager->registerDataProvider(
             'payments.dataprovider.list_filter_form',
             $this->getInstance(PaymentsAdminFilterFormDataProvider::class)
+        );
+
+        $dataProviderManager->registerDataProvider(
+            'payments.dataprovider.retention_analysis',
+            $this->getInstance(RetentionAnalysisDataProvider::class)
         );
     }
 
