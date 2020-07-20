@@ -2,6 +2,12 @@
     {control simpleWidget 'frontend.payment.success.head_tracking', $payment}
 
     <link rel="stylesheet" type="text/css" href="{$basePath}/layouts/default/css/thank-you.css?v=2">
+
+    <style>
+        .hide-if-no-forms {
+            display: none;
+        }
+    </style>
 {/block}
 
 {block #content}
@@ -32,13 +38,15 @@
 
     <div class="col-md-12">
         <div class="additionalform">
-            <div class="thank-you-warn">
+            <div class="thank-you-warn hide-if-no-forms">
                 {control snippet 'success-attention'}
             </div>
 
-            {control simpleWidget 'frontend.payment.success.forms', $payment}
+            <div id="success-forms">
+                {control simpleWidget 'frontend.payment.success.forms', $payment}
+            </div>
 
-            <hr/>
+            <hr class="hide-if-no-forms" />
 
             <div id="finish">
                 {control simpleWidget 'frontend.payment.success.finish_registration', $payment}
@@ -194,5 +202,16 @@
             window.requestAnimationFrame(contentResizeHandler);
         });
     })()
+</script>
+
+<script>
+    $(document).ready(function () {
+        var successForms = document.getElementById('success-forms');
+        if ((successForms.querySelector('form') !== null)) {
+            document.querySelectorAll('.hide-if-no-forms').forEach(function (element) {
+                element.style.display = 'block';
+            });
+        }
+    });
 </script>
 {/block}
