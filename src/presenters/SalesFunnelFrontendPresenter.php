@@ -178,7 +178,7 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
             $addresses = $this->addressesRepository->addresses($this->usersRepository->find($this->getUser()->id), 'print');
         }
 
-        $headEnd = $this->applicationConfig->get('header_block') . "\n\n" . $salesFunnel->head;
+        $headEnd = $this->applicationConfig->get('header_block') . "\n\n" . $salesFunnel->head_script;
 
         $contentAccess = [];
         foreach ($subscriptionTypes as $index => $subscriptionType) {

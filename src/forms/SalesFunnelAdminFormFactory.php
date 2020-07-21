@@ -88,18 +88,18 @@ class SalesFunnelAdminFormFactory
 
         $form->addTextArea('body', 'sales_funnel.data.sales_funnels.fields.body')
             ->setAttribute('data-codeeditor', 'htmlmixed');
-        ;
 
-        $form->addTextArea('head', 'sales_funnel.data.sales_funnels.fields.head')
+        $form->addTextArea('head_meta', 'sales_funnel.data.sales_funnels.fields.head_meta')
             ->setAttribute('data-codeeditor', 'htmlmixed');
-        ;
+
+        $form->addTextArea('head_script', 'sales_funnel.data.sales_funnels.fields.head_script')
+            ->setAttribute('data-codeeditor', 'htmlmixed');
 
         $form->addTextArea('no_access_html', 'sales_funnel.data.sales_funnels.fields.no_access_html')
             ->setAttribute('data-codeeditor', 'htmlmixed');
 
         $form->addTextArea('error_html', 'sales_funnel.data.sales_funnels.fields.error_html')
             ->setAttribute('data-codeeditor', 'htmlmixed');
-        ;
 
         $form->addHidden('sales_funnel_id', $id);
 
@@ -139,10 +139,6 @@ class SalesFunnelAdminFormFactory
             $values['end_at'] = null;
         }
 
-        $head = null;
-        if ($values['head']) {
-            $head = $values['head'];
-        }
         if ($values['is_active']) {
             $values['redirect_funnel_id'] = null;
         }
@@ -157,7 +153,8 @@ class SalesFunnelAdminFormFactory
                 $values->name,
                 $values->url_key,
                 $values->body,
-                $head,
+                $values['head_meta'] ?? null,
+                $values['head_script'] ?? null,
                 $startAt,
                 $endAt,
                 $values->is_active,

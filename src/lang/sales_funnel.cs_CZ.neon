@@ -14,7 +14,8 @@ data:
 			body: HTML obsah
 			no_access_html: HTML stránka pro nedovolený přístup
 			error_html: HTML stránka pro chybový výpis
-			head: Kód HTML do hlavičky
+			head_meta: Kód HTML do hlavičky - meta informace
+			head_script: Kód HTML do hlavičky - skripty
 			created_at: Vytvořený
 			payment_gateway: Platební brány
 			subscription_type: Typy předplatných

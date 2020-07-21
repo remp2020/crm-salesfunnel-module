@@ -2,39 +2,15 @@
 
 {block #headstart}{/block}
 
+{block headMeta}
+    {$funnel->head_meta|noescape}
+{/block}
+
 {block head}
-    {$funnel->head|noescape}
+    {$funnel->head_script|noescape}
 {/block}
 
 {block #content}
-
-{*
-<style>
-    @media only screen {
-        #outside {
-            width: 100%;
-        }
-    }
-
-    @media only screen
-    and (min-device-width: 320px)
-    and (max-device-width: 568px)
-    and (-webkit-min-device-pixel-ratio: 2) {
-        #outside {
-            width: 350px;
-        }
-    }
-
-    @media only screen
-    and (min-device-width: 375px)
-    and (max-device-width: 667px)
-    and (-webkit-min-device-pixel-ratio: 2) {
-        #outside {
-            width: 375px;
-        }
-    }
-</style>
-*}
 
 <style>
     .iframe_wrapper {

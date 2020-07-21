@@ -15,7 +15,8 @@ data:
 			body: Funnel HTML content
 			no_access_html: Funnel no access html
 			error_html: Funnel error screen html
-			head: HTML header
+			head_meta: HTML header - meta information
+			head_script: HTML header - scripts
 			created_at: Created at
 			payment_gateway: Payment gateways
 			subscription_type: Subscription types
