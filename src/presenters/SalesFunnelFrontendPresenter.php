@@ -2,6 +2,7 @@
 
 namespace Crm\SalesFunnelModule\Presenters;
 
+use Crm\ApplicationModule\Events\AuthenticatedAccessRequiredEvent;
 use Crm\ApplicationModule\Hermes\HermesMessage;
 use Crm\ApplicationModule\Presenters\FrontendPresenter;
 use Crm\ApplicationModule\Request;
@@ -562,6 +563,19 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
             ->count();
 
         return $usableRecurrentsCount > 0;
+    }
+
+    public function renderSignIn($referer, $funnel)
+    {
+        $this->emitter->emit(new AuthenticatedAccessRequiredEvent());
+
+        // user might have been logged in one of the event handlers
+        if ($this->getUser()->isLoggedIn()) {
+            $this->redirect('show', [
+                'referer' => $referer,
+                'funnel' => $funnel,
+            ]);
+        }
     }
 
     public function renderNoAccess($id = null)
