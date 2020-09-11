@@ -89,21 +89,35 @@
     </style>
     <div class="col-md-6">
       <h2 class="page-header">{_sales_funnel.data.sales_funnels.fields.subscription_type}</h2>
-      {var $pairs = $funnel->related('sales_funnels_subscription_types')}
-      {if $pairs->count('*')}
+      {if count($funnelSubscriptionTypes) > 0}
         <ul class="list-group">
-          <li n:foreach="$pairs as $pair" class="list-group-item">
-            <a n:href=":Subscriptions:SubscriptionTypesAdmin:show $pair->subscription_type_id">{$pair->subscription_type->name}</a>
+          <li n:foreach="$funnelSubscriptionTypes as $subscriptionType" class="list-group-item">
+            <a n:href=":Subscriptions:SubscriptionTypesAdmin:show $subscriptionType->id">{$subscriptionType->name}</a>
             <span class="label label-default">
-            {ifset $subscriptionTypesPaymentsMap[$pair->subscription_type_id]}
-              <b>{$subscriptionTypesPaymentsMap[$pair->subscription_type_id]}</b>
+            {ifset $subscriptionTypesPaymentsMap[$subscriptionType->id]}
+              <b>{$subscriptionTypesPaymentsMap[$subscriptionType->id]}</b>
             {else}
               <b>0</b>
             {/ifset}
             </span>
-            <span class="text-muted">&nbsp; x {$pair->subscription_type->price|price}</span>
-            <code>{$pair->subscription_type->code}</code>
-            <a n:href="RemoveSubscriptionType! $pair->subscription_type_id" class="btn btn-default btn-xs pull-right ajax"><i class="fa fa-trash"></i> {_system.delete}</a>
+            <span class="text-muted">&nbsp; x {$subscriptionType->price|price}</span>
+            <br>
+            <code>{$subscriptionType->code}</code>
+            <div class="pull-right">
+              {if $iterator->first}
+                <a class="btn btn-default btn-xs disabled"><i class="fas fa-angle-up"></i></a>
+              {else}
+                <a n:href="MoveSubscriptionTypeUp! $funnel->id, $subscriptionType->id" class="btn btn-default btn-xs ajax"><i class="fas fa-angle-up"></i></a>
+              {/if}
+
+              {if $iterator->last}
+                <a class="btn btn-default btn-xs disabled"><i class="fas fa-angle-down"></i></a>
+              {else}
+                <a n:href="MoveSubscriptionTypeDown! $funnel->id, $subscriptionType->id" class="btn btn-default btn-xs ajax"><i class="fas fa-angle-down"></i></a>
+              {/if}
+              <a n:href="RemoveSubscriptionType! $subscriptionType->id" class="btn btn-default btn-xs ajax"><i class="fa fa-trash"></i> {_system.delete}</a>
+            </div>
+            <div class="clear"></div>
           </li>
         </ul>
       {else}
@@ -131,13 +145,26 @@
     </style>
     <div class="col-md-6">
       <h2 class="page-header">{_sales_funnel.data.sales_funnels.fields.payment_gateway}</h2>
-      {var $pairs = $funnel->related('sales_funnels_payment_gateways')}
-      {if $pairs->count('*')}
+      {if count($funnelGateways)}
         <ul class="list-group">
-          <li n:foreach="$pairs as $pair" class="list-group-item">
-            <a n:href=":Payments:PaymentGatewaysAdmin:show $pair->payment_gateway_id">{$pair->payment_gateway->name}</a>
-            <code>{$pair->payment_gateway->code}</code>
-            <a n:href="RemovePaymentGateway! $pair->payment_gateway_id" class="btn btn-default btn-xs pull-right ajax"><i class="fa fa-trash"></i> {_system.delete}</a>
+          <li n:foreach="$funnelGateways as $paymentGateway" class="list-group-item">
+            <a n:href=":Payments:PaymentGatewaysAdmin:show $paymentGateway->id">{$paymentGateway->name}</a>
+            <code>{$paymentGateway->code}</code>
+            <div class="pull-right">
+              {if $iterator->first}
+                <a class="btn btn-default btn-xs disabled"><i class="fas fa-angle-up"></i></a>
+              {else}
+                <a n:href="MovePaymentGatewayUp! $funnel->id, $paymentGateway->id" class="btn btn-default btn-xs ajax"><i class="fas fa-angle-up"></i></a>
+              {/if}
+
+              {if $iterator->last}
+                <a class="btn btn-default btn-xs disabled"><i class="fas fa-angle-down"></i></a>
+              {else}
+                <a n:href="MovePaymentGatewayDown! $funnel->id, $paymentGateway->id" class="btn btn-default btn-xs ajax"><i class="fas fa-angle-down"></i></a>
+              {/if}
+
+              <a n:href="RemovePaymentGateway! $paymentGateway->id" class="btn btn-default btn-xs ajax"><i class="fa fa-trash"></i> {_system.delete}</a>
+            </div>
           </li>
         </ul>
       {else}

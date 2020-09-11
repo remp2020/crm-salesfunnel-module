@@ -17,14 +17,22 @@ class SalesFunnelsRepository extends Repository
 
     private $subscriptionDaysDistribution;
 
+    private $salesFunnelsSubscriptionTypesRepository;
+
+    private $salesFunnelsPaymentGatewaysRepository;
+
     public function __construct(
         Context $database,
         SubscriptionDaysDistribution $subscriptionDaysDistribution,
-        AuditLogRepository $auditLogRepository
+        AuditLogRepository $auditLogRepository,
+        SalesFunnelsSubscriptionTypesRepository $salesFunnelsSubscriptionTypesRepository,
+        SalesFunnelsPaymentGatewaysRepository $salesFunnelsPaymentGatewaysRepository
     ) {
         parent::__construct($database);
         $this->subscriptionDaysDistribution = $subscriptionDaysDistribution;
         $this->auditLogRepository = $auditLogRepository;
+        $this->salesFunnelsSubscriptionTypesRepository = $salesFunnelsSubscriptionTypesRepository;
+        $this->salesFunnelsPaymentGatewaysRepository = $salesFunnelsPaymentGatewaysRepository;
     }
 
     public function add(
@@ -258,7 +266,7 @@ LEFT JOIN users ON users.id = sub.user_id")->fetchAll();
     final public function getSalesFunnelSubscriptionTypes(IRow $funnel)
     {
         $subscriptionTypes = [];
-        foreach ($funnel->related('sales_funnels_subscription_types') as $row) {
+        foreach ($this->salesFunnelsSubscriptionTypesRepository->findAllBySalesFunnel($funnel) as $row) {
             $subscriptionTypes[] = $row->subscription_type;
         }
 
@@ -280,7 +288,7 @@ LEFT JOIN users ON users.id = sub.user_id")->fetchAll();
     final public function getSalesFunnelGateways(IRow $funnel)
     {
         $gateways = [];
-        foreach ($funnel->related('sales_funnels_payment_gateways') as $row) {
+        foreach ($this->salesFunnelsPaymentGatewaysRepository->findAllBySalesFunnel($funnel) as $row) {
             if ($row->payment_gateway->visible) {
                 $gateways[] = $row->payment_gateway;
             }

@@ -14,8 +14,10 @@ use Crm\PaymentsModule\Repository\PaymentsRepository;
 use Crm\SalesFunnelModule\Components\WindowPreviewControlFactoryInterface;
 use Crm\SalesFunnelModule\Forms\SalesFunnelAdminFormFactory;
 use Crm\SalesFunnelModule\Repository\SalesFunnelsMetaRepository;
+use Crm\SalesFunnelModule\Repository\SalesFunnelsPaymentGatewaysRepository;
 use Crm\SalesFunnelModule\Repository\SalesFunnelsRepository;
 use Crm\SalesFunnelModule\Repository\SalesFunnelsStatsRepository;
+use Crm\SalesFunnelModule\Repository\SalesFunnelsSubscriptionTypesRepository;
 use Crm\SubscriptionsModule\Repository\SubscriptionTypesRepository;
 use Crm\SubscriptionsModule\Subscription\SubscriptionType;
 use Nette\Application\UI\Form;
@@ -39,6 +41,10 @@ class SalesFunnelsAdminPresenter extends AdminPresenter
 
     private $subscriptionTypesRepository;
 
+    private $salesFunnelsSubscriptionTypesRepository;
+
+    private $salesFunnelsPaymentGatewaysRepository;
+
     public function __construct(
         SalesFunnelsRepository $salesFunnelsRepository,
         SalesFunnelAdminFormFactory $salesFunnelAdminFormFactory,
@@ -46,7 +52,9 @@ class SalesFunnelsAdminPresenter extends AdminPresenter
         SalesFunnelsStatsRepository $salesFunnelsStatsRepository,
         PaymentGatewaysRepository $paymentGatewaysRepository,
         PaymentsRepository $paymentsRepository,
-        SubscriptionTypesRepository $subscriptionTypesRepository
+        SubscriptionTypesRepository $subscriptionTypesRepository,
+        SalesFunnelsSubscriptionTypesRepository $salesFunnelsSubscriptionTypesRepository,
+        SalesFunnelsPaymentGatewaysRepository $salesFunnelsPaymentGatewaysRepository
     ) {
         parent::__construct();
         $this->salesFunnelsRepository = $salesFunnelsRepository;
@@ -56,6 +64,8 @@ class SalesFunnelsAdminPresenter extends AdminPresenter
         $this->paymentGatewaysRepository = $paymentGatewaysRepository;
         $this->paymentsRepository = $paymentsRepository;
         $this->subscriptionTypesRepository = $subscriptionTypesRepository;
+        $this->salesFunnelsSubscriptionTypesRepository = $salesFunnelsSubscriptionTypesRepository;
+        $this->salesFunnelsPaymentGatewaysRepository = $salesFunnelsPaymentGatewaysRepository;
     }
 
     public function renderDefault()
@@ -75,6 +85,9 @@ class SalesFunnelsAdminPresenter extends AdminPresenter
             $this->redirect('default');
         }
         $this->template->funnel = $funnel;
+        $this->template->funnelSubscriptionTypes = $this->salesFunnelsRepository->getSalesFunnelSubscriptionTypes($funnel);
+        $this->template->funnelGateways = $this->salesFunnelsRepository->getSalesFunnelGateways($funnel);
+
         $this->template->total_paid_amount = $this->salesFunnelsRepository->totalPaidAmount($funnel);
         $this->template->subscriptionTypesPaymentsMap = $this->salesFunnelsRepository->getSalesFunnelDistribution($funnel);
         $this->template->meta = $this->salesFunnelsMetaRepository->all($funnel);
@@ -150,9 +163,10 @@ class SalesFunnelsAdminPresenter extends AdminPresenter
             ->setHtml('<i class="fa fa-save"></i> ' . $this->translator->translate('system.save'));
 
         $form->onSuccess[] = function ($form, $values) use ($funnel) {
-            $funnel->related('sales_funnels_payment_gateways')->insert([
-                'payment_gateway_id' => $values->payment_gateway_id,
-            ]);
+            $this->salesFunnelsPaymentGatewaysRepository->add(
+                $funnel,
+                $this->paymentGatewaysRepository->find($values->payment_gateway_id)
+            );
             if ($this->isAjax()) {
                 $this->redrawControl('paymentGatewayForm');
             } else {
@@ -173,6 +187,55 @@ class SalesFunnelsAdminPresenter extends AdminPresenter
             $this->redrawControl('paymentGatewayForm');
         } else {
             $this->redirect('show', $funnel->id);
+        }
+    }
+    public function handleMovePaymentGatewayUp($salesFunnelId, $paymentGatewayId)
+    {
+        $this->movePaymentGateway('up', $salesFunnelId, $paymentGatewayId);
+        if ($this->isAjax()) {
+            $this->redrawControl('paymentGatewayForm');
+        } else {
+            $this->redirect('show', $salesFunnelId);
+        }
+    }
+
+    public function handleMovePaymentGatewayDown($salesFunnelId, $paymentGatewayId)
+    {
+        $this->movePaymentGateway('down', $salesFunnelId, $paymentGatewayId);
+        if ($this->isAjax()) {
+            $this->redrawControl('paymentGatewayForm');
+        } else {
+            $this->redirect('show', $salesFunnelId);
+        }
+    }
+
+    private function movePaymentGateway(string $where, int $salesFunnelId, int $paymentGatewayId): void
+    {
+        $salesFunnel = $this->salesFunnelsRepository->find($salesFunnelId);
+
+        $pairs = $this->salesFunnelsPaymentGatewaysRepository->findAllBySalesFunnel($salesFunnel);
+        $pairs = array_values($pairs);
+        foreach ($pairs as $i => $pair) {
+            if ($where === 'up') {
+                $swapI = $i-1;
+            } elseif ($where === 'down') {
+                $swapI = $i+1;
+            } else {
+                break;
+            }
+
+            if ($pair->payment_gateway_id == $paymentGatewayId && array_key_exists($swapI, $pairs)) {
+                $swap = $pairs[$swapI];
+                $swapSorting = $swap->sorting;
+                $pairSorting = $pair->sorting;
+                $this->salesFunnelsPaymentGatewaysRepository->update($pair, [
+                    'sorting' => $swapSorting
+                ]);
+                $this->salesFunnelsPaymentGatewaysRepository->update($swap, [
+                    'sorting' => $pairSorting
+                ]);
+                break;
+            }
         }
     }
 
@@ -203,9 +266,10 @@ class SalesFunnelsAdminPresenter extends AdminPresenter
             ->setHtml('<i class="fa fa-save"></i> ' . $this->translator->translate('system.save'));
 
         $form->onSuccess[] = function ($form, $values) use ($funnel) {
-            $funnel->related('sales_funnels_subscription_types')->insert([
-                'subscription_type_id' => $values->subscription_type_id,
-            ]);
+            $this->salesFunnelsSubscriptionTypesRepository->add(
+                $funnel,
+                $this->subscriptionTypesRepository->find($values->subscription_type_id)
+            );
             if ($this->isAjax()) {
                 $this->redrawControl('subscriptionTypesForm');
             } else {
@@ -226,6 +290,56 @@ class SalesFunnelsAdminPresenter extends AdminPresenter
             $this->redrawControl('subscriptionTypesForm');
         } else {
             $this->redirect('show', $funnel->id);
+        }
+    }
+
+    public function handleMoveSubscriptionTypeUp($salesFunnelId, $subscriptionTypeId)
+    {
+        $this->moveSubscriptionType('up', $salesFunnelId, $subscriptionTypeId);
+        if ($this->isAjax()) {
+            $this->redrawControl('subscriptionTypesForm');
+        } else {
+            $this->redirect('show', $salesFunnelId);
+        }
+    }
+
+    public function handleMoveSubscriptionTypeDown($salesFunnelId, $subscriptionTypeId)
+    {
+        $this->moveSubscriptionType('down', $salesFunnelId, $subscriptionTypeId);
+        if ($this->isAjax()) {
+            $this->redrawControl('subscriptionTypesForm');
+        } else {
+            $this->redirect('show', $salesFunnelId);
+        }
+    }
+
+    private function moveSubscriptionType(string $where, int $salesFunnelId, int $subscriptionTypeId): void
+    {
+        $salesFunnel = $this->salesFunnelsRepository->find($salesFunnelId);
+
+        $pairs = $this->salesFunnelsSubscriptionTypesRepository->findAllBySalesFunnel($salesFunnel);
+        $pairs = array_values($pairs);
+        foreach ($pairs as $i => $pair) {
+            if ($where === 'up') {
+                $swapI = $i-1;
+            } elseif ($where === 'down') {
+                $swapI = $i+1;
+            } else {
+                break;
+            }
+
+            if ($pair->subscription_type_id == $subscriptionTypeId && array_key_exists($swapI, $pairs)) {
+                $swap = $pairs[$swapI];
+                $swapSorting = $swap->sorting;
+                $pairSorting = $pair->sorting;
+                $this->salesFunnelsSubscriptionTypesRepository->update($pair, [
+                    'sorting' => $swapSorting
+                ]);
+                $this->salesFunnelsSubscriptionTypesRepository->update($swap, [
+                    'sorting' => $pairSorting
+                ]);
+                break;
+            }
         }
     }
 
