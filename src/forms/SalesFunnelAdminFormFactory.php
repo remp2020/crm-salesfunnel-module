@@ -2,6 +2,7 @@
 
 namespace Crm\SalesFunnelModule\Forms;
 
+use Crm\SalesFunnelModule\DI\Config;
 use Crm\SalesFunnelModule\Repository\SalesFunnelsRepository;
 use Crm\SalesFunnelModule\SalesFunnelsCache;
 use Crm\SegmentModule\Repository\SegmentsRepository;
@@ -18,6 +19,8 @@ class SalesFunnelAdminFormFactory
 
     private $translator;
 
+    private $config;
+
     private $salesFunnelsCache;
 
     public $onUpdate;
@@ -28,12 +31,14 @@ class SalesFunnelAdminFormFactory
         SalesFunnelsRepository $salesFunnelsRepository,
         SegmentsRepository $segmentsRepository,
         SalesFunnelsCache $salesFunnelsCache,
-        Translator $translator
+        Translator $translator,
+        Config $config
     ) {
         $this->salesFunnelsRepository = $salesFunnelsRepository;
         $this->segmentsRepository = $segmentsRepository;
         $this->salesFunnelsCache = $salesFunnelsCache;
         $this->translator = $translator;
+        $this->config = $config;
     }
 
     public function create($id)
@@ -146,7 +151,9 @@ class SalesFunnelAdminFormFactory
         if ($id) {
             $row = $this->salesFunnelsRepository->find($id);
             $this->salesFunnelsRepository->update($row, $values);
-            $this->salesFunnelsCache->add($id, $values['url_key']);
+            if ($this->config->getFunnelRoutes()) {
+                $this->salesFunnelsCache->add($id, $values['url_key']);
+            }
             $this->onUpdate->__invoke($row);
         } else {
             $row = $this->salesFunnelsRepository->add(
@@ -165,7 +172,9 @@ class SalesFunnelAdminFormFactory
                 $values->error_html,
                 $values->redirect_funnel_id
             );
-            $this->salesFunnelsCache->add($row['id'], $values['url_key']);
+            if ($this->config->getFunnelRoutes()) {
+                $this->salesFunnelsCache->add($row['id'], $values['url_key']);
+            }
             $this->onSave->__invoke($row);
         }
     }

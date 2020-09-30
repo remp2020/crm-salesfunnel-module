@@ -17,6 +17,7 @@ use Crm\ApplicationModule\Widget\WidgetManagerInterface;
 use Crm\SalesFunnelModule\Api\TrackStatsHandler;
 use Crm\SalesFunnelModule\DataProvider\PaymentsAdminFilterFormDataProvider;
 use Crm\SalesFunnelModule\DataProvider\RetentionAnalysisDataProvider;
+use Crm\SalesFunnelModule\DI\Config;
 use Crm\SalesFunnelModule\Repository\SalesFunnelsRepository;
 use Crm\SalesFunnelModule\Seeders\ConfigsSeeder;
 use Crm\SalesFunnelModule\Seeders\SalesFunnelsSeeder;
@@ -33,15 +34,19 @@ class SalesFunnelModule extends CrmModule
 
     private $salesFunnelsRepository;
 
+    private $config;
+
     public function __construct(
         Container $container,
         Translator $translator,
         SalesFunnelsCache $salesFunnelsCache,
-        SalesFunnelsRepository $salesFunnelsRepository
+        SalesFunnelsRepository $salesFunnelsRepository,
+        Config $config
     ) {
         parent::__construct($container, $translator);
         $this->salesFunnelsCache = $salesFunnelsCache;
         $this->salesFunnelsRepository = $salesFunnelsRepository;
+        $this->config = $config;
     }
 
     public function registerAdminMenuItems(MenuContainerInterface $menuContainer)
@@ -90,8 +95,10 @@ class SalesFunnelModule extends CrmModule
 
     public function registerRoutes(RouteList $router)
     {
-        foreach ($this->salesFunnelsCache->all() as $salesFunnel) {
-            $router[] = new Route("<funnel {$salesFunnel->url_key}>", 'SalesFunnel:SalesFunnelFrontend:default');
+        if ($this->config->getFunnelRoutes()) {
+            foreach ($this->salesFunnelsCache->all() as $salesFunnel) {
+                $router[] = new Route("<funnel {$salesFunnel->url_key}>", 'SalesFunnel:SalesFunnelFrontend:default');
+            }
         }
 
         $router[] = new Route('/sales-funnel/sales-funnel/<action>[/<variableSymbol>]', 'SalesFunnel:SalesFunnel:success');
@@ -99,7 +106,7 @@ class SalesFunnelModule extends CrmModule
 
     public function cache(OutputInterface $output, array $tags = [])
     {
-        if (empty($tags)) {
+        if (empty($tags) && $this->config->getFunnelRoutes()) {
             $funnelsCount = $this->salesFunnelsRepository->getTable()->count('*');
             if ($funnelsCount) {
                 $this->salesFunnelsCache->removeAll();

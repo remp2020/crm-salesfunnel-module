@@ -17,6 +17,17 @@ extensions:
 	- Crm\SalesFunnelModule\DI\SalesFunnelModuleExtension
 ```
 
+## Configuration
+
+By default we register for every sales funnel short route _(e.g. for sales funnel with URL key `sample`, route is `http://crm.press/sample`)_. You can turn off registration of slug by adding following setting to configuration file.
+
+```neon
+sales_funnel:
+	funnel_routes: false
+```
+
+Sales funnel will be still accessible through long route _(e.g. `http://crm.press/sales-funnel/sales-funnel-frontend/show?funnel=sample`)_.
+
 ## Using sales funnels
 
 Sales Funnel module provides a way to present subscription type offering to user in a way that's completely independent
@@ -28,8 +39,7 @@ To create new sales funnel, you need to enter several fields (required are bold)
 
 * **Name**. Name of the sales funnel displayed in CRM admin listings and statistics.
 * *Active*. Flag, whether the window should be available to users or not.
-* **URL key**. Slug under which the window is available. All funnels are available at custom routes - e.g. funnel `foo-bar`
-would be available at `http://crm.press/foo-bar`.
+* **URL key**. Slug under which the window is available. All funnels are available at custom routes - e.g. sample funnel with url key `sample` would be available at `http://crm.press/sales-funnel/sales-funnel-frontend/show?funnel=sample` and at `http://crm.press/sample` _(if slugs are allowed, see [Configuration](#configuration))_.
 * *Only logged*. Flag to limit access to only logged in users.
 * *Only not logged*. Flag to limit access to only not logged in users.
 * *Segment*. Segment selection to limit access only to members of a specific segment.

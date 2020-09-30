@@ -13,6 +13,9 @@ services:
 	salesFunnelsStatsRepository: Crm\SalesFunnelModule\Repository\SalesFunnelsStatsRepository
 	salesFunnelsMetaRepository: Crm\SalesFunnelModule\Repository\SalesFunnelsMetaRepository
 
+	# DI
+	- Crm\SalesFunnelModule\DI\Config
+
 	- Crm\SalesFunnelModule\Api\ListPaymentsPublicMetaHandler
 	- Crm\SalesFunnelModule\Api\TrackStatsHandler
 	- Crm\SalesFunnelModule\Components\NewSubscriptionWidget
