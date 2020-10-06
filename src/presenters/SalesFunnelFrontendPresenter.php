@@ -2,6 +2,7 @@
 
 namespace Crm\SalesFunnelModule\Presenters;
 
+use Crm\ApplicationModule\DataProvider\DataProviderManager;
 use Crm\ApplicationModule\Events\AuthenticatedAccessRequiredEvent;
 use Crm\ApplicationModule\Hermes\HermesMessage;
 use Crm\ApplicationModule\Presenters\FrontendPresenter;
@@ -15,6 +16,7 @@ use Crm\PaymentsModule\PaymentProcessor;
 use Crm\PaymentsModule\Repository\PaymentGatewaysRepository;
 use Crm\PaymentsModule\Repository\PaymentsRepository;
 use Crm\PaymentsModule\Repository\RecurrentPaymentsRepository;
+use Crm\SalesFunnelModule\DataProvider\ValidateUserFunnelAccessDataProviderInterface;
 use Crm\SalesFunnelModule\Events\PaymentItemContainerReadyEvent;
 use Crm\SalesFunnelModule\Events\SalesFunnelEvent;
 use Crm\SalesFunnelModule\Repository\SalesFunnelsMetaRepository;
@@ -74,6 +76,8 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
 
     private $signInFormFactory;
 
+    private $dataProviderManager;
+
     public function __construct(
         SalesFunnelsRepository $salesFunnelsRepository,
         SalesFunnelsStatsRepository $salesFunnelsStatsRepository,
@@ -91,7 +95,8 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
         GatewayFactory $gatewayFactory,
         RecurrentPaymentsRepository $recurrentPaymentsRepository,
         ContentAccessRepository $contentAccessRepository,
-        SignInFormFactory $signInFormFactory
+        SignInFormFactory $signInFormFactory,
+        DataProviderManager $dataProviderManager
     ) {
         parent::__construct();
         $this->salesFunnelsRepository = $salesFunnelsRepository;
@@ -111,6 +116,7 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
         $this->recurrentPaymentsRepository = $recurrentPaymentsRepository;
         $this->contentAccessRepository = $contentAccessRepository;
         $this->signInFormFactory = $signInFormFactory;
+        $this->dataProviderManager = $dataProviderManager;
     }
 
     public function startup()
@@ -299,6 +305,19 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
             $this->emitter->emit(new SalesFunnelEvent($funnel, $this->getUser(), SalesFunnelsStatsRepository::TYPE_NO_ACCESS, $ua));
             $this->redirectOrSendJson('noAccess', $funnel->id);
         }
+
+        /** @var ValidateUserFunnelAccessDataProviderInterface[] $providers */
+        $providers = $this->dataProviderManager->getProviders('salesfunnel.dataprovider.validate_funnel', ValidateUserFunnelAccessDataProviderInterface::class);
+        foreach ($providers as $sorting => $provider) {
+            $canAccessFunnel = $provider->provide([
+                'user' => $this->getUser()->isLoggedIn() ? $this->getUser()->getIdentity() : null,
+                'sales_funnel' => $funnel,
+            ]);
+            if (!$canAccessFunnel) {
+                $this->emitter->emit(new SalesFunnelEvent($funnel, $this->getUser(), SalesFunnelsStatsRepository::TYPE_NO_ACCESS, $ua));
+                $this->redirectOrSendJson('noAccess', $funnel->id);
+            }
+        }
     }
 
     private function validateFunnelSegment(ActiveRow $funnel, int $userId): bool
@@ -457,8 +476,21 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
         }
 
         if ($this->validateFunnelSegment($funnel, $user->id) === false) {
-            $this->emitter->emit(new SalesFunnelEvent($funnel, $this->getUser(), SalesFunnelsStatsRepository::TYPE_NO_ACCESS, $ua));
+            $this->emitter->emit(new SalesFunnelEvent($funnel, $user, SalesFunnelsStatsRepository::TYPE_NO_ACCESS, $ua));
             $this->redirectOrSendJson('noAccess', $funnel->id);
+        }
+
+        /** @var ValidateUserFunnelAccessDataProviderInterface[] $providers */
+        $providers = $this->dataProviderManager->getProviders('salesfunnel.dataprovider.validate_funnel', ValidateUserFunnelAccessDataProviderInterface::class);
+        foreach ($providers as $sorting => $provider) {
+            $canAccessFunnel = $provider->provide([
+                'user' => $user,
+                'sales_funnel' => $funnel,
+            ]);
+            if (!$canAccessFunnel) {
+                $this->emitter->emit(new SalesFunnelEvent($funnel, $user, SalesFunnelsStatsRepository::TYPE_NO_ACCESS, $ua));
+                $this->redirectOrSendJson('noAccess', $funnel->id);
+            }
         }
 
         if (!$this->validateSubscriptionTypeCounts($subscriptionType, $user)) {
@@ -492,7 +524,7 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
         // prepare payment meta
         $metaData = [];
         $metaData = array_merge($metaData, $this->trackingParams());
-        $metaData['newsletters_subscribe'] = (bool) filter_input(INPUT_POST, 'newsletters_subscribe');
+        $metaData['newsletters_subscribe'] = (bool)filter_input(INPUT_POST, 'newsletters_subscribe');
 
         foreach ($this->getHttpRequest()->getPost('payment_metadata', []) as $key => $submittedMeta) {
             if ($submittedMeta !== "") {
