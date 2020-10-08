@@ -92,7 +92,7 @@ class SalesFunnelAdminFormFactory
             ->setAttribute('placeholder', 'sales_funnel.data.sales_funnels.placeholder.end_at');
 
         $form->addTextArea('body', 'sales_funnel.data.sales_funnels.fields.body')
-            ->setAttribute('data-codeeditor', 'htmlmixed');
+            ->setAttribute('data-codeeditor', ['name' => 'twig', 'base' => 'text/html']);
 
         $form->addTextArea('head_meta', 'sales_funnel.data.sales_funnels.fields.head_meta')
             ->setAttribute('data-codeeditor', 'htmlmixed');
