@@ -20,10 +20,9 @@ use Crm\SalesFunnelModule\Repository\SalesFunnelsRepository;
 use Crm\SalesFunnelModule\Repository\SalesFunnelsStatsRepository;
 use Crm\SalesFunnelModule\Repository\SalesFunnelsSubscriptionTypesRepository;
 use Crm\SubscriptionsModule\Repository\SubscriptionTypesRepository;
-use Crm\SubscriptionsModule\Subscription\SubscriptionType;
 use Nette\Application\Responses\CallbackResponse;
+use Crm\SubscriptionsModule\Subscription\SubscriptionTypeHelper;
 use Nette\Application\UI\Form;
-use Nette\Database\Context;
 use Nette\Database\Table\ActiveRow;
 use Nette\Utils\DateTime;
 use PhpOffice\PhpSpreadsheet\Writer\Csv;
@@ -48,14 +47,10 @@ class SalesFunnelsAdminPresenter extends AdminPresenter
     private $salesFunnelsSubscriptionTypesRepository;
 
     private $salesFunnelsPaymentGatewaysRepository;
-    /**
-     * @var ExcelFactory
-     */
+
     private $excelFactory;
-    /**
-     * @var Context
-     */
-    private $database;
+
+    private $subscriptionTypeHelper;
 
     public function __construct(
         SalesFunnelsRepository $salesFunnelsRepository,
@@ -68,7 +63,7 @@ class SalesFunnelsAdminPresenter extends AdminPresenter
         SalesFunnelsSubscriptionTypesRepository $salesFunnelsSubscriptionTypesRepository,
         SalesFunnelsPaymentGatewaysRepository $salesFunnelsPaymentGatewaysRepository,
         ExcelFactory $excelFactory,
-        Context $database
+        SubscriptionTypeHelper $subscriptionTypeHelper
     ) {
         parent::__construct();
         $this->salesFunnelsRepository = $salesFunnelsRepository;
@@ -81,7 +76,7 @@ class SalesFunnelsAdminPresenter extends AdminPresenter
         $this->salesFunnelsSubscriptionTypesRepository = $salesFunnelsSubscriptionTypesRepository;
         $this->salesFunnelsPaymentGatewaysRepository = $salesFunnelsPaymentGatewaysRepository;
         $this->excelFactory = $excelFactory;
-        $this->database = $database;
+        $this->subscriptionTypeHelper = $subscriptionTypeHelper;
     }
 
     public function renderDefault()
@@ -271,7 +266,7 @@ class SalesFunnelsAdminPresenter extends AdminPresenter
         }
 
         // zmen nazvy
-        $subscriptionTypes = SubscriptionType::getPairs($this->subscriptionTypesRepository->all()->where($where)) ;
+        $subscriptionTypes = $this->subscriptionTypeHelper->getPairs($this->subscriptionTypesRepository->all()->where($where), true);
         $subscriptionType = $form->addSelect('subscription_type_id', 'subscriptions.data.subscription_types.fields.name', $subscriptionTypes)
             ->setRequired('subscriptions.data.subscription_types.required.name');
         $subscriptionType->getControlPrototype()->addAttributes(['class' => 'select2']);
