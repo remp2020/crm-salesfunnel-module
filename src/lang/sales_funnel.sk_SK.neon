@@ -113,6 +113,12 @@ admin:
 				subscriptions: Pred koľkými dňami mu skončilo posledné predplatné
 				hadNever: Nemal nikdy
 				hadActive: Mal aktívne
+			payment:
+				email: E-mail
+				first_name: Meno
+				last_name: Priezvisko
+				date: Dátum platby
+				amount: Suma
 		preview:
 			back: späť na platobné okno
 			header: Náhľad okna

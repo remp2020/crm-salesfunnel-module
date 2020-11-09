@@ -113,6 +113,12 @@ admin:
 				subscriptions: "Days since ending of last subscription (pre-payment)"
 				hadNever: Never had subscription
 				hadActive: Had active subscription
+			payment:
+				email: E-mail
+				first_name: First name
+				last_name: Last name
+				date: Date
+				amount: Amount
 		preview:
 			back: back to sales funnel
 			header: Preview window

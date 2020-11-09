@@ -6,6 +6,7 @@ use Crm\AdminModule\Presenters\AdminPresenter;
 use Crm\ApplicationModule\Components\Graphs\GoogleBarGraphGroupControlFactoryInterface;
 use Crm\ApplicationModule\Components\Graphs\GoogleLineGraphGroupControlFactoryInterface;
 use Crm\ApplicationModule\Components\VisualPaginator;
+use Crm\ApplicationModule\ExcelFactory;
 use Crm\ApplicationModule\Graphs\Criteria;
 use Crm\ApplicationModule\Graphs\GraphDataItem;
 use Crm\PaymentsModule\Components\LastPaymentsControlFactoryInterface;
@@ -20,9 +21,12 @@ use Crm\SalesFunnelModule\Repository\SalesFunnelsStatsRepository;
 use Crm\SalesFunnelModule\Repository\SalesFunnelsSubscriptionTypesRepository;
 use Crm\SubscriptionsModule\Repository\SubscriptionTypesRepository;
 use Crm\SubscriptionsModule\Subscription\SubscriptionType;
+use Nette\Application\Responses\CallbackResponse;
 use Nette\Application\UI\Form;
+use Nette\Database\Context;
 use Nette\Database\Table\ActiveRow;
 use Nette\Utils\DateTime;
+use PhpOffice\PhpSpreadsheet\Writer\Csv;
 use Tomaj\Form\Renderer\BootstrapRenderer;
 
 class SalesFunnelsAdminPresenter extends AdminPresenter
@@ -44,6 +48,14 @@ class SalesFunnelsAdminPresenter extends AdminPresenter
     private $salesFunnelsSubscriptionTypesRepository;
 
     private $salesFunnelsPaymentGatewaysRepository;
+    /**
+     * @var ExcelFactory
+     */
+    private $excelFactory;
+    /**
+     * @var Context
+     */
+    private $database;
 
     public function __construct(
         SalesFunnelsRepository $salesFunnelsRepository,
@@ -54,7 +66,9 @@ class SalesFunnelsAdminPresenter extends AdminPresenter
         PaymentsRepository $paymentsRepository,
         SubscriptionTypesRepository $subscriptionTypesRepository,
         SalesFunnelsSubscriptionTypesRepository $salesFunnelsSubscriptionTypesRepository,
-        SalesFunnelsPaymentGatewaysRepository $salesFunnelsPaymentGatewaysRepository
+        SalesFunnelsPaymentGatewaysRepository $salesFunnelsPaymentGatewaysRepository,
+        ExcelFactory $excelFactory,
+        Context $database
     ) {
         parent::__construct();
         $this->salesFunnelsRepository = $salesFunnelsRepository;
@@ -66,6 +80,8 @@ class SalesFunnelsAdminPresenter extends AdminPresenter
         $this->subscriptionTypesRepository = $subscriptionTypesRepository;
         $this->salesFunnelsSubscriptionTypesRepository = $salesFunnelsSubscriptionTypesRepository;
         $this->salesFunnelsPaymentGatewaysRepository = $salesFunnelsPaymentGatewaysRepository;
+        $this->excelFactory = $excelFactory;
+        $this->database = $database;
     }
 
     public function renderDefault()
@@ -311,6 +327,62 @@ class SalesFunnelsAdminPresenter extends AdminPresenter
         } else {
             $this->redirect('show', $salesFunnelId);
         }
+    }
+
+    public function handleExportUsersWithPayment($salesFunnelId)
+    {
+        $excelSpreadSheet = $this->excelFactory->createExcel('Sales funnel payments - ' . $salesFunnelId);
+        $funnel = $this->salesFunnelsRepository->find($salesFunnelId);
+
+        $lastId = 0;
+        $step = 1000;
+        $paidPayments = $this->paymentsRepository->getTable()
+            ->where([
+                'payments.sales_funnel_id' => $funnel->id,
+                'payments.status' => PaymentsRepository::STATUS_PAID,
+            ]);
+        $rows = [];
+
+        while (true) {
+            $results = $paidPayments
+                ->select('payments.*, user.email')
+                ->where('payments.id > ?', $lastId)
+                ->order('payments.id ASC')
+                ->limit($step)
+                ->fetchAll();
+
+            foreach ($results as $row) {
+                $rows[] =[
+                    $row->email,
+                    $row->paid_at,
+                    $row->amount
+                ];
+                $lastId = $row->id;
+            }
+
+            if (count($results) < $step) {
+                break;
+            }
+        }
+
+        $excelSpreadSheet->getActiveSheet()->fromArray($rows);
+
+        $writer = new Csv($excelSpreadSheet);
+        $writer->setDelimiter(';');
+        $writer->setUseBOM(true);
+        $writer->setEnclosure('"');
+
+        $now = new DateTime();
+        $fileName = 'sales-funnel-' . $salesFunnelId . '-payments-export-' . $now->format('Y-m-d') . '.csv';
+        $this->getHttpResponse()->addHeader('Content-Encoding', 'windows-1250');
+        $this->getHttpResponse()->addHeader('Content-Type', 'application/octet-stream; charset=windows-1250');
+        $this->getHttpResponse()->addHeader('Content-Disposition', "attachment; filename=" . $fileName);
+
+        $response = new CallbackResponse(function () use ($writer) {
+            $writer->save("php://output");
+        });
+
+        $this->sendResponse($response);
     }
 
     private function moveSubscriptionType(string $where, int $salesFunnelId, int $subscriptionTypeId): void

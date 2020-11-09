@@ -229,18 +229,22 @@
 
 <div class="row">
   <div class="col-md-12">
-    <h2 class="page-header">{_sales_funnel.admin.sales_funnels.show.users}</h2>
+    <h2 class="page-header">{_sales_funnel.admin.sales_funnels.show.users} <a n:href="ExportUsersWithPayment! $funnel->id" class="btn btn-primary btn-sm"><i class="fas fa-file-export"></i> Export</a></h2>
     <table class="table table-responsive table-bordered">
       <thead>
         <tr>
-          <th>Email</th>
-          <th>Date</th>
-          <th>Amount</th>
+          <th>{_sales_funnel.admin.sales_funnels.show.payment.email}</th>
+          <th>{_sales_funnel.admin.sales_funnels.show.payment.first_name}</th>
+          <th>{_sales_funnel.admin.sales_funnels.show.payment.last_name}</th>
+          <th>{_sales_funnel.admin.sales_funnels.show.payment.date}</th>
+          <th>{_sales_funnel.admin.sales_funnels.show.payment.amount}</th>
         </tr>
       </thead>
       <tbody>
         <tr n:foreach="$payments as $payment">
           <td><a n:href=":Users:UsersAdmin:show $payment->user_id">{$payment->user->public_name}</a></td>
+          <td>{$payment->user->first_name}</td>
+          <td>{$payment->user->last_name}</td>
           <td><span class="text-muted">{$payment->paid_at|userDate}</span></td>
           <td>
             {$payment->amount|price}
