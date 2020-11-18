@@ -159,3 +159,6 @@ config:
 	default_sales_funnel_url_key:
 		name: Predvolené platobné okno
 		description: "URL vybraného platobného okna (napr. default)"
+	sales_funnel_header_block:
+		name: "Kód v hlavičke"
+		description: "Ľubovoľný kód (napr. Remp Tracker), ktorý sa má vložiť do hlavičky šablóny platobného okna"

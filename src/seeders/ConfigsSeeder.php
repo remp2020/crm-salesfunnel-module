@@ -6,11 +6,14 @@ use Crm\ApplicationModule\Builder\ConfigBuilder;
 use Crm\ApplicationModule\Config\ApplicationConfig;
 use Crm\ApplicationModule\Config\Repository\ConfigCategoriesRepository;
 use Crm\ApplicationModule\Config\Repository\ConfigsRepository;
+use Crm\ApplicationModule\Seeders\ConfigsTrait;
 use Crm\ApplicationModule\Seeders\ISeeder;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class ConfigsSeeder implements ISeeder
 {
+    use ConfigsTrait;
+
     private $configCategoriesRepository;
 
     private $configsRepository;
@@ -26,46 +29,36 @@ class ConfigsSeeder implements ISeeder
         $this->configsRepository = $configsRepository;
         $this->configBuilder = $configBuilder;
     }
+
     public function seed(OutputInterface $output)
     {
-        $categoryName = 'sales_funnel.config.category';
-        $category = $this->configCategoriesRepository->loadByName($categoryName);
-        if (!$category) {
-            $category = $this->configCategoriesRepository->add($categoryName, 'far fa-window-maximize', 100);
-            $output->writeln('  <comment>* config category <info>Všeobecne</info> created</comment>');
-        } else {
-            $output->writeln('  * config category <info>Všeobecne</info> exists');
-        }
+        $category = $this->getCategory(
+            $output,
+            'sales_funnel.config.category',
+            'far fa-window-maximize',
+            100
+        );
 
-        $name = 'default_sales_funnel_url_key';
-        $value = 'sample';
-        $config = $this->configsRepository->loadByName($name);
-        if (!$config) {
-            $this->configBuilder->createNew()
-                ->setName($name)
-                ->setDisplayName('sales_funnel.config.default_sales_funnel_url_key.name')
-                ->setValue($value)
-                ->setDescription('sales_funnel.config.default_sales_funnel_url_key.description')
-                ->setType(ApplicationConfig::TYPE_STRING)
-                ->setAutoload(true)
-                ->setConfigCategory($category)
-                ->setSorting(900)
-                ->save();
-            $output->writeln("  <comment>* config item <info>$name</info> created</comment>");
-        } else {
-            $output->writeln("  * config item <info>$name</info> exists");
+        $this->addConfig(
+            $output,
+            $category,
+            'default_sales_funnel_url_key',
+            ApplicationConfig::TYPE_STRING,
+            'sales_funnel.config.default_sales_funnel_url_key.name',
+            'sales_funnel.config.default_sales_funnel_url_key.description',
+            'sample',
+            900
+        );
 
-            if ($config->has_default_value && $config->value !== $value) {
-                $this->configsRepository->update($config, ['value' => $value, 'has_default_value' => true]);
-                $output->writeln("  <comment>* config item <info>$name</info> updated</comment>");
-            }
-
-            if ($config->category->name != $categoryName) {
-                $this->configsRepository->update($config, [
-                    'config_category_id' => $category->id
-                ]);
-                $output->writeln("  <comment>* config item <info>$name</info> updated</comment>");
-            }
-        }
+        $this->addConfig(
+            $output,
+            $category,
+            'sales_funnel_header_block',
+            ApplicationConfig::TYPE_HTML,
+            'sales_funnel.config.sales_funnel_header_block.name',
+            'sales_funnel.config.sales_funnel_header_block.description',
+            null,
+            910
+        );
     }
 }
