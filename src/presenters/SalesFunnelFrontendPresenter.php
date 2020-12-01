@@ -225,14 +225,14 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
         if ($this->getUser()->isLoggedIn()) {
             $userId = $this->getUser()->getIdentity()->id;
         }
-        $browserId = (isset($_COOKIE['browser_id']) ? $_COOKIE['browser_id'] : null);
 
         $this->hermesEmitter->emit(new HermesMessage('sales-funnel', [
             'type' => 'checkout',
             'user_id' => $userId,
-            'browser_id' => $browserId,
+            'browser_id' => $_COOKIE['browser_id'] ?? null,
             'sales_funnel_id' => $salesFunnel->id,
             'source' => $this->trackingParams(),
+            'commerce_session_id' => $_COOKIE['commerce_session_id'] ?? null,
         ]));
 
         $this->sendResponse(new TextResponse($template));
@@ -537,6 +537,11 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
             $metaData['browser_id'] = $browserId;
         }
 
+        $commerceSessionId = $_COOKIE['commerce_session_id'] ?? null;
+        if ($commerceSessionId) {
+            $metaData['commerce_session_id'] = $commerceSessionId;
+        }
+
         $payment = $this->paymentsRepository->add(
             $subscriptionType,
             $paymentGateway,
@@ -562,6 +567,7 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
             'browser_id' => $browserId,
             'sales_funnel_id' => $funnel->id,
             'payment_id' => $payment->id,
+            'commerce_session_id' => $commerceSessionId, // TODO: [refactoring] try to remove this call from this module
         ]));
 
         if ($this->hasStoredCard($user, $payment->payment_gateway)) {
