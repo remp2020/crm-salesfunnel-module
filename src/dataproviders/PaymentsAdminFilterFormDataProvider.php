@@ -5,7 +5,6 @@ namespace Crm\SalesFunnelModule\DataProvider;
 use Crm\ApplicationModule\DataProvider\DataProviderException;
 use Crm\PaymentsModule\DataProvider\AdminFilterFormDataProviderInterface;
 use Crm\SalesFunnelModule\Repository\SalesFunnelsRepository;
-use Nette\Application\Request;
 use Nette\Application\UI\Form;
 use Nette\Database\Table\Selection;
 
@@ -31,15 +30,15 @@ class PaymentsAdminFilterFormDataProvider implements AdminFilterFormDataProvider
             throw new DataProviderException('invalid type of provided form: ' . get_class($params['form']));
         }
 
-        if (!isset($params['request'])) {
-            throw new DataProviderException('missing [request] within data provider params');
+        if (!isset($params['formData'])) {
+            throw new DataProviderException('missing [formData] within data provider params');
         }
-        if (!($params['request'] instanceof Request)) {
-            throw new DataProviderException('invalid type of provided request: ' . get_class($params['request']));
+        if (!is_array($params['formData'])) {
+            throw new DataProviderException('invalid type of provided formData: ' . get_class($params['formData']));
         }
 
         $form = $params['form'];
-        $request = $params['request'];
+        $formData = $params['formData'];
 
         $salesFunnels = $this->salesFunnelsRepository->getTable()->fetchPairs('id', 'name');
         $form->addMultiSelect('sales_funnel', 'Funnel', $salesFunnels)
@@ -47,17 +46,22 @@ class PaymentsAdminFilterFormDataProvider implements AdminFilterFormDataProvider
             ->getControlPrototype()->addAttributes(['class' => 'select2']);
 
         $form->setDefaults([
-            'sales_funnel' => $request->getParameter('sales_funnel'),
+            'sales_funnel' => $this->getSalesFunnel($formData),
         ]);
 
         return $form;
     }
 
-    public function filter(Selection $selection, Request $request): Selection
+    public function filter(Selection $selection, array $formData): Selection
     {
-        if ($request->getParameter('sales_funnel')) {
-            $selection->where('sales_funnel_id', $request->getParameter('sales_funnel'));
+        if ($this->getSalesFunnel($formData)) {
+            $selection->where('sales_funnel_id', $this->getSalesFunnel($formData));
         }
         return $selection;
+    }
+
+    private function getSalesFunnel($formData)
+    {
+        return $formData['sales_funnel'] ?? null;
     }
 }
