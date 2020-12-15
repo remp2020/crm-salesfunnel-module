@@ -16,6 +16,7 @@ use Crm\PaymentsModule\PaymentProcessor;
 use Crm\PaymentsModule\Repository\PaymentGatewaysRepository;
 use Crm\PaymentsModule\Repository\PaymentsRepository;
 use Crm\PaymentsModule\Repository\RecurrentPaymentsRepository;
+use Crm\SalesFunnelModule\DataProvider\TrackerDataProviderInterface;
 use Crm\SalesFunnelModule\DataProvider\ValidateUserFunnelAccessDataProviderInterface;
 use Crm\SalesFunnelModule\Events\PaymentItemContainerReadyEvent;
 use Crm\SalesFunnelModule\Events\SalesFunnelEvent;
@@ -220,20 +221,6 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
 
         $ua = Request::getUserAgent();
         $this->emitter->emit(new SalesFunnelEvent($salesFunnel, $this->getUser(), SalesFunnelsStatsRepository::TYPE_SHOW, $ua));
-
-        $userId = null;
-        if ($this->getUser()->isLoggedIn()) {
-            $userId = $this->getUser()->getIdentity()->id;
-        }
-
-        $this->hermesEmitter->emit(new HermesMessage('sales-funnel', [
-            'type' => 'checkout',
-            'user_id' => $userId,
-            'browser_id' => $_COOKIE['browser_id'] ?? null,
-            'sales_funnel_id' => $salesFunnel->id,
-            'source' => $this->trackingParams(),
-            'commerce_session_id' => $_COOKIE['commerce_session_id'] ?? null,
-        ]));
 
         $this->sendResponse(new TextResponse($template));
     }
@@ -522,8 +509,6 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
         ));
 
         // prepare payment meta
-        $metaData = [];
-        $metaData = array_merge($metaData, $this->trackingParams());
         $metaData['newsletters_subscribe'] = (bool)filter_input(INPUT_POST, 'newsletters_subscribe');
 
         foreach ($this->getHttpRequest()->getPost('payment_metadata', []) as $key => $submittedMeta) {
@@ -532,15 +517,16 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
             }
         }
 
-        $browserId = $_COOKIE['browser_id'] ?? null;
-        if ($browserId) {
-            $metaData['browser_id'] = $browserId;
+        $trackerParams = [];
+        /** @var TrackerDataProviderInterface[] $providers */
+        $providers = $this->dataProviderManager->getProviders(
+            'sales_funnel.dataprovider.tracker',
+            TrackerDataProviderInterface::class
+        );
+        foreach ($providers as $provider) {
+            $trackerParams[] = $provider->provide();
         }
-
-        $commerceSessionId = $_COOKIE['commerce_session_id'] ?? null;
-        if ($commerceSessionId) {
-            $metaData['commerce_session_id'] = $commerceSessionId;
-        }
+        $trackerParams = array_merge([], ...$trackerParams);
 
         $payment = $this->paymentsRepository->add(
             $subscriptionType,
@@ -557,18 +543,23 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
             null,
             $address,
             false,
-            $metaData
+            array_merge($metaData, $trackerParams)
         );
 
         $this->paymentsRepository->update($payment, ['sales_funnel_id' => $funnel->id]);
-        $this->hermesEmitter->emit(new HermesMessage('sales-funnel', [
+
+        $eventParams = [
             'type' => 'payment',
             'user_id' => $user->id,
-            'browser_id' => $browserId,
             'sales_funnel_id' => $funnel->id,
             'payment_id' => $payment->id,
-            'commerce_session_id' => $commerceSessionId, // TODO: [refactoring] try to remove this call from this module
-        ]));
+        ];
+        $this->hermesEmitter->emit(
+            new HermesMessage(
+                'sales-funnel',
+                array_merge($eventParams, $trackerParams)
+            )
+        );
 
         if ($this->hasStoredCard($user, $payment->payment_gateway)) {
             $this->redirectOrSendJson(':Payments:Recurrent:selectCard', $payment->id);
