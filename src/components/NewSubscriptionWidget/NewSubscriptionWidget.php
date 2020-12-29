@@ -56,18 +56,18 @@ class NewSubscriptionWidget extends BaseWidget
         $this->template->referer = $referer;
         $this->template->paymentGatewayId = null;
         $this->template->subscriptionTypeId = null;
-        $this->template->rtmSource = $this->getParameter('rtm_source') ?? $this->getParameter('utm_source');
-        $this->template->rtmMedium = $this->getParameter('rtm_medium') ?? $this->getParameter('utm_medium');
-        $this->template->rtmCampaign = $this->getParameter('rtm_campaign') ?? $this->getParameter('utm_campaign');
-        $this->template->rtmContent = $this->getParameter('rtm_content') ?? $this->getParameter('utm_content');
-        $this->template->rtmVariant = $this->getParameter('rtm_variant') ?? $this->getParameter('banner_variant');
+        $this->template->rtmSource = $this->presenter->getParameter('rtm_source') ?? $this->presenter->getParameter('utm_source');
+        $this->template->rtmMedium = $this->presenter->getParameter('rtm_medium') ?? $this->presenter->getParameter('utm_medium');
+        $this->template->rtmCampaign = $this->presenter->getParameter('rtm_campaign') ?? $this->presenter->getParameter('utm_campaign');
+        $this->template->rtmContent = $this->presenter->getParameter('rtm_content') ?? $this->presenter->getParameter('utm_content');
+        $this->template->rtmVariant = $this->presenter->getParameter('rtm_variant') ?? $this->presenter->getParameter('banner_variant');
 
-        $paymentGatewayId = $this->getParameter('payment_gateway_id');
+        $paymentGatewayId = $this->presenter->getParameter('payment_gateway_id');
         if (isset($paymentGatewayId)) {
             $this->template->paymentGatewayId = (int) $paymentGatewayId;
         }
 
-        $subscriptionTypeId = $this->getParameter('subscription_type_id');
+        $subscriptionTypeId = $this->presenter->getParameter('subscription_type_id');
         if (isset($subscriptionTypeId)) {
             $this->template->subscriptionTypeId = (int) $subscriptionTypeId;
         }
