@@ -171,7 +171,7 @@ class SalesFunnelModule extends CrmModule
     public function registerDataProviders(DataProviderManager $dataProviderManager)
     {
         $dataProviderManager->registerDataProvider(
-            'payments.dataprovider.list_filter_form',
+            'payments.dataprovider.payments_filter_form',
             $this->getInstance(PaymentsAdminFilterFormDataProvider::class)
         );
 
