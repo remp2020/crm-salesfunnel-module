@@ -9,14 +9,15 @@
         <div class="page-header">
             <h1>
                 {_sales_funnel.admin.sales_funnels.show.distribution.subscriptions}:
-                {if intval($toLevel) === -1}{_sales_funnel.admin.sales_funnels.show.distribution.hadNever}
-                {elseif intval($toLevel) === 0}{_sales_funnel.admin.sales_funnels.show.distribution.hadActive}
+                {if intval($fromLevel) === \Crm\SalesFunnelModule\Distribution\SubscriptionDaysDistribution::NO_SUBSCRIPTION}{_sales_funnel.admin.sales_funnels.show.distribution.hadNever}
+                {elseif intval($fromLevel) === \Crm\SalesFunnelModule\Distribution\SubscriptionDaysDistribution::ACTIVE_SUBSCRIPTION}{_sales_funnel.admin.sales_funnels.show.distribution.hadActive}
+                {elseif is_null($toLevel)}{$fromLevel}+
                 {else}{$fromLevel} < {$toLevel}
                 {/if}
 
                 <small>
                     <br/>({$funnel->name})
-                    / {_system.total} {count($users)}
+                    / {_system.total} {count($distributionList)}
                 </small>
             </h1>
         </div>

@@ -12,7 +12,7 @@
                 {$fromLevel}{if $toLevel-1 > $fromLevel} - {$toLevel-1}{elseif $toLevel === null}+{/if}
                 <small>
                     <br/>({$funnel->name})
-                    / {_system.total} {count($users)}
+                    / {_system.total} {count($distributionList)}
                 </small>
             </h1>
         </div>

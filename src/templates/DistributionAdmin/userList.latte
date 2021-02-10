@@ -10,7 +10,8 @@
         </tr>
         </thead>
         <tbody>
-        <tr n:foreach="$users as $u">
+        <tr n:foreach="$distributionList as $distribution">
+            {var $u = $distribution->user}
             <td class="text-muted">{$u->id}</td>
             <td>
                 <a n:href=":Users:UsersAdmin:show $u->id">

@@ -6,6 +6,7 @@ use Crm\ApiModule\Api\ApiRoutersContainerInterface;
 use Crm\ApiModule\Authorization\NoAuthorization;
 use Crm\ApiModule\Router\ApiIdentifier;
 use Crm\ApiModule\Router\ApiRoute;
+use Crm\ApplicationModule\Commands\CommandsContainerInterface;
 use Crm\ApplicationModule\CrmModule;
 use Crm\ApplicationModule\DataProvider\DataProviderManager;
 use Crm\ApplicationModule\Event\EventsStorage;
@@ -69,8 +70,18 @@ class SalesFunnelModule extends CrmModule
             700
         );
         $emitter->addListener(
+            \Crm\PaymentsModule\Events\PaymentChangeStatusEvent::class,
+            $this->getInstance(\Crm\SalesFunnelModule\Events\CalculateSalesFunnelConversionDistributionEventHandler::class),
+            800
+        );
+        $emitter->addListener(
             \Crm\SalesFunnelModule\Events\SalesFunnelEvent::class,
             $this->getInstance(\Crm\SalesFunnelModule\Events\SalesFunnelHandler::class)
+        );
+
+        $emitter->addListener(
+            \Crm\SalesFunnelModule\Events\CalculateSalesFunnelConversionDistributionEvent::class,
+            $this->getInstance(\Crm\SalesFunnelModule\Events\CalculateSalesFunnelConversionDistributionEventHandler::class)
         );
     }
 
@@ -185,5 +196,10 @@ class SalesFunnelModule extends CrmModule
     {
         $seederManager->addSeeder($this->getInstance(ConfigsSeeder::class));
         $seederManager->addSeeder($this->getInstance(SalesFunnelsSeeder::class));
+    }
+
+    public function registerCommands(CommandsContainerInterface $commandsContainer)
+    {
+        $commandsContainer->registerCommand($this->getInstance(\Crm\SalesFunnelModule\Commands\CalculateSalesFunnelsConversionDistributionsCommand::class));
     }
 }

@@ -17,7 +17,7 @@ extensions:
 	- Crm\SalesFunnelModule\DI\SalesFunnelModuleExtension
 ```
 
-## Configuration
+### Configuration
 
 By default we register for every sales funnel short route _(e.g. for sales funnel with URL key `sample`, route is `http://crm.press/sample`)_. You can turn off registration of slug by adding following setting to configuration file.
 
@@ -27,6 +27,12 @@ sales_funnel:
 ```
 
 Sales funnel will be still accessible through long route _(e.g. `http://crm.press/sales-funnel/sales-funnel-frontend/show?funnel=sample`)_.
+
+### Scheduled commands
+
+Please add following commands to your scheduler:
+
+- `sales-funnel:distributions`. Every sales funnel precalculates data about users who paid through it in advance. These calculations are used to provide stats and distributions on the funnel detail. Stats are updated on the fly, but it's recommended to run this once a day. 
 
 ## Using sales funnels
 

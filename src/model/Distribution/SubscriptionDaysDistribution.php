@@ -2,83 +2,89 @@
 
 namespace Crm\SalesFunnelModule\Distribution;
 
-use Nette\Database\Context;
+use Nette\Database\IRow;
 
-class SubscriptionDaysDistribution implements DistributionInterface
+class SubscriptionDaysDistribution extends AbstractFunnelDistribution
 {
-    private $database;
+    public const NO_SUBSCRIPTION = -2;
+    public const ACTIVE_SUBSCRIPTION = -1;
+    public const TYPE = 'last_subscription_days';
 
-    public function __construct(Context $database)
+    protected function getDistributionRows($funnelId, $userId = null): array
     {
-        $this->database = $database;
-    }
+        $userSql = $this->getUserSql($userId);
+        $statusSql = $this->getStatusSql();
 
-    public function distribution(int $funnelId, array $levels): array
-    {
-        $levels[] = -1;
-        $lastLevel = false;
-        $result = [];
-        foreach ($levels as $level) {
-            $skeleton = $this->getQuerySkeleton($level, $lastLevel, $funnelId);
-            $query = "SELECT COUNT(*) AS result FROM ({$skeleton}) AS sub";
-
-            $res = $this->database->query($query)->fetch();
-            $result[$level] = $res->result;
-            $lastLevel = $level;
-        }
-
-        return $result;
-    }
-
-    public function distributionList(int $funnelId, float $fromLevel, float $toLevel = null): array
-    {
-        $skeleton = $this->getQuerySkeleton($toLevel, $fromLevel, $funnelId);
-        $query = "SELECT users.* FROM ({$skeleton}) AS sub LEFT JOIN users ON sub.user_id = users.id";
-
-        return $this->database->query($query)->fetchAll();
-    }
-
-    private function getQuerySkeleton(float $level, float $lastLevel, $funnelId)
-    {
-        if ($level === 0.0) {
-            $join = 'subscriptions.start_time < funnel_paid.paid_at AND subscriptions.end_time > funnel_paid.paid_at';
-            $where = 'subscriptions.id IS NOT NULL';
-        } elseif ($level === -1.0) {
-            $join = 'subscriptions.start_time < funnel_paid.paid_at AND subscriptions.end_time < funnel_paid.paid_at';
-            $where = 'subscriptions.id IS NULL';
-        } else {
-            $join = "subscriptions.end_time BETWEEN funnel_paid.paid_at - INTERVAL {$level} DAY AND funnel_paid.paid_at - INTERVAL {$lastLevel} DAY";
-            $where = 'subscriptions.id IS NOT NULL AND next_subscription.id IS NULL';
-        }
-
-        return <<<SQL
-    SELECT DISTINCT funnel_paid.user_id FROM
-    (
-        SELECT user_id, MIN(paid_at) as paid_at
-        FROM payments
-        WHERE status='paid' AND sales_funnel_id = $funnelId
-        GROUP BY user_id
-    ) funnel_paid
-    
-    -- get full first payment of funnel and related subscription
-    INNER JOIN payments
-      ON payments.paid_at = funnel_paid.paid_at
-      AND payments.user_id = funnel_paid.user_id
-     
-    -- get other subscriptions
-    LEFT JOIN subscriptions
-      ON subscriptions.user_id = funnel_paid.user_id 
-      AND (payments.subscription_id IS NULL OR subscriptions.id != payments.subscription_id)
-      AND {$join}
-     
-    -- make sure this is the last subscription  
-    LEFT JOIN subscriptions AS next_subscription
-      ON next_subscription.end_time > subscriptions.end_time
-      AND next_subscription.user_id = subscriptions.user_id
-      AND next_subscription.id != payments.subscription_id
-      AND next_subscription.start_time < funnel_paid.paid_at
-      
-    WHERE {$where}
+        $sql = <<<SQL
+SELECT user_id, MIN(diff) as value, MAX(additional) as additional FROM (
+   SELECT sub.user_id,
+          sub.paid_at,
+          subscriptions.end_time,
+          DATEDIFF(sub.paid_at, subscriptions.end_time) AS 'diff',
+          subscriptions.end_time > sub.paid_at AS 'additional'
+   FROM (
+            SELECT user_id, MIN(paid_at) as 'paid_at'
+            FROM payments
+            WHERE status IN $statusSql
+              AND sales_funnel_id = $funnelId
+              $userSql
+            GROUP BY user_id
+        ) sub
+            LEFT JOIN subscriptions
+                      ON subscriptions.start_time < sub.paid_at AND
+                         sub.user_id = subscriptions.user_id
+) diffs GROUP BY user_id
 SQL;
+
+        return $this->database->query($sql)->fetchAll();
+    }
+
+    protected function prepareInsertRow(IRow $salesFunnel, IRow $distributionRow): array
+    {
+        if (is_null($distributionRow->value)) {
+            return $this->salesFunnelsConversionDistributionsRepository
+                ->prepareRow($salesFunnel->id, $distributionRow->user_id, self::TYPE, self::NO_SUBSCRIPTION);
+        }
+
+        if ($distributionRow->additional === 1) {
+            return $this->salesFunnelsConversionDistributionsRepository
+                ->prepareRow($salesFunnel->id, $distributionRow->user_id, self::TYPE, self::ACTIVE_SUBSCRIPTION);
+        }
+
+        return $this->salesFunnelsConversionDistributionsRepository
+            ->prepareRow($salesFunnel->id, $distributionRow->user_id, self::TYPE, $distributionRow->value);
+    }
+
+    public function getDistributionList(int $funnelId, float $fromLevel, float $toLevel = null): array
+    {
+        $select = $this->salesFunnelsConversionDistributionsRepository
+            ->salesFunnelTypeDistributions($funnelId, self::TYPE);
+
+        if ($fromLevel === (float)self::ACTIVE_SUBSCRIPTION) {
+            return $select->where('value', self::ACTIVE_SUBSCRIPTION)->fetchAll();
+        }
+
+        if ($fromLevel === (float)self::NO_SUBSCRIPTION) {
+            return $select->where('value', self::NO_SUBSCRIPTION)->fetchAll();
+        }
+
+        $select->where('value >= ?', $fromLevel);
+        if (isset($toLevel)) {
+            $select->where('value < ?', $toLevel);
+        }
+
+        return $select->fetchAll();
+    }
+
+    public function getActiveSubscriptionsDistribution(int $funnelId)
+    {
+        return $this->salesFunnelsConversionDistributionsRepository->salesFunnelTypeDistributions($funnelId, self::TYPE)
+            ->where('value', self::ACTIVE_SUBSCRIPTION)->select('COUNT(*) AS active_subscriptions')->fetch();
+    }
+
+    public function getNoSubscriptionsDistribution(int $funnelId)
+    {
+        return $this->salesFunnelsConversionDistributionsRepository->salesFunnelTypeDistributions($funnelId, self::TYPE)
+            ->where('value', self::NO_SUBSCRIPTION)->select('COUNT(*) AS no_subscriptions')->fetch();
     }
 }

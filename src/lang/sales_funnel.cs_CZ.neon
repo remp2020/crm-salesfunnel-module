@@ -112,6 +112,7 @@ admin:
 				subscriptions: Před kolika dny mu skončilo poslední předplatné
 				hadNever: Nikdy neměl
 				hadActive: Měl aktivní
+				warning: "Distribuce je zastaralá. Spusťte příkaz `sales-funnel:distributions`."
 			payment:
 				email: E-mail
 				first_name: Jméno

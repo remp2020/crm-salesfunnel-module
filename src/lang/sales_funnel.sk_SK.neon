@@ -113,6 +113,7 @@ admin:
 				subscriptions: Pred koľkými dňami mu skončilo posledné predplatné
 				hadNever: Nemal nikdy
 				hadActive: Mal aktívne
+				warning: "Distribúcia je neaktuálna. Spustite príkaz 'sales-funnel:distributions'."
 			payment:
 				email: E-mail
 				first_name: Meno

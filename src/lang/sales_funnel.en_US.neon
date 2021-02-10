@@ -113,6 +113,7 @@ admin:
 				subscriptions: "Days since ending of last subscription (pre-payment)"
 				hadNever: Never had subscription
 				hadActive: Had active subscription
+				warning: Distribution is out of date. Please run `sales-funnel:distributions` command.
 			payment:
 				email: E-mail
 				first_name: First name

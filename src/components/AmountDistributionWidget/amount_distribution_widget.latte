@@ -1,22 +1,30 @@
 <div class="col-md-2">
     <div class="panel panel-default">
-        <div class="panel-heading">{_sales_funnel.admin.sales_funnels.show.distribution.amounts}</div>
+        <div class="panel-heading">
+            {if !$isDistributionActual}
+                <i class="fas fa-exclamation-triangle" style="color: red;" data-toggle="tooltip" data-original-title="{_sales_funnel.admin.sales_funnels.show.distribution.warning}"></i>
+            {/if}
+            {_sales_funnel.admin.sales_funnels.show.distribution.amounts}
+        </div>
         <ul class="list-group">
-            {var $lastKey = 0}
             <li n:foreach="$distribution as $key => $value" class="list-group-item">
-                {var $nextLevel = isset($levels[$key+1]) ? $levels[$key+1] : null}
                 <strong>
-                    {if $key === 0} {0|price}
-                    {elseif !isset($levels[$key+1])} +{$levels[$key]|price};
-                    {else} {$levels[$key]|price} < {$levels[$key+1]|price}
+                    {if $key === 0}
+                        {0|price}
+                        {var $nextKey = 0}
+                    {elseif !isset($levels[$key+1])}
+                        {$levels[$key]|price}+
+                        {var $nextKey = null}
+                    {else}
+                        {$levels[$key]|price} < {$levels[$key+1]|price}
+                        {var $nextKey = $levels[$key+1]}
                     {/if}
                 </strong>
                 <span class="pull-right">
-                    <a href="{plink :SalesFunnel:DistributionAdmin:amount $funnelId, $levels[$key], $nextLevel}">
+                    <a href="{plink :SalesFunnel:DistributionAdmin:amount $funnelId, $levels[$key], $nextKey}">
                         {$value}
                     </a>
                 </span>
-                {var $lastKey = $key}
             </li>
         </ul>
     </div>

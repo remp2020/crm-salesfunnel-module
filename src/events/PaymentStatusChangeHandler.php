@@ -4,7 +4,6 @@ namespace Crm\SalesFunnelModule\Events;
 
 use Crm\PaymentsModule\Events\PaymentChangeStatusEvent;
 use Crm\PaymentsModule\Repository\PaymentsRepository;
-use Crm\SalesFunnelModule\Repository\SalesFunnelsRepository;
 use Crm\SalesFunnelModule\Repository\SalesFunnelsStatsRepository;
 use League\Event\AbstractListener;
 use League\Event\Emitter;
@@ -12,22 +11,12 @@ use League\Event\EventInterface;
 
 class PaymentStatusChangeHandler extends AbstractListener
 {
-    /** @var SalesFunnelsRepository  */
-    private $salesFunnelsRepository;
-
-    /** @var SalesFunnelsStatsRepository  */
-    private $salesFunnelsStatsRepository;
-
     /** @var Emitter  */
     private $emitter;
 
     public function __construct(
-        SalesFunnelsRepository $salesFunnelsRepository,
-        SalesFunnelsStatsRepository $salesFunnelsStatsRepository,
         Emitter $emitter
     ) {
-        $this->salesFunnelsRepository = $salesFunnelsRepository;
-        $this->salesFunnelsStatsRepository = $salesFunnelsStatsRepository;
         $this->emitter = $emitter;
     }
 

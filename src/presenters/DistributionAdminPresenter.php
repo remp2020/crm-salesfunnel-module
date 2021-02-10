@@ -6,25 +6,45 @@ use Crm\AdminModule\Presenters\AdminPresenter;
 use Crm\SalesFunnelModule\Components\AmountDistributionWidgetFactory;
 use Crm\SalesFunnelModule\Components\DaysFromLastSubscriptionDistributionWidgetFactory;
 use Crm\SalesFunnelModule\Components\PaymentDistributionWidgetFactory;
+use Crm\SalesFunnelModule\Distribution\PaymentsCountDistribution;
+use Crm\SalesFunnelModule\Distribution\PaymentsSumDistribution;
+use Crm\SalesFunnelModule\Distribution\SubscriptionDaysDistribution;
 use Crm\SalesFunnelModule\Repository\SalesFunnelsRepository;
+use Crm\UsersModule\Repository\UsersRepository;
 
 class DistributionAdminPresenter extends AdminPresenter
 {
     private $salesFunnelsRepository;
 
+    private $paymentsSumDistribution;
+
+    private $paymentsCountDistribution;
+
+    private $subscriptionDaysDistribution;
+
+    private $usersRepository;
+
     public function __construct(
-        SalesFunnelsRepository $salesFunnelsRepository
+        PaymentsCountDistribution $paymentsCountDistribution,
+        PaymentsSumDistribution $paymentsSumDistribution,
+        SalesFunnelsRepository $salesFunnelsRepository,
+        SubscriptionDaysDistribution $subscriptionDaysDistribution,
+        UsersRepository $usersRepository
     ) {
         parent::__construct();
+        $this->paymentsSumDistribution = $paymentsSumDistribution;
         $this->salesFunnelsRepository = $salesFunnelsRepository;
+        $this->paymentsCountDistribution = $paymentsCountDistribution;
+        $this->subscriptionDaysDistribution = $subscriptionDaysDistribution;
+        $this->usersRepository = $usersRepository;
     }
 
     public function renderAmount($funnelId, $fromLevel, $toLevel)
     {
-        $this->template->users = $this->salesFunnelsRepository->userSpentDistributionList($funnelId, $fromLevel, $toLevel);
-
+        $distributionList = $this->paymentsSumDistribution->getDistributionList($funnelId, $fromLevel, $toLevel);
         $funnel = $this->salesFunnelsRepository->find($funnelId);
 
+        $this->template->distributionList = $distributionList;
         $this->template->fromLevel = $fromLevel;
         $this->template->toLevel = $toLevel;
         $this->template->funnel = $funnel;
@@ -37,10 +57,10 @@ class DistributionAdminPresenter extends AdminPresenter
 
     public function renderPayment($funnelId, $fromLevel, $toLevel)
     {
-        $this->template->users = $this->salesFunnelsRepository->userPaymentsCountDistributionList($funnelId, $fromLevel, $toLevel);
-
+        $distributionList = $this->paymentsCountDistribution->getDistributionList($funnelId, $fromLevel, $toLevel);
         $funnel = $this->salesFunnelsRepository->find($funnelId);
 
+        $this->template->distributionList = $distributionList;
         $this->template->fromLevel = $fromLevel;
         $this->template->toLevel = $toLevel;
         $this->template->funnel = $funnel;
@@ -53,10 +73,10 @@ class DistributionAdminPresenter extends AdminPresenter
 
     public function renderDaysFromLastSubscription($funnelId, $fromLevel, $toLevel)
     {
-        $this->template->users = $this->salesFunnelsRepository->userSubscriptionsDistributionList($funnelId, $fromLevel, $toLevel);
-
+        $distributionList = $this->subscriptionDaysDistribution->getDistributionList($funnelId, $fromLevel, $toLevel);
         $funnel = $this->salesFunnelsRepository->find($funnelId);
 
+        $this->template->distributionList = $distributionList;
         $this->template->fromLevel = $fromLevel;
         $this->template->toLevel = $toLevel;
         $this->template->funnel = $funnel;

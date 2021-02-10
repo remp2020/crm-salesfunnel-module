@@ -1,21 +1,50 @@
 <div class="col-md-2">
     <div class="panel panel-default">
-        <div class="panel-heading">{_sales_funnel.admin.sales_funnels.show.distribution.subscriptions}</div>
+        <div class="panel-heading">
+            {if !$isDistributionActual}
+                <i class="fas fa-exclamation-triangle" style="color: red;" data-toggle="tooltip" data-original-title="{_sales_funnel.admin.sales_funnels.show.distribution.warning}"></i>
+            {/if}
+            {_sales_funnel.admin.sales_funnels.show.distribution.subscriptions}
+        </div>
         <ul class="list-group">
-            {var $lastKey = 0}
-            <li n:foreach="$distribution as $key => $value" class="list-group-item">
+            <li class="list-group-item">
                 <strong>
-                    {if $key === -1}{_sales_funnel.admin.sales_funnels.show.distribution.hadNever}
-                    {elseif $key === 0}{_sales_funnel.admin.sales_funnels.show.distribution.hadActive}
-                    {else}{$lastKey} < {$key}
-                    {/if}
+                   {_sales_funnel.admin.sales_funnels.show.distribution.hadActive}
                 </strong>
                 <span class="pull-right">
-                    <a href="{plink :SalesFunnel:DistributionAdmin:daysFromLastSubscription $funnelId, $lastKey, $key}">
-                        {$value}
+                    <a href="{plink :SalesFunnel:DistributionAdmin:daysFromLastSubscription $funnelId, \Crm\SalesFunnelModule\Distribution\SubscriptionDaysDistribution::ACTIVE_SUBSCRIPTION}">
+                        {$activeSubscriptions}
                     </a>
                 </span>
-                {var $lastKey = $key}
+            </li>
+
+            {foreach $distribution as $key => $value}
+                <li class="list-group-item">
+                    <strong>
+                        {if $key+1 === count($levels)}
+                            {$levels[$key]}+
+                            {var $nextKey = null}
+                        {else}
+                            {$levels[$key]} < {$levels[$key+1]}
+                            {var $nextKey = $levels[$key+1]}
+                        {/if}
+                    </strong>
+                    <span class="pull-right">
+                        <a href="{plink :SalesFunnel:DistributionAdmin:daysFromLastSubscription $funnelId, $levels[$key], $nextKey}">
+                            {$value}
+                        </a>
+                    </span>
+                </li>
+            {/foreach}
+            <li class="list-group-item">
+                <strong>
+                   {_sales_funnel.admin.sales_funnels.show.distribution.hadNever}
+                </strong>
+                <span class="pull-right">
+                    <a href="{plink :SalesFunnel:DistributionAdmin:daysFromLastSubscription $funnelId, \Crm\SalesFunnelModule\Distribution\SubscriptionDaysDistribution::NO_SUBSCRIPTION}">
+                        {$noSubscriptions}
+                    </a>
+                </span>
             </li>
         </ul>
     </div>
