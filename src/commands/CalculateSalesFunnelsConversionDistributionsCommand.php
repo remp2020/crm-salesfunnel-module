@@ -8,6 +8,7 @@ use League\Event\Emitter;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class CalculateSalesFunnelsConversionDistributionsCommand extends Command
@@ -29,6 +30,12 @@ class CalculateSalesFunnelsConversionDistributionsCommand extends Command
     {
         $this->setName('sales-funnel:distributions')
             ->setDescription('Calculates sales funnels conversion distributions for active sales funnels')
+            ->addOption(
+                'all',
+                null,
+                InputOption::VALUE_NONE,
+                'Calculate the distribution for all sales funnels, even inactive.'
+            )
             ->addArgument(
                 'sales_funnel_url',
                 InputArgument::OPTIONAL,
@@ -52,7 +59,12 @@ class CalculateSalesFunnelsConversionDistributionsCommand extends Command
             }
             $salesFunnels[] = $salesFunnel;
         } else {
-            $salesFunnels = $this->salesFunnelsRepository->active();
+            $isAll = $input->getOption('all');
+            if ($isAll) {
+                $salesFunnels = $this->salesFunnelsRepository->all();
+            } else {
+                $salesFunnels = $this->salesFunnelsRepository->active();
+            }
         }
 
         foreach ($salesFunnels as $salesFunnel) {
