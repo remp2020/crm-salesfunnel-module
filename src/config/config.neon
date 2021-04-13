@@ -33,6 +33,7 @@ services:
 	- Crm\SalesFunnelModule\Components\SalesFunnelUserListingWidget
 	- Crm\SalesFunnelModule\DataProvider\RetentionAnalysisDataProvider
 	- Crm\SalesFunnelModule\DataProvider\PaymentsAdminFilterFormDataProvider
+	- Crm\SalesFunnelModule\Scenarios\PaymentIsFromSalesFunnelCriteria
 
 	paymentsCountDistribution:
 		class: Crm\SalesFunnelModule\Distribution\PaymentsCountDistribution

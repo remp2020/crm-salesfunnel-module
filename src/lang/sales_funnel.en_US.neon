@@ -148,6 +148,9 @@ admin:
 			funnel: Funnel
 		sales_funnel_stats_by_device:
 			all_devices: All devices
+	scenarios:
+		criteria:
+			is_from_sales_funnel_label: 'Is from sales funnel'
 
 # components
 subscription_types_in_sales_funnels:

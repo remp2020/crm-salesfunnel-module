@@ -7,6 +7,7 @@ use Crm\ApiModule\Authorization\NoAuthorization;
 use Crm\ApiModule\Router\ApiIdentifier;
 use Crm\ApiModule\Router\ApiRoute;
 use Crm\ApplicationModule\Commands\CommandsContainerInterface;
+use Crm\ApplicationModule\Criteria\ScenariosCriteriaStorage;
 use Crm\ApplicationModule\CrmModule;
 use Crm\ApplicationModule\DataProvider\DataProviderManager;
 use Crm\ApplicationModule\Event\EventsStorage;
@@ -20,6 +21,7 @@ use Crm\SalesFunnelModule\DataProvider\PaymentsAdminFilterFormDataProvider;
 use Crm\SalesFunnelModule\DataProvider\RetentionAnalysisDataProvider;
 use Crm\SalesFunnelModule\DI\Config;
 use Crm\SalesFunnelModule\Repository\SalesFunnelsRepository;
+use Crm\SalesFunnelModule\Scenarios\PaymentIsFromSalesFunnelCriteria;
 use Crm\SalesFunnelModule\Seeders\ConfigsSeeder;
 use Crm\SalesFunnelModule\Seeders\SalesFunnelsSeeder;
 use Kdyby\Translation\Translator;
@@ -196,6 +198,11 @@ class SalesFunnelModule extends CrmModule
     {
         $seederManager->addSeeder($this->getInstance(ConfigsSeeder::class));
         $seederManager->addSeeder($this->getInstance(SalesFunnelsSeeder::class));
+    }
+
+    public function registerScenariosCriteria(ScenariosCriteriaStorage $scenariosCriteriaStorage)
+    {
+        $scenariosCriteriaStorage->register('payment', PaymentIsFromSalesFunnelCriteria::KEY, $this->getInstance(PaymentIsFromSalesFunnelCriteria::class));
     }
 
     public function registerCommands(CommandsContainerInterface $commandsContainer)

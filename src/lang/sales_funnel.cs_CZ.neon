@@ -147,6 +147,9 @@ admin:
 			funnel: Okno
 		sales_funnel_stats_by_device:
 			all_devices: Všechna zařízení
+	scenarios:
+		criteria:
+			is_from_sales_funnel_label: 'Je z platebního okna'
 
 # components
 subscription_types_in_sales_funnels:
