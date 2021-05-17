@@ -156,6 +156,10 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
         }
         $this->validateFunnel($salesFunnel);
 
+        if ($this->getUser()->isLoggedIn()) {
+            $this->validateFunnelLimitPerUserCount($salesFunnel, $this->getUser()->id);
+        }
+
         if (!$referer) {
             $referer = $this->getReferer();
         }
@@ -462,6 +466,8 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
             );
         }
 
+        $this->validateFunnelLimitPerUserCount($funnel, $user->id);
+
         if ($this->validateFunnelSegment($funnel, $user->id) === false) {
             $this->emitter->emit(new SalesFunnelEvent($funnel, $user, SalesFunnelsStatsRepository::TYPE_NO_ACCESS, $ua));
             $this->redirectOrSendJson('noAccess', $funnel->id);
@@ -669,6 +675,20 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
             }
         }
         return $subscriptionTypes;
+    }
+
+    private function validateFunnelLimitPerUserCount(ActiveRow $funnel, $userId)
+    {
+        if ($funnel->limit_per_user && $userId) {
+            $salesFunnelUserCount = $this->salesFunnelsRepository->getAllUserSalesFunnelPurchases(
+                $userId,
+                $funnel->id
+            )->count(':payments.id');
+            if ($salesFunnelUserCount >= $funnel->limit_per_user) {
+                $this->redirectOrSendJson('limitReached', $funnel->id);
+            }
+        }
+        return true;
     }
 
     private function validateSubscriptionTypeCounts(ActiveRow $subscriptionType, ActiveRow $user)

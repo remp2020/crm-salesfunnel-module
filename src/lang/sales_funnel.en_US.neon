@@ -12,6 +12,7 @@ data:
 			segment_id: Segment
 			start_at: Valid from
 			end_at: Valid to
+			limit_per_user: Max. number of purchases per user
 			body: Funnel HTML content
 			no_access_html: Funnel no access html
 			error_html: Funnel error screen html
@@ -29,6 +30,9 @@ data:
 			only_logged: Only logged
 			only_not_logged: Only not logged
 			segment: Segment
+		validation:
+			minimum:
+				limit_per_user: Minum value %1$d
 		placeholder:
 			name: for example Main funnel
 			url_key: for example 'winter-sale'

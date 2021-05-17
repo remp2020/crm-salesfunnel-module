@@ -91,6 +91,10 @@ class SalesFunnelAdminFormFactory
         $form->addText('end_at', 'sales_funnel.data.sales_funnels.fields.end_at')
             ->setAttribute('placeholder', 'sales_funnel.data.sales_funnels.placeholder.end_at');
 
+        $form->addInteger('limit_per_user', 'sales_funnel.data.sales_funnels.fields.limit_per_user')
+            ->addCondition(Form::FILLED)
+            ->addRule(Form::MIN, 'sales_funnel.data.sales_funnels.validation.minimum.limit_per_user', 1);
+
         $form->addTextArea('body', 'sales_funnel.data.sales_funnels.fields.body')
             ->setAttribute('data-codeeditor', ['name' => 'twig', 'base' => 'text/html']);
 

@@ -11,6 +11,7 @@ data:
 			segment_id: Segment
 			start_at: Platný od
 			end_at: Platný do
+			limit_per_user: Maximální počet nákupů na uživatele
 			body: HTML obsah
 			no_access_html: HTML stránka pro nedovolený přístup
 			error_html: HTML stránka pro chybový výpis
@@ -28,6 +29,9 @@ data:
 			only_logged: Pouze přihlášení
 			only_not_logged: Pouze nepřihlášení
 			segment: Segment
+		validation:
+			minimum:
+				limit_per_user: Minimální hodnota %1$d
 		placeholder:
 			name: Například Speciální zimní akce
 			url_key: například 'winter-sale'

@@ -122,6 +122,14 @@ class SalesFunnelsRepository extends Repository
         return $this->getTable()->where([':sales_funnels_subscription_types.subscription_type_id' => $subscriptionType->id]);
     }
 
+    final public function getAllUserSalesFunnelPurchases($userId, $salesFunnelId)
+    {
+        return $this->getTable()->where([
+            'sales_funnels.id' => $salesFunnelId,
+            ':payments.user_id' => $userId,
+        ])->where(':payments.status = ?', PaymentsRepository::STATUS_PAID);
+    }
+
     /**
      * @param IRow $funnel
      * @return array
