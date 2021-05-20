@@ -155,6 +155,7 @@ admin:
 	scenarios:
 		criteria:
 			is_from_sales_funnel_label: 'Is from sales funnel'
+			is_from_specific_sales_funnel_label: 'Is from specific sales funnel'
 
 # components
 subscription_types_in_sales_funnels:

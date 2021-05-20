@@ -21,6 +21,7 @@ use Crm\SalesFunnelModule\DataProvider\PaymentsAdminFilterFormDataProvider;
 use Crm\SalesFunnelModule\DataProvider\RetentionAnalysisDataProvider;
 use Crm\SalesFunnelModule\DI\Config;
 use Crm\SalesFunnelModule\Repository\SalesFunnelsRepository;
+use Crm\SalesFunnelModule\Scenarios\PaymentIsFromSpecificSalesFunnelCriteria;
 use Crm\SalesFunnelModule\Scenarios\PaymentIsFromSalesFunnelCriteria;
 use Crm\SalesFunnelModule\Seeders\ConfigsSeeder;
 use Crm\SalesFunnelModule\Seeders\SalesFunnelsSeeder;
@@ -203,6 +204,7 @@ class SalesFunnelModule extends CrmModule
     public function registerScenariosCriteria(ScenariosCriteriaStorage $scenariosCriteriaStorage)
     {
         $scenariosCriteriaStorage->register('payment', PaymentIsFromSalesFunnelCriteria::KEY, $this->getInstance(PaymentIsFromSalesFunnelCriteria::class));
+        $scenariosCriteriaStorage->register('payment', PaymentIsFromSpecificSalesFunnelCriteria::KEY, $this->getInstance(PaymentIsFromSpecificSalesFunnelCriteria::class));
     }
 
     public function registerCommands(CommandsContainerInterface $commandsContainer)
