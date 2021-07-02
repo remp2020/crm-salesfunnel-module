@@ -23,7 +23,7 @@ use Crm\SalesFunnelModule\Events\SalesFunnelEvent;
 use Crm\SalesFunnelModule\Repository\SalesFunnelsMetaRepository;
 use Crm\SalesFunnelModule\Repository\SalesFunnelsRepository;
 use Crm\SalesFunnelModule\Repository\SalesFunnelsStatsRepository;
-use Crm\SegmentModule\SegmentFactory;
+use Crm\SegmentModule\SegmentFactoryInterface;
 use Crm\SubscriptionsModule\PaymentItem\SubscriptionTypePaymentItem;
 use Crm\SubscriptionsModule\Repository\ContentAccessRepository;
 use Crm\SubscriptionsModule\Repository\SubscriptionTypesRepository;
@@ -87,7 +87,7 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
         PaymentGatewaysRepository $paymentGatewaysRepository,
         PaymentsRepository $paymentsRepository,
         PaymentProcessor $paymentProcessor,
-        SegmentFactory $segmentFactory,
+        SegmentFactoryInterface $segmentFactory,
         ActualUserSubscription $actualUserSubscription,
         Emitter $hermesEmitter,
         Authorizator $authorizator,
