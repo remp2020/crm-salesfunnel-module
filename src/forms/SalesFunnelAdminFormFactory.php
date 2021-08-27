@@ -64,7 +64,7 @@ class SalesFunnelAdminFormFactory
         $form->addProtection();
 
         $form->addText('name', 'sales_funnel.data.sales_funnels.fields.name')
-            ->setAttribute('placeholder', 'sales_funnel.data.sales_funnels.placeholder.name')
+            ->setHtmlAttribute('placeholder', 'sales_funnel.data.sales_funnels.placeholder.name')
             ->setRequired();
 
         $isActive = $form->addCheckbox('is_active', 'sales_funnel.data.sales_funnels.fields.is_active');
@@ -76,7 +76,7 @@ class SalesFunnelAdminFormFactory
 
         $redirectFunnelId = $form->addSelect('redirect_funnel_id', 'sales_funnel.data.sales_funnels.fields.redirect_funnel_id', $activeFunnels)
             ->setPrompt('--')
-            ->setAttribute('placeholder', 'sales_funnel.data.sales_funnels.placeholder.redirect_funnel_id')
+            ->setHtmlAttribute('placeholder', 'sales_funnel.data.sales_funnels.placeholder.redirect_funnel_id')
             ->setOption('id', 'redirect_funnel_id')
             ->setOption('description', 'sales_funnel.data.sales_funnels.description.redirect_funnel_id');
 
@@ -86,7 +86,7 @@ class SalesFunnelAdminFormFactory
             ->toggle('redirect_funnel_id');
 
         $form->addText('url_key', 'sales_funnel.data.sales_funnels.fields.url_key')
-            ->setAttribute('placeholder', 'sales_funnel.data.sales_funnels.placeholder.url_key')
+            ->setHtmlAttribute('placeholder', 'sales_funnel.data.sales_funnels.placeholder.url_key')
             ->setRequired();
 
         $form->addCheckbox('only_logged', 'sales_funnel.data.sales_funnels.fields.only_logged');
@@ -95,10 +95,10 @@ class SalesFunnelAdminFormFactory
         $form->addSelect('segment_id', 'sales_funnel.data.sales_funnels.fields.segment', $this->segmentsRepository->all()->fetchPairs('id', 'name'))->setPrompt('--');
 
         $form->addText('start_at', 'sales_funnel.data.sales_funnels.fields.start_at')
-            ->setAttribute('placeholder', 'sales_funnel.data.sales_funnels.placeholder.start_at');
+            ->setHtmlAttribute('placeholder', 'sales_funnel.data.sales_funnels.placeholder.start_at');
 
         $form->addText('end_at', 'sales_funnel.data.sales_funnels.fields.end_at')
-            ->setAttribute('placeholder', 'sales_funnel.data.sales_funnels.placeholder.end_at');
+            ->setHtmlAttribute('placeholder', 'sales_funnel.data.sales_funnels.placeholder.end_at');
 
         $form->addInteger('limit_per_user', 'sales_funnel.data.sales_funnels.fields.limit_per_user')
             ->addCondition(Form::FILLED)
@@ -110,19 +110,19 @@ class SalesFunnelAdminFormFactory
             ->addRule(Form::MIN, 'sales_funnel.data.sales_funnels.validation.minimum.funnel_purchase_limit', 1);
 
         $form->addTextArea('body', 'sales_funnel.data.sales_funnels.fields.body')
-            ->setAttribute('data-codeeditor', ['name' => 'twig', 'base' => 'text/html']);
+            ->setHtmlAttribute('data-codeeditor', ['name' => 'twig', 'base' => 'text/html']);
 
         $form->addTextArea('head_meta', 'sales_funnel.data.sales_funnels.fields.head_meta')
-            ->setAttribute('data-codeeditor', 'htmlmixed');
+            ->setHtmlAttribute('data-codeeditor', 'htmlmixed');
 
         $form->addTextArea('head_script', 'sales_funnel.data.sales_funnels.fields.head_script')
-            ->setAttribute('data-codeeditor', 'htmlmixed');
+            ->setHtmlAttribute('data-codeeditor', 'htmlmixed');
 
         $form->addTextArea('no_access_html', 'sales_funnel.data.sales_funnels.fields.no_access_html')
-            ->setAttribute('data-codeeditor', 'htmlmixed');
+            ->setHtmlAttribute('data-codeeditor', 'htmlmixed');
 
         $form->addTextArea('error_html', 'sales_funnel.data.sales_funnels.fields.error_html')
-            ->setAttribute('data-codeeditor', 'htmlmixed');
+            ->setHtmlAttribute('data-codeeditor', 'htmlmixed');
 
         $form->addHidden('sales_funnel_id', $id);
 
