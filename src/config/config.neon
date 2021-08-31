@@ -33,17 +33,17 @@ services:
 	- Crm\SalesFunnelModule\Scenarios\PaymentIsFromSpecificSalesFunnelCriteria
 
 	paymentsCountDistribution:
-		class: Crm\SalesFunnelModule\Distribution\PaymentsCountDistribution
+		factory: Crm\SalesFunnelModule\Distribution\PaymentsCountDistribution
 		setup:
 			- setDistributionConfiguration([0, 1, 3, 5, 8, 13, 21, 34])
 
 	paymentsSumDistribution:
-		class: Crm\SalesFunnelModule\Distribution\PaymentsSumDistribution
+		factory: Crm\SalesFunnelModule\Distribution\PaymentsSumDistribution
 		setup:
 			- setDistributionConfiguration([0, 0.01, 3, 6, 10, 20, 50, 100, 200, 300])
 
 	subscriptionDaysDistribution:
-		class: Crm\SalesFunnelModule\Distribution\SubscriptionDaysDistribution
+		factory: Crm\SalesFunnelModule\Distribution\SubscriptionDaysDistribution
 		setup:
 			- setDistributionConfiguration([0, 14, 30, 60, 120, 180])
 
