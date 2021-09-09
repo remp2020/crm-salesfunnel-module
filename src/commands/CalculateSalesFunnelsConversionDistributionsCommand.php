@@ -76,6 +76,6 @@ class CalculateSalesFunnelsConversionDistributionsCommand extends Command
         $output->writeln('<info>Sales funnels conversion distributions calculated.</info>');
         $output->writeln('');
 
-        return 0;
+        return Command::SUCCESS;
     }
 }
