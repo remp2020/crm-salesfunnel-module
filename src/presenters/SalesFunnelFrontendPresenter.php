@@ -173,7 +173,7 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
         ]);
         $twig = new \Twig\Environment($loader);
 
-        if ($this->request->query['preview'] === 'no-user' && $this->isValidPreview()) {
+        if (($this->request->query['preview'] ?? null) === 'no-user' && $this->isValidPreview()) {
             $isLoggedIn = false;
         }
 
