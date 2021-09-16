@@ -156,22 +156,15 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
         }
         $this->validateFunnel($salesFunnel);
 
-        if ($this->getUser()->isLoggedIn()) {
-            $this->validateFunnelLimitPerUserCount($salesFunnel, $this->getUser()->id);
-        }
+        $isLoggedIn = $this->getUser()->isLoggedIn();
 
         if (!$referer) {
             $referer = $this->getReferer();
         }
 
         $gateways = $this->loadGateways($salesFunnel);
-        $subscriptionTypes = $this->loadSubscriptionTypes($salesFunnel);
-        if ($this->getUser()->isLoggedIn()) {
-            $subscriptionTypes = $this->filterSubscriptionTypes($subscriptionTypes, $this->getUser()->id);
-        }
-        if (count($subscriptionTypes) == 0) {
-            $this->redirect('limitReached', $salesFunnel->id);
-        }
+        $subscriptionTypes = $this->getValidSubscriptionTypes($salesFunnel);
+
         $addresses = [];
         $body = $salesFunnel->body;
 
@@ -180,9 +173,7 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
         ]);
         $twig = new \Twig\Environment($loader);
 
-        $isLoggedIn = $this->getUser()->isLoggedIn();
-        if ((isset($this->request->query['preview']) && $this->request->query['preview'] === 'no-user')
-            && $this->getUser()->isAllowed('SalesFunnel:SalesFunnelsAdmin', 'preview')) {
+        if ($this->request->query['preview'] === 'no-user' && $this->isValidPreview()) {
             $isLoggedIn = false;
         }
 
@@ -251,9 +242,31 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
         return $subscriptionTypes;
     }
 
+    private function getValidSubscriptionTypes(ActiveRow $salesFunnel)
+    {
+        $subscriptionTypes = $this->loadSubscriptionTypes($salesFunnel);
+
+        $isLoggedIn = $this->getUser()->isLoggedIn();
+        if ($isLoggedIn && !$this->isValidPreview()) {
+            $subscriptionTypes = $this->filterSubscriptionTypes($subscriptionTypes, $this->getUser()->id);
+            if (count($subscriptionTypes) === 0) {
+                $this->redirect('limitReached', $salesFunnel->id);
+            }
+        }
+        if (count($subscriptionTypes) === 0) {
+            if ($this->isValidPreview()) {
+                $this->redirect('noSubscriptionTypes', $salesFunnel->id);
+            } else {
+                $this->redirect('limitReached', $salesFunnel->id);
+            }
+        }
+
+        return $subscriptionTypes;
+    }
+
     private function validateFunnel(ActiveRow $funnel = null)
     {
-        if (isset($this->request->query['preview']) && $this->getUser()->isAllowed('SalesFunnel:SalesFunnelsAdmin', 'preview')) {
+        if ($this->isValidPreview()) {
             return;
         }
 
@@ -295,6 +308,10 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
         if ($this->getUser()->isLoggedIn() && $this->validateFunnelSegment($funnel, $this->getUser()->getId()) === false) {
             $this->emitter->emit(new SalesFunnelEvent($funnel, $this->getUser(), SalesFunnelsStatsRepository::TYPE_NO_ACCESS, $ua));
             $this->redirectOrSendJson('noAccess', $funnel->id);
+        }
+
+        if ($this->getUser()->isLoggedIn()) {
+            $this->validateFunnelLimitPerUserCount($funnel, $this->getUser()->id);
         }
 
         /** @var ValidateUserFunnelAccessDataProviderInterface[] $providers */
@@ -643,6 +660,16 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
         }
     }
 
+    public function renderNoSubscriptionTypes($id = null)
+    {
+        if ($id) {
+            $funnel = $this->salesFunnelsRepository->find($id);
+            if ($funnel && $funnel->error_html) {
+                $this->template->errorHtml = $funnel->error_html;
+            }
+        }
+    }
+
     protected function createComponentSignInForm()
     {
         $form = $this->signInFormFactory->create();
@@ -726,5 +753,11 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
             'status' => 'error',
             'url' => $this->link($destination, $args)
         ]);
+    }
+
+    private function isValidPreview(): bool
+    {
+        return isset($this->request->query['preview']) &&
+            $this->getUser()->isAllowed('SalesFunnel:SalesFunnelsAdmin', 'preview');
     }
 }
