@@ -34,43 +34,7 @@ class SalesFunnelPresenter extends FrontendPresenter
 
     public function renderError()
     {
-        $message = $this->translator->translate('sales_funnel.frontend.error_page.reason_default');
-        $found = false;
-        if (isset($this->params['subscription_type_id'])) {
-            if (in_array($this->params['subscription_type_id'], [1, 2, 3, 4, 5, 6, 7, 8])) {
-                $params = ['subscription_type_id' => $this->params['subscription_type_id']];
-                if (isset($this->params['payment_gateway_id'])) {
-                    $params['payment_gateway_id'] = $this->params['payment_gateway_id'];
-                }
-                $link = $this->link(':Subscriptions:Subscriptions:new', $params);
-                $message = 'Prosím, <a href="' . $link . '" style="text-decoration:underline">skúste ju zopakovať ešte raz</a> alebo kontaktujte našu technickú podporu.';
-                $found = true;
-            }
-        }
-
-        if (!$found && isset($this->params['subscription_type'])) {
-            if (in_array($this->params['subscription_type'], ['month_optout', 'month_club_optout'])) {
-                $link = $this->link('optout1Popup', ['subscription_type' => $this->params['subscription_type']]);
-                $message = 'Prosím, <a href="' . $link . '" style="text-decoration:underline">skúste ju zopakovať ešte raz</a> alebo kontaktujte našu technickú podporu.';
-                $found = true;
-            }
-            if (in_array($this->params['subscription_type'], ['2_months_web_99c', '2_months_web_club_99c'])) {
-                $link = $this->link('optout99Popup', ['subscription_type' => $this->params['subscription_type']]);
-                $message = 'Prosím, <a href="' . $link . '" style="text-decoration:underline">skúste ju zopakovať ešte raz</a> alebo kontaktujte našu technickú podporu.';
-                $found = true;
-            }
-            if (in_array($this->params['subscription_type'], ['hbo_web', 'hbo_app', 'hbo_print'])) {
-                $params = ['subscription_type' => $this->params['subscription_type']];
-                if (isset($this->params['payment_gateway_id'])) {
-                    $params['payment_gateway_id'] = $this->params['payment_gateway_id'];
-                }
-                $link = $this->link('funnelHbo', $params);
-                $message = 'Prosím, <a href="' . $link . '" style="text-decoration:underline">skúste ju zopakovať ešte raz</a> alebo kontaktujte našu technickú podporu.';
-                $found = true;
-            }
-        }
-
-        $this->template->message = $message;
+        $this->template->message = $this->translator->translate('sales_funnel.frontend.error_page.reason_default');
     }
 
     public function renderCancel($variableSymbol)
