@@ -3,10 +3,6 @@ services:
 		setup:
 			- addModule(Crm\SalesFunnelModule\SalesFunnelModule())
 
-	sales_route:
-		class: Crm\SalesFunnelModule\SalesFunnelRoute
-		autowired: no
-
 	salesFunnelsRepository: Crm\SalesFunnelModule\Repository\SalesFunnelsRepository
 	salesFunnelsSubscriptionTypesRepository: Crm\SalesFunnelModule\Repository\SalesFunnelsSubscriptionTypesRepository
 	salesFunnelsPaymentGatewaysRepository: Crm\SalesFunnelModule\Repository\SalesFunnelsPaymentGatewaysRepository
