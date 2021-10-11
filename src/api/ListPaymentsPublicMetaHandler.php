@@ -94,7 +94,7 @@ class ListPaymentsPublicMetaHandler extends ApiHandler
 
         $data = [];
         foreach ($payments as $payment) {
-            /** @var $payment ActiveRow */
+            /** @var ActiveRow $payment */
             $item = [
                 'amount' => $payment->amount,
                 'meta' => [],
