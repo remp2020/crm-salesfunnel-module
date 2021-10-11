@@ -19,7 +19,7 @@ class SalesFunnelsCache
 
     public function add($id, $urlKey)
     {
-        $funnel = JSON::encode([
+        $funnel = Json::encode([
             'id' => $id,
             'url_key' => $urlKey,
         ]);
@@ -36,7 +36,7 @@ class SalesFunnelsCache
         $data = $this->redis()->hgetall(static::REDIS_KEY);
         $res = [];
         foreach ($data as $record) {
-            $res[] = JSON::decode($record);
+            $res[] = Json::decode($record);
         }
         return $res;
     }
