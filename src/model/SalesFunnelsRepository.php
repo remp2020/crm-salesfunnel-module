@@ -6,7 +6,7 @@ use Crm\ApplicationModule\Repository;
 use Crm\ApplicationModule\Repository\AuditLogRepository;
 use Crm\PaymentsModule\Repository\PaymentsRepository;
 use DateTime;
-use Nette\Database\Context;
+use Nette\Database\Explorer;
 use Nette\Database\Table\IRow;
 use Nette\Database\Table\Selection;
 
@@ -19,7 +19,7 @@ class SalesFunnelsRepository extends Repository
     private $salesFunnelsPaymentGatewaysRepository;
 
     public function __construct(
-        Context $database,
+        Explorer $database,
         AuditLogRepository $auditLogRepository,
         SalesFunnelsSubscriptionTypesRepository $salesFunnelsSubscriptionTypesRepository,
         SalesFunnelsPaymentGatewaysRepository $salesFunnelsPaymentGatewaysRepository

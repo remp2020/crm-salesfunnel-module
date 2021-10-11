@@ -6,7 +6,7 @@ use Crm\PaymentsModule\Repository\PaymentsRepository;
 use Crm\SalesFunnelModule\Repository\SalesFunnelsRepository;
 use Crm\SalesFunnelModule\SalesFunnelsConversionDistributionsRepository;
 use Crm\SubscriptionsModule\Repository\SubscriptionsRepository;
-use Nette\Database\Context;
+use Nette\Database\Explorer;
 use Nette\Database\IRow;
 
 abstract class AbstractFunnelDistribution
@@ -28,7 +28,7 @@ abstract class AbstractFunnelDistribution
     protected $distributionConfiguration;
 
     public function __construct(
-        Context $database,
+        Explorer $database,
         PaymentsRepository $paymentsRepository,
         SubscriptionsRepository $subscriptionsRepository,
         SalesFunnelsConversionDistributionsRepository $salesFunnelsConversionDistributionsRepository,
