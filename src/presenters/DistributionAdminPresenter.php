@@ -39,6 +39,9 @@ class DistributionAdminPresenter extends AdminPresenter
         $this->usersRepository = $usersRepository;
     }
 
+    /**
+     * @admin-access-level read
+     */
     public function renderAmount($funnelId, $fromLevel, $toLevel)
     {
         $distributionList = $this->paymentsSumDistribution->getDistributionList($funnelId, $fromLevel, $toLevel);
@@ -55,6 +58,9 @@ class DistributionAdminPresenter extends AdminPresenter
         return $factory->create();
     }
 
+    /**
+     * @admin-access-level read
+     */
     public function renderPayment($funnelId, $fromLevel, $toLevel)
     {
         $distributionList = $this->paymentsCountDistribution->getDistributionList($funnelId, $fromLevel, $toLevel);
@@ -71,6 +77,9 @@ class DistributionAdminPresenter extends AdminPresenter
         return $factory->create();
     }
 
+    /**
+     * @admin-access-level read
+     */
     public function renderDaysFromLastSubscription($funnelId, $fromLevel, $toLevel)
     {
         $distributionList = $this->subscriptionDaysDistribution->getDistributionList($funnelId, $fromLevel, $toLevel);

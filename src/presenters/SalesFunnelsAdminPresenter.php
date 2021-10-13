@@ -79,15 +79,24 @@ class SalesFunnelsAdminPresenter extends AdminPresenter
         $this->subscriptionTypeHelper = $subscriptionTypeHelper;
     }
 
+    /**
+     * @admin-access-level read
+     */
     public function renderDefault()
     {
         $this->template->funnels = $this->salesFunnelsRepository->all();
     }
 
+    /**
+     * @admin-access-level write
+     */
     public function renderNew()
     {
     }
 
+    /**
+     * @admin-access-level read
+     */
     public function renderShow($id)
     {
         $funnel = $this->salesFunnelsRepository->find($id);
@@ -118,12 +127,18 @@ class SalesFunnelsAdminPresenter extends AdminPresenter
         $this->template->payments = $payments->limit($paginator->getLength(), $paginator->getOffset());
     }
 
+    /**
+     * @admin-access-level read
+     */
     public function renderPreview($id)
     {
         $funnel = $this->salesFunnelsRepository->find($id);
         $this->template->funnel = $funnel;
     }
 
+    /**
+     * @admin-access-level write
+     */
     public function renderEdit($id)
     {
         $this->template->funnel = $this->salesFunnelsRepository->find($id);
@@ -188,6 +203,9 @@ class SalesFunnelsAdminPresenter extends AdminPresenter
         return $form;
     }
 
+    /**
+     * @admin-access-level write
+     */
     public function handleRemovePaymentGateway($paymentGatewayId)
     {
         $funnel = $this->salesFunnelsRepository->find($this->params['id']);
@@ -200,6 +218,9 @@ class SalesFunnelsAdminPresenter extends AdminPresenter
             $this->redirect('show', $funnel->id);
         }
     }
+    /**
+     * @admin-access-level write
+     */
     public function handleMovePaymentGatewayUp($salesFunnelId, $paymentGatewayId)
     {
         $this->movePaymentGateway('up', $salesFunnelId, $paymentGatewayId);
@@ -210,6 +231,9 @@ class SalesFunnelsAdminPresenter extends AdminPresenter
         }
     }
 
+    /**
+     * @admin-access-level write
+     */
     public function handleMovePaymentGatewayDown($salesFunnelId, $paymentGatewayId)
     {
         $this->movePaymentGateway('down', $salesFunnelId, $paymentGatewayId);
@@ -291,6 +315,9 @@ class SalesFunnelsAdminPresenter extends AdminPresenter
         return $form;
     }
 
+    /**
+     * @admin-access-level write
+     */
     public function handleRemoveSubscriptionType($subscriptionTypeId)
     {
         $funnel = $this->salesFunnelsRepository->find($this->params['id']);
@@ -304,6 +331,9 @@ class SalesFunnelsAdminPresenter extends AdminPresenter
         }
     }
 
+    /**
+     * @admin-access-level write
+     */
     public function handleMoveSubscriptionTypeUp($salesFunnelId, $subscriptionTypeId)
     {
         $this->moveSubscriptionType('up', $salesFunnelId, $subscriptionTypeId);
@@ -314,6 +344,9 @@ class SalesFunnelsAdminPresenter extends AdminPresenter
         }
     }
 
+    /**
+     * @admin-access-level write
+     */
     public function handleMoveSubscriptionTypeDown($salesFunnelId, $subscriptionTypeId)
     {
         $this->moveSubscriptionType('down', $salesFunnelId, $subscriptionTypeId);
@@ -324,6 +357,9 @@ class SalesFunnelsAdminPresenter extends AdminPresenter
         }
     }
 
+    /**
+     * @admin-access-level read
+     */
     public function handleExportUsersWithPayment($salesFunnelId)
     {
         $excelSpreadSheet = $this->excelFactory->createExcel('Sales funnel payments - ' . $salesFunnelId);
