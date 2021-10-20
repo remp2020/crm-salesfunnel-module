@@ -7,7 +7,7 @@ use Crm\ApplicationModule\Repository\AuditLogRepository;
 use Crm\PaymentsModule\Repository\PaymentsRepository;
 use DateTime;
 use Nette\Database\Explorer;
-use Nette\Database\Table\IRow;
+use Nette\Database\Table\ActiveRow;
 use Nette\Database\Table\Selection;
 
 class SalesFunnelsRepository extends Repository
@@ -41,7 +41,7 @@ class SalesFunnelsRepository extends Repository
         $isActive = true,
         $onlyLogged = false,
         $onlyNotLogged = false,
-        IRow $segment = null,
+        ActiveRow $segment = null,
         $noAccessHtml = null,
         $errorHtml = null,
         $redirectFunnelId = null
@@ -81,35 +81,35 @@ class SalesFunnelsRepository extends Repository
         return $this->getTable()->where('url_key', $urlKey)->fetch();
     }
 
-    final public function update(IRow &$row, $data)
+    final public function update(ActiveRow &$row, $data)
     {
         $data['updated_at'] = new DateTime();
         return parent::update($row, $data);
     }
 
-    final public function incrementShows(IRow $funnel)
+    final public function incrementShows(ActiveRow $funnel)
     {
         return $this->increment($funnel, 'total_show');
     }
 
-    final public function incrementConversions(IRow $funnel)
+    final public function incrementConversions(ActiveRow $funnel)
     {
         $this->update($funnel, ['last_conversion' => new DateTime()]);
         return $this->increment($funnel, 'total_conversions');
     }
 
-    final public function incrementErrors(IRow $funnel)
+    final public function incrementErrors(ActiveRow $funnel)
     {
         return $this->increment($funnel, 'total_errors');
     }
 
-    private function increment(IRow $funnel, $field, $value = 1)
+    private function increment(ActiveRow $funnel, $field, $value = 1)
     {
         $date = new DateTime();
         return $this->getDatabase()->query("UPDATE sales_funnels SET {$field}={$field}+{$value}, last_use='{$date->format('Y-m-d H:i:s')}' WHERE id=" . $funnel->id);
     }
 
-    final public function totalPaidAmount(IRow $funnel)
+    final public function totalPaidAmount(ActiveRow $funnel)
     {
         return $this->getTable()
             ->where(':payments.status = ?', PaymentsRepository::STATUS_PAID)
@@ -117,7 +117,7 @@ class SalesFunnelsRepository extends Repository
             ->sum(':payments.amount');
     }
 
-    final public function getSalesFunnelsBySubscriptionType(IRow $subscriptionType)
+    final public function getSalesFunnelsBySubscriptionType(ActiveRow $subscriptionType)
     {
         return $this->getTable()->where([':sales_funnels_subscription_types.subscription_type_id' => $subscriptionType->id]);
     }
@@ -131,10 +131,10 @@ class SalesFunnelsRepository extends Repository
     }
 
     /**
-     * @param IRow $funnel
+     * @param ActiveRow $funnel
      * @return array
      */
-    final public function getSalesFunnelSubscriptionTypes(IRow $funnel)
+    final public function getSalesFunnelSubscriptionTypes(ActiveRow $funnel)
     {
         $subscriptionTypes = [];
         foreach ($this->salesFunnelsSubscriptionTypesRepository->findAllBySalesFunnel($funnel) as $row) {
@@ -144,7 +144,7 @@ class SalesFunnelsRepository extends Repository
         return $subscriptionTypes;
     }
 
-    final public function getSalesFunnelDistribution(IRow $funnel)
+    final public function getSalesFunnelDistribution(ActiveRow $funnel)
     {
         return $this->getTable()
             ->select(':payments.subscription_type_id, COUNT(*) AS count')
@@ -156,7 +156,7 @@ class SalesFunnelsRepository extends Repository
             ->fetchPairs('subscription_type_id', 'count');
     }
 
-    final public function getSalesFunnelGateways(IRow $funnel)
+    final public function getSalesFunnelGateways(ActiveRow $funnel)
     {
         $gateways = [];
         foreach ($this->salesFunnelsPaymentGatewaysRepository->findAllBySalesFunnel($funnel) as $row) {

@@ -7,7 +7,7 @@ use Crm\SalesFunnelModule\Repository\SalesFunnelsRepository;
 use Crm\SalesFunnelModule\SalesFunnelsConversionDistributionsRepository;
 use Crm\SubscriptionsModule\Repository\SubscriptionsRepository;
 use Nette\Database\Explorer;
-use Nette\Database\IRow;
+use Nette\Database\Table\ActiveRow;
 
 abstract class AbstractFunnelDistribution
 {
@@ -43,7 +43,7 @@ abstract class AbstractFunnelDistribution
 
     abstract protected function getDistributionRows($funnelId, $userId = null): array;
 
-    abstract protected function prepareInsertRow(IRow $salesFunnel, IRow $distributionRow): array;
+    abstract protected function prepareInsertRow(ActiveRow $salesFunnel, ActiveRow $distributionRow): array;
 
     public function setDistributionConfiguration(array $distributionLevels): void
     {
@@ -83,7 +83,7 @@ abstract class AbstractFunnelDistribution
             ->fetch();
     }
 
-    public function calculateDistribution(IRow $salesFunnel):void
+    public function calculateDistribution(ActiveRow $salesFunnel):void
     {
         $this->salesFunnelsConversionDistributionsRepository
             ->deleteSalesFunnelTypeDistributions($salesFunnel->id, static::TYPE);
@@ -98,7 +98,7 @@ abstract class AbstractFunnelDistribution
         }
     }
 
-    public function calculateUserDistribution(IRow $salesFunnel, IRow $user):void
+    public function calculateUserDistribution(ActiveRow $salesFunnel, ActiveRow $user):void
     {
         $userDistribution = $this->salesFunnelsConversionDistributionsRepository
             ->salesFunnelUserTypeDistribution($salesFunnel->id, $user->id, static::TYPE)->fetch();

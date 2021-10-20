@@ -3,13 +3,13 @@
 namespace Crm\SalesFunnelModule\Repository;
 
 use Crm\ApplicationModule\Repository;
-use Nette\Database\Table\IRow;
+use Nette\Database\Table\ActiveRow;
 
 class SalesFunnelsPaymentGatewaysRepository extends Repository
 {
     protected $tableName = 'sales_funnels_payment_gateways';
 
-    final public function add(IRow $salesFunnel, IRow $paymentGateway)
+    final public function add(ActiveRow $salesFunnel, ActiveRow $paymentGateway)
     {
         $data = [
             'sales_funnel_id' => $salesFunnel->id,
@@ -28,7 +28,7 @@ class SalesFunnelsPaymentGatewaysRepository extends Repository
         return $row;
     }
 
-    final public function findByBoth(IRow $salesFunnel, IRow $paymentGateway)
+    final public function findByBoth(ActiveRow $salesFunnel, ActiveRow $paymentGateway)
     {
         return $this->getTable()->where([
             'sales_funnel_id' => $salesFunnel->id,
@@ -36,7 +36,7 @@ class SalesFunnelsPaymentGatewaysRepository extends Repository
         ])->fetch();
     }
 
-    final public function findAllBySalesFunnel(IRow $salesFunnel)
+    final public function findAllBySalesFunnel(ActiveRow $salesFunnel)
     {
         return $salesFunnel->related('sales_funnels_payment_gateways')->order('sorting ASC')->fetchAll();
     }

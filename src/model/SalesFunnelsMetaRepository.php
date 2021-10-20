@@ -3,14 +3,14 @@
 namespace Crm\SalesFunnelModule\Repository;
 
 use Crm\ApplicationModule\Repository;
-use Nette\Database\IRow;
+use Nette\Database\Table\ActiveRow;
 use Nette\Utils\DateTime;
 
 class SalesFunnelsMetaRepository extends Repository
 {
     protected $tableName = 'sales_funnels_meta';
 
-    final public function add(IRow $salesFunnel, $key, $value)
+    final public function add(ActiveRow $salesFunnel, $key, $value)
     {
         $this->insert([
             'sales_funnel_id' => $salesFunnel->id,
@@ -21,12 +21,12 @@ class SalesFunnelsMetaRepository extends Repository
         ]);
     }
 
-    final public function exists(IRow $salesFunnel, $key)
+    final public function exists(ActiveRow $salesFunnel, $key)
     {
         return $this->getTable()->where(['sales_funnel_id' => $salesFunnel->id, 'key' => $key])->count('*') > 0;
     }
 
-    final public function updateValue(IRow $salesFunnel, $key, $value)
+    final public function updateValue(ActiveRow $salesFunnel, $key, $value)
     {
         $salesFunnelMeta = $this->getTable()->where(['sales_funnel_id' => $salesFunnel->id, 'key' => $key])->fetch();
         return $this->update($salesFunnelMeta, [
@@ -35,13 +35,13 @@ class SalesFunnelsMetaRepository extends Repository
         ]);
     }
 
-    final public function incrementValue(IRow $salesFunnel, $key, $value = 1)
+    final public function incrementValue(ActiveRow $salesFunnel, $key, $value = 1)
     {
         return $this->getTable()->where(['sales_funnel_id' => $salesFunnel->id, 'key' => $key])
             ->update(['value+=' => $value, 'updated_at' => new DateTime()]);
     }
 
-    final public function get(IRow $salesFunnel, $key)
+    final public function get(ActiveRow $salesFunnel, $key)
     {
         $row = $this->getTable()->where(['sales_funnel_id' => $salesFunnel->id, 'key' => $key])->limit(1)->fetch();
         if ($row) {
@@ -50,14 +50,14 @@ class SalesFunnelsMetaRepository extends Repository
         return false;
     }
 
-    final public function deleteValue(IRow $salesFunnel, $key)
+    final public function deleteValue(ActiveRow $salesFunnel, $key)
     {
         $row = $this->getTable()->where(['sales_funnel_id' => $salesFunnel->id, 'key' => $key])->fetch();
 
         return $this->delete($row);
     }
 
-    final public function all(IRow $salesFunnel)
+    final public function all(ActiveRow $salesFunnel)
     {
         return $this->getTable()->where(['sales_funnel_id' => $salesFunnel->id])->fetchPairs('key', 'value');
     }

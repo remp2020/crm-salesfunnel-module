@@ -3,13 +3,13 @@
 namespace Crm\SalesFunnelModule\Repository;
 
 use Crm\ApplicationModule\Repository;
-use Nette\Database\Table\IRow;
+use Nette\Database\Table\ActiveRow;
 
 class SalesFunnelsSubscriptionTypesRepository extends Repository
 {
     protected $tableName = 'sales_funnels_subscription_types';
 
-    final public function add(IRow $salesFunnel, IRow $subscriptionType)
+    final public function add(ActiveRow $salesFunnel, ActiveRow $subscriptionType)
     {
         $data = [
             'sales_funnel_id' => $salesFunnel->id,
@@ -28,7 +28,7 @@ class SalesFunnelsSubscriptionTypesRepository extends Repository
         return $row;
     }
 
-    final public function findByBoth(IRow $salesFunnel, IRow $subscriptionType)
+    final public function findByBoth(ActiveRow $salesFunnel, ActiveRow $subscriptionType)
     {
         return $this->getTable()->where([
             'sales_funnel_id' => $salesFunnel->id,
@@ -36,7 +36,7 @@ class SalesFunnelsSubscriptionTypesRepository extends Repository
         ])->fetch();
     }
 
-    final public function findAllBySalesFunnel(IRow $salesFunnel)
+    final public function findAllBySalesFunnel(ActiveRow $salesFunnel)
     {
         return $salesFunnel->related('sales_funnels_subscription_types')->order('sorting ASC')->fetchAll();
     }

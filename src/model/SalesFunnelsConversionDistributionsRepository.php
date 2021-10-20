@@ -4,13 +4,13 @@ namespace Crm\SalesFunnelModule;
 
 use Crm\ApplicationModule\Repository;
 use Crm\ApplicationModule\Selection;
-use Nette\Database\Table\IRow;
+use Nette\Database\Table\ActiveRow;
 
 class SalesFunnelsConversionDistributionsRepository extends Repository
 {
     protected $tableName = 'sales_funnels_conversion_distributions';
 
-    final public function add(IRow $salesFunnel, IRow $user, string $type, float $value)
+    final public function add(ActiveRow $salesFunnel, ActiveRow $user, string $type, float $value)
     {
         $this->insert([
             'sales_funnel_id' => $salesFunnel->id,

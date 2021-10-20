@@ -9,7 +9,7 @@ use Crm\SalesFunnelModule\SalesFunnelsCache;
 use Crm\SegmentModule\Repository\SegmentsRepository;
 use Kdyby\Translation\Translator;
 use Nette\Application\UI\Form;
-use Nette\Database\Table\IRow;
+use Nette\Database\Table\ActiveRow;
 use Nette\Utils\DateTime;
 use Tomaj\Form\Renderer\BootstrapRenderer;
 
@@ -204,7 +204,7 @@ class SalesFunnelAdminFormFactory
         }
     }
 
-    private function updateMeta(IRow $salesFunnel, array $meta): void
+    private function updateMeta(ActiveRow $salesFunnel, array $meta): void
     {
         // null value will be deleted
         foreach ($meta as $name => $value) {

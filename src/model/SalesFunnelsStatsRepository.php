@@ -3,7 +3,7 @@
 namespace Crm\SalesFunnelModule\Repository;
 
 use Crm\ApplicationModule\Repository;
-use Nette\Database\IRow;
+use Nette\Database\Table\ActiveRow;
 use Nette\Utils\DateTime;
 
 class SalesFunnelsStatsRepository extends Repository
@@ -17,7 +17,7 @@ class SalesFunnelsStatsRepository extends Repository
     protected $tableName = 'sales_funnels_stats';
     
     final public function add(
-        IRow $salesFunnel,
+        ActiveRow $salesFunnel,
         $type,
         $deviceType,
         DateTime $date = null,

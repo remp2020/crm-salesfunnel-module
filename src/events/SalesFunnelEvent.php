@@ -4,7 +4,7 @@ namespace Crm\SalesFunnelModule\Events;
 
 use Detection\MobileDetect;
 use League\Event\AbstractEvent;
-use Nette\Database\Table\IRow;
+use Nette\Database\Table\ActiveRow;
 use Nette\Security\User;
 
 class SalesFunnelEvent extends AbstractEvent
@@ -19,7 +19,7 @@ class SalesFunnelEvent extends AbstractEvent
 
     private $userAgent;
 
-    public function __construct(IRow $salesFunnel, $user, $type, $userAgent = null)
+    public function __construct(ActiveRow $salesFunnel, $user, $type, $userAgent = null)
     {
         $this->salesFunnel = $salesFunnel;
         $this->type = $type;
@@ -39,7 +39,7 @@ class SalesFunnelEvent extends AbstractEvent
 
         if ($user instanceof User) {
             $this->email = $user->isLoggedIn() ? $user->getIdentity()->email : null;
-        } elseif ($user instanceof IRow) {
+        } elseif ($user instanceof ActiveRow) {
             $this->email = $user->email;
         }
     }
