@@ -27,7 +27,6 @@ use Crm\SalesFunnelModule\Seeders\ConfigsSeeder;
 use Crm\SalesFunnelModule\Seeders\SalesFunnelsSeeder;
 use Kdyby\Translation\Translator;
 use League\Event\Emitter;
-use Nette\Application\Routers\Route;
 use Nette\Application\Routers\RouteList;
 use Nette\DI\Container;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -111,11 +110,11 @@ class SalesFunnelModule extends CrmModule
     {
         if ($this->config->getFunnelRoutes()) {
             foreach ($this->salesFunnelsCache->all() as $salesFunnel) {
-                $router[] = new Route("<funnel {$salesFunnel->url_key}>", 'SalesFunnel:SalesFunnelFrontend:default');
+                $router->addRoute("<funnel {$salesFunnel->url_key}>", 'SalesFunnel:SalesFunnelFrontend:default');
             }
         }
 
-        $router[] = new Route('/sales-funnel/sales-funnel/<action>[/<variableSymbol>]', 'SalesFunnel:SalesFunnel:success');
+        $router->addRoute('/sales-funnel/sales-funnel/<action>[/<variableSymbol>]', 'SalesFunnel:SalesFunnel:success');
     }
 
     public function cache(OutputInterface $output, array $tags = [])
