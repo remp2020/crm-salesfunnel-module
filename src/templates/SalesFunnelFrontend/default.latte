@@ -69,4 +69,19 @@
         $(this).siblings('.preloader').remove();
         $(this).parents('.iframe_wrapper').addClass('init');
     })
+
+    window.addEventListener("message", (event) => {
+        if (event.origin !== {$host})
+            return;
+
+        try {
+            var data = JSON.parse(event.data)
+        } catch (e) {
+            return;
+        }
+
+        if ('url' in data) {
+            window.location.href = data.url
+        }
+    }, false);
 </script>

@@ -146,6 +146,7 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
 
         $this->template->funnel = $salesFunnel;
         $this->template->referer = $this->getReferer();
+        $this->template->host = $this->getHttpRequest()->getUrl()->getHostUrl();
     }
 
     public function renderShow($funnel, $referer = null, $values = null, $errors = null)
