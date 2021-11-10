@@ -12,6 +12,7 @@ data:
 			start_at: Platný od
 			end_at: Platný do
 			limit_per_user: Maximální počet nákupů na uživatele
+			funnel_purchase_limit: Maximální počet nákupů
 			body: HTML obsah
 			no_access_html: HTML stránka pro nedovolený přístup
 			error_html: HTML stránka pro chybový výpis
@@ -32,6 +33,7 @@ data:
 		validation:
 			minimum:
 				limit_per_user: Minimální hodnota %1$d
+				funnel_purchase_limit: Minimální počet nákupů %1$d
 		placeholder:
 			name: Například Speciální zimní akce
 			url_key: například 'winter-sale'

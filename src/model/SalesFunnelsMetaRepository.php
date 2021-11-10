@@ -50,6 +50,13 @@ class SalesFunnelsMetaRepository extends Repository
         return false;
     }
 
+    final public function deleteValue(IRow $salesFunnel, $key)
+    {
+        $row = $this->getTable()->where(['sales_funnel_id' => $salesFunnel->id, 'key' => $key])->fetch();
+
+        return $this->delete($row);
+    }
+
     final public function all(IRow $salesFunnel)
     {
         return $this->getTable()->where(['sales_funnel_id' => $salesFunnel->id])->fetchPairs('key', 'value');

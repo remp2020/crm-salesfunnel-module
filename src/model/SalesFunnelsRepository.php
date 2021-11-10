@@ -166,4 +166,11 @@ class SalesFunnelsRepository extends Repository
         }
         return $gateways;
     }
+
+    final public function getAllSalesFunnelPurchases($salesFunnelId)
+    {
+        return $this->getTable()->where([
+            ':payments.sales_funnel_id' => $salesFunnelId
+        ])->where(':payments.paid_at IS NOT NULL');
+    }
 }

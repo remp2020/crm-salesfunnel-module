@@ -306,6 +306,8 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
             $this->redirectOrSendJson('noAccess', $funnel->id);
         }
 
+        $this->validateFunnelPurchaseLimit($funnel);
+
         if ($this->getUser()->isLoggedIn() && $this->validateFunnelSegment($funnel, $this->getUser()->getId()) === false) {
             $this->emitter->emit(new SalesFunnelEvent($funnel, $this->getUser(), SalesFunnelsStatsRepository::TYPE_NO_ACCESS, $ua));
             $this->redirectOrSendJson('noAccess', $funnel->id);
@@ -485,6 +487,8 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
         }
 
         $this->validateFunnelLimitPerUserCount($funnel, $user->id);
+
+        $this->validateFunnelPurchaseLimit($funnel);
 
         if ($this->validateFunnelSegment($funnel, $user->id) === false) {
             $this->emitter->emit(new SalesFunnelEvent($funnel, $user, SalesFunnelsStatsRepository::TYPE_NO_ACCESS, $ua));
@@ -713,6 +717,20 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
                 $funnel->id
             )->count(':payments.id');
             if ($salesFunnelUserCount >= $funnel->limit_per_user) {
+                $this->redirectOrSendJson('limitReached', $funnel->id);
+            }
+        }
+        return true;
+    }
+
+    private function validateFunnelPurchaseLimit(ActiveRow $funnel)
+    {
+        $purchaseLimit = $this->salesFunnelsMetaRepository->get($funnel, 'funnel_purchase_limit');
+        if ($purchaseLimit) {
+            $purchases = $this->salesFunnelsRepository->getAllSalesFunnelPurchases($funnel->id)
+                                                      ->count(':payments.id');
+
+            if ($purchases >= (int) $purchaseLimit) {
                 $this->redirectOrSendJson('limitReached', $funnel->id);
             }
         }

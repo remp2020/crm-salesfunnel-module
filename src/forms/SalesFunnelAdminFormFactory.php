@@ -3,6 +3,7 @@
 namespace Crm\SalesFunnelModule\Forms;
 
 use Crm\SalesFunnelModule\DI\Config;
+use Crm\SalesFunnelModule\Repository\SalesFunnelsMetaRepository;
 use Crm\SalesFunnelModule\Repository\SalesFunnelsRepository;
 use Crm\SalesFunnelModule\SalesFunnelsCache;
 use Crm\SegmentModule\Repository\SegmentsRepository;
@@ -14,6 +15,8 @@ use Tomaj\Form\Renderer\BootstrapRenderer;
 class SalesFunnelAdminFormFactory
 {
     private $salesFunnelsRepository;
+
+    private $salesFunnelsMetaRepository;
 
     private $segmentsRepository;
 
@@ -29,12 +32,14 @@ class SalesFunnelAdminFormFactory
 
     public function __construct(
         SalesFunnelsRepository $salesFunnelsRepository,
+        SalesFunnelsMetaRepository $salesFunnelsMetaRepository,
         SegmentsRepository $segmentsRepository,
         SalesFunnelsCache $salesFunnelsCache,
         Translator $translator,
         Config $config
     ) {
         $this->salesFunnelsRepository = $salesFunnelsRepository;
+        $this->salesFunnelsMetaRepository = $salesFunnelsMetaRepository;
         $this->segmentsRepository = $segmentsRepository;
         $this->salesFunnelsCache = $salesFunnelsCache;
         $this->translator = $translator;
@@ -46,7 +51,10 @@ class SalesFunnelAdminFormFactory
         $defaults = [];
         if (isset($id)) {
             $funnel = $this->salesFunnelsRepository->find($id);
-            $defaults = $funnel->toArray();
+            $purchaseLimit['funnel_purchase_limit'] = $this->salesFunnelsMetaRepository->get($funnel, 'funnel_purchase_limit');
+
+            $funnelData = $funnel->toArray();
+            $defaults = array_merge($funnelData, $purchaseLimit);
         }
 
         $form = new Form;
@@ -94,6 +102,11 @@ class SalesFunnelAdminFormFactory
         $form->addInteger('limit_per_user', 'sales_funnel.data.sales_funnels.fields.limit_per_user')
             ->addCondition(Form::FILLED)
             ->addRule(Form::MIN, 'sales_funnel.data.sales_funnels.validation.minimum.limit_per_user', 1);
+
+        $form->addInteger('funnel_purchase_limit', 'sales_funnel.data.sales_funnels.fields.funnel_purchase_limit')
+            ->setNullable()
+            ->addCondition(Form::FILLED)
+            ->addRule(Form::MIN, 'sales_funnel.data.sales_funnels.validation.minimum.funnel_purchase_limit', 1);
 
         $form->addTextArea('body', 'sales_funnel.data.sales_funnels.fields.body')
             ->setAttribute('data-codeeditor', ['name' => 'twig', 'base' => 'text/html']);
@@ -147,6 +160,20 @@ class SalesFunnelAdminFormFactory
         } else {
             $values['end_at'] = null;
         }
+
+        $salesFunnel = $this->salesFunnelsRepository->find($id);
+        if ($values['funnel_purchase_limit']) {
+            if ($this->salesFunnelsMetaRepository->exists($salesFunnel, 'funnel_purchase_limit')) {
+                $this->salesFunnelsMetaRepository->updateValue($salesFunnel, 'funnel_purchase_limit', $values['funnel_purchase_limit']);
+            } else {
+                $this->salesFunnelsMetaRepository->add($salesFunnel, 'funnel_purchase_limit', $values['funnel_purchase_limit']);
+            }
+        } else {
+            if ($this->salesFunnelsMetaRepository->exists($salesFunnel, 'funnel_purchase_limit')) {
+                $this->salesFunnelsMetaRepository->deleteValue($salesFunnel, 'funnel_purchase_limit');
+            }
+        }
+        unset($values['funnel_purchase_limit']);
 
         if ($values['is_active']) {
             $values['redirect_funnel_id'] = null;
