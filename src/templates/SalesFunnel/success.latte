@@ -36,15 +36,14 @@
         </p>
     </div>
 
+
     <div class="col-md-12">
         <div class="additionalform">
             <div class="thank-you-warn hide-if-no-forms">
                 {control snippet 'success-attention'}
             </div>
 
-            <div id="success-forms">
-                {control simpleWidget 'frontend.payment.success.forms', $payment}
-            </div>
+            {control simpleWidget 'frontend.payment.success.bottom', $payment}
 
             <hr class="hide-if-no-forms" />
 
@@ -58,47 +57,8 @@
 
 {block #scripts}
 <script>
-    // Forms registered via widget need to have possibility to save form data on final submit direting user away.
-    // We need to wait for confirmation that forms succeeded and no validation errors occurred.
-    var finishCallbacks = [];
-    var finished = 0;
-    var errorred = 0;
-
-    function registerFormCallback(callback) {
-        finishCallbacks.push(callback);
-        console.log("registered callback")
-    }
-
-    function finishCallback() {
-        finished += 1;
-    }
-
-    function errorCallback() {
-        errorred += 1;
-    }
-
-    function handleFormSaved(headerSelector) {
-        var $header = $(headerSelector),
-            $open = $header.find('.open').hide(),
-            $done = $header.find('.done').show();
-
-        setTimeout(function () {
-            $done.fadeOut(300, function () {
-                $open.fadeIn();
-            });
-        }, 3200);
-    }
 
     $(function () {
-        $(document).on('click', '.additionalform-header-box', function () {
-            if ($(this).data('toggle') === 'collapse') {
-                // dont intervene with bootstrap collapsing;
-                return;
-            }
-            var target = $(this).data('target');
-            $(target).toggle();
-        });
-
         $('#finish a').on('click', function (e) {
             e.preventDefault();
 
@@ -204,14 +164,4 @@
     })()
 </script>
 
-<script>
-    $(document).ready(function () {
-        var successForms = document.getElementById('success-forms');
-        if ((successForms.querySelector('form') !== null)) {
-            document.querySelectorAll('.hide-if-no-forms').forEach(function (element) {
-                element.style.display = 'block';
-            });
-        }
-    });
-</script>
 {/block}
