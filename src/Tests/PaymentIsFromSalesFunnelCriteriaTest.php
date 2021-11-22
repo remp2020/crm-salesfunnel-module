@@ -63,7 +63,7 @@ class PaymentIsFromSalesFunnelCriteriaTest extends PaymentsTestCase
             PaymentIsFromSalesFunnelCriteria::KEY => $values
         ], $userRow);
 
-        $this->assertNotFalse($paymentSelection->fetch());
+        $this->assertNotNull($paymentSelection->fetch());
     }
 
     public function testRequiredAndIsNotFromSalesFunnel(): void
@@ -78,7 +78,7 @@ class PaymentIsFromSalesFunnelCriteriaTest extends PaymentsTestCase
             PaymentIsFromSalesFunnelCriteria::KEY => $values
         ], $userRow);
 
-        $this->assertFalse($paymentSelection->fetch());
+        $this->assertNull($paymentSelection->fetch());
     }
 
     public function testNotRequiredAndIsFromSalesFunnel(): void
@@ -97,7 +97,7 @@ class PaymentIsFromSalesFunnelCriteriaTest extends PaymentsTestCase
             PaymentIsFromSalesFunnelCriteria::KEY => $values
         ], $userRow);
 
-        $this->assertFalse($paymentSelection->fetch());
+        $this->assertNull($paymentSelection->fetch());
     }
 
     public function testNotRequiredAndIsNotFromSalesFunnel(): void
@@ -112,7 +112,7 @@ class PaymentIsFromSalesFunnelCriteriaTest extends PaymentsTestCase
             PaymentIsFromSalesFunnelCriteria::KEY => $values
         ], $userRow);
 
-        $this->assertNotFalse($paymentSelection->fetch());
+        $this->assertNotNull($paymentSelection->fetch());
     }
 
     private function prepareData()

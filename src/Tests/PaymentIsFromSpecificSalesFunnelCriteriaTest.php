@@ -36,7 +36,7 @@ class PaymentIsFromSpecificSalesFunnelCriteriaTest extends PaymentsTestCase
         $values = (object)['selection' => [3, 5, 8]];
         $criteria->addConditions($paymentSelection, [PaymentIsFromSpecificSalesFunnelCriteria::KEY => $values], $paymentRow);
 
-        $this->assertFalse($paymentSelection->fetch());
+        $this->assertNull($paymentSelection->fetch());
     }
 
     public function testPaymentIsFromSpecificSalesFunnel(): void
@@ -59,6 +59,6 @@ class PaymentIsFromSpecificSalesFunnelCriteriaTest extends PaymentsTestCase
         $values = (object)['selection' => [5, $salesFunnelRow->id, 8]];
         $criteria->addConditions($paymentSelection, [PaymentIsFromSpecificSalesFunnelCriteria::KEY => $values], $paymentRow);
 
-        $this->assertNotFalse($paymentSelection->fetch());
+        $this->assertNotNull($paymentSelection->fetch());
     }
 }
