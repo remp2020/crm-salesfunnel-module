@@ -9,6 +9,7 @@ use Crm\SalesFunnelModule\SalesFunnelsCache;
 use Crm\SegmentModule\Repository\SegmentsRepository;
 use Kdyby\Translation\Translator;
 use Nette\Application\UI\Form;
+use Nette\Database\Table\IRow;
 use Nette\Utils\DateTime;
 use Tomaj\Form\Renderer\BootstrapRenderer;
 
@@ -161,18 +162,9 @@ class SalesFunnelAdminFormFactory
             $values['end_at'] = null;
         }
 
-        $salesFunnel = $this->salesFunnelsRepository->find($id);
-        if ($values['funnel_purchase_limit']) {
-            if ($this->salesFunnelsMetaRepository->exists($salesFunnel, 'funnel_purchase_limit')) {
-                $this->salesFunnelsMetaRepository->updateValue($salesFunnel, 'funnel_purchase_limit', $values['funnel_purchase_limit']);
-            } else {
-                $this->salesFunnelsMetaRepository->add($salesFunnel, 'funnel_purchase_limit', $values['funnel_purchase_limit']);
-            }
-        } else {
-            if ($this->salesFunnelsMetaRepository->exists($salesFunnel, 'funnel_purchase_limit')) {
-                $this->salesFunnelsMetaRepository->deleteValue($salesFunnel, 'funnel_purchase_limit');
-            }
-        }
+        $meta = [
+            'funnel_purchase_limit' => $values['funnel_purchase_limit'] ?? null
+        ];
         unset($values['funnel_purchase_limit']);
 
         if ($values['is_active']) {
@@ -185,6 +177,7 @@ class SalesFunnelAdminFormFactory
             if ($this->config->getFunnelRoutes()) {
                 $this->salesFunnelsCache->add($id, $values['url_key']);
             }
+            $this->updateMeta($row, $meta);
             $this->onUpdate->__invoke($row);
         } else {
             $row = $this->salesFunnelsRepository->add(
@@ -206,7 +199,28 @@ class SalesFunnelAdminFormFactory
             if ($this->config->getFunnelRoutes()) {
                 $this->salesFunnelsCache->add($row['id'], $values['url_key']);
             }
+            $this->updateMeta($row, $meta);
             $this->onSave->__invoke($row);
+        }
+    }
+
+    private function updateMeta(IRow $salesFunnel, array $meta): void
+    {
+        // null value will be deleted
+        foreach ($meta as $name => $value) {
+            $exists = $this->salesFunnelsMetaRepository->exists($salesFunnel, $name);
+
+            if ($exists) {
+                if ($value !== null) {
+                    $this->salesFunnelsMetaRepository->updateValue($salesFunnel, $name, $value);
+                } else {
+                    $this->salesFunnelsMetaRepository->deleteValue($salesFunnel, $name);
+                }
+            } else {
+                if ($value !== null) {
+                    $this->salesFunnelsMetaRepository->add($salesFunnel, $name, $value);
+                }
+            }
         }
     }
 }
