@@ -141,7 +141,7 @@ funnel to work correctly.
 
 If you want to only view the sample implementation of funnel, you can [find it here](./src/seeders/sales_funnels/sample.twig).
 
-## Events and handlers
+## Events and handlers
 
 ### PaymentItemContainerReadyEvent
 
