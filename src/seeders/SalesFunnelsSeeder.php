@@ -3,6 +3,7 @@
 namespace Crm\SalesFunnelModule\Seeders;
 
 use Crm\ApplicationModule\Seeders\ISeeder;
+use Crm\PaymentsModule\Gateways\BankTransfer;
 use Crm\PaymentsModule\Repository\PaymentGatewaysRepository;
 use Crm\SalesFunnelModule\Repository\SalesFunnelsPaymentGatewaysRepository;
 use Crm\SalesFunnelModule\Repository\SalesFunnelsRepository;
@@ -43,7 +44,7 @@ class SalesFunnelsSeeder implements ISeeder
 
     public function seed(OutputInterface $output)
     {
-        $gateway = $this->paymentGatewaysRepository->findByCode('bank_transfer');
+        $gateway = $this->paymentGatewaysRepository->findByCode(BankTransfer::GATEWAY_CODE);
 
         $subscriptionTypeCode = 'sample';
         $subscriptionType = $this->subscriptionTypesRepository->findByCode($subscriptionTypeCode);
