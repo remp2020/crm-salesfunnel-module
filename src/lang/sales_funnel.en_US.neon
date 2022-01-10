@@ -92,13 +92,12 @@ admin:
 			back: back to sales funnel
 		show:
 			back: back to sales funnels
-			edit: Edit sales funnel
-			preview: Display sales funnel
 			basic_informations: Basic information
 			stats: Funnel stats
 			users: Users
 			meta: Meta info
 			last_payments: Last payments
+			all_payments: All payments
 			no_payment_gateway_message: No payment gatewaya
 			add_payment_gateway: Add payment gateway
 			no_subscription_type_message: No subscription types
@@ -128,7 +127,7 @@ admin:
 				amount: Amount
 		preview:
 			back: back to sales funnel
-			header: Preview window
+			header: Preview funnel
 		new:
 			title: New sales funnel
 			back: back to sales funnels
@@ -139,6 +138,13 @@ admin:
 		window_preview:
 			logged_user: Logged user
 			unlogged_user: Unlogged user
+		header:
+			edit: Edit sales funnel
+			preview: Preview funnel
+			export_users: Export users
+			show: General
+			stats: Stats
+
 	distribution:
 		email: E-mail
 		source: Source
