@@ -25,7 +25,7 @@ class TrackStatsHandler extends ApiHandler
         $this->emitter = $emitter;
     }
 
-    public function params()
+    public function params(): array
     {
         return [
             new InputParam(InputParam::TYPE_POST, 'url_key', InputParam::REQUIRED),

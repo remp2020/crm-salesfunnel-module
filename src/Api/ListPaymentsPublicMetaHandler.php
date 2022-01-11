@@ -31,7 +31,7 @@ class ListPaymentsPublicMetaHandler extends ApiHandler
         $this->salesFunnelsMetaRepository = $salesFunnelsMetaRepository;
     }
 
-    public function params()
+    public function params(): array
     {
         return [
             new InputParam(
