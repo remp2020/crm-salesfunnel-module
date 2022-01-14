@@ -458,7 +458,7 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
             }
         }
 
-        $source = $this->getHttpRequest()->getPost('registration_source', 'funnel');
+        $source = $this->getHttpRequest()->getPost('registration_source') ?? 'funnel';
 
         $user = null;
         try {
@@ -539,7 +539,7 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
         // prepare payment meta
         $metaData['newsletters_subscribe'] = (bool)filter_input(INPUT_POST, 'newsletters_subscribe');
 
-        foreach ($this->getHttpRequest()->getPost('payment_metadata', []) as $key => $submittedMeta) {
+        foreach ($this->getHttpRequest()->getPost('payment_metadata') ?? [] as $key => $submittedMeta) {
             if ($submittedMeta !== "") {
                 $metaData[$key] = $submittedMeta;
             }
