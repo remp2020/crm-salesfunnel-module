@@ -3,6 +3,7 @@
 namespace Crm\SalesFunnelModule\Distribution;
 
 use Nette\Database\Table\ActiveRow;
+use Nette\Utils\ArrayHash;
 
 class SubscriptionDaysDistribution extends AbstractFunnelDistribution
 {
@@ -39,7 +40,7 @@ SQL;
         return $this->database->query($sql)->fetchAll();
     }
 
-    protected function prepareInsertRow(ActiveRow $salesFunnel, ActiveRow $distributionRow): array
+    protected function prepareInsertRow(ActiveRow $salesFunnel, ArrayHash $distributionRow): array
     {
         if (is_null($distributionRow->value)) {
             return $this->salesFunnelsConversionDistributionsRepository

@@ -8,6 +8,7 @@ use Crm\SalesFunnelModule\SalesFunnelsConversionDistributionsRepository;
 use Crm\SubscriptionsModule\Repository\SubscriptionsRepository;
 use Nette\Database\Explorer;
 use Nette\Database\Table\ActiveRow;
+use Nette\Utils\ArrayHash;
 
 abstract class AbstractFunnelDistribution
 {
@@ -43,7 +44,7 @@ abstract class AbstractFunnelDistribution
 
     abstract protected function getDistributionRows($funnelId, $userId = null): array;
 
-    abstract protected function prepareInsertRow(ActiveRow $salesFunnel, ActiveRow $distributionRow): array;
+    abstract protected function prepareInsertRow(ActiveRow $salesFunnel, ArrayHash $distributionRow): array;
 
     public function setDistributionConfiguration(array $distributionLevels): void
     {

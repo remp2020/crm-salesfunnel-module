@@ -3,6 +3,7 @@
 namespace Crm\SalesFunnelModule\Distribution;
 
 use Nette\Database\Table\ActiveRow;
+use Nette\Utils\ArrayHash;
 
 class PaymentsCountDistribution extends AbstractFunnelDistribution
 {
@@ -34,7 +35,7 @@ SQL;
         return $this->database->query($sql)->fetchAll();
     }
 
-    protected function prepareInsertRow(ActiveRow $salesFunnel, ActiveRow $distributionRow): array
+    protected function prepareInsertRow(ActiveRow $salesFunnel, ArrayHash $distributionRow): array
     {
         return $this->salesFunnelsConversionDistributionsRepository
             ->prepareRow($salesFunnel->id, $distributionRow->user_id, self::TYPE, $distributionRow->value);
