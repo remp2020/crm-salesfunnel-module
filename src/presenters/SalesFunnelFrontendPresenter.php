@@ -207,6 +207,7 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
             'values' => $values ? Json::decode($values, Json::FORCE_ARRAY) : null,
             'errors' => $errors ? Json::decode($errors, Json::FORCE_ARRAY) : null,
             'backLink' => $this->storeRequest(),
+            'locale' => $this->translator->getLocale(),
         ];
 
         if ($isLoggedIn) {
