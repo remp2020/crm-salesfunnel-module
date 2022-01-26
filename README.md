@@ -139,7 +139,7 @@ available at `/sample` URL on your domain. You can (and should) also find your f
 (`/sales-funnel/sales-funnels-admin/)`as you still need to enable subscription types and gateways for this newly seeded
 funnel to work correctly.
 
-If you want to only view the sample implementation of funnel, you can [find it here](./src/seeders/sales_funnels/sample.twig).
+If you want to only view the sample implementation of funnel, you can [find it here](./src/Seeders/sales_funnels/sample.twig).
 
 ## Events and handlers
 
