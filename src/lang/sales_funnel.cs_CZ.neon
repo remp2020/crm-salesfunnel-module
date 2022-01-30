@@ -91,13 +91,12 @@ admin:
 			back: zpět na platební okno
 		show:
 			back: zpět na seznam oken
-			edit: Upravit platební okno
-			preview: Zobrazit platební okno
 			basic_informations: Základní informace
 			stats: Statistiky
 			users: Uživatelé s platbou
 			meta: Meta info
 			last_payments: Poslední platby
+			all_payments: Všechny platby
 			no_payment_gateway_message: Žádná platební brána
 			add_payment_gateway: Přidej platební bránu
 			no_subscription_type_message: Žádné typy předplatného
@@ -138,6 +137,13 @@ admin:
 		window_preview:
 			logged_user: Přihlášený uživatel
 			unlogged_user: Nepřihlášený uživatel
+		header:
+			edit: Upravit platební okno
+			preview: Náhled okna
+			export_users: Export uživatelů
+			show: Obecné
+			stats: Statistiky
+
 	distribution:
 		email: E-mail
 		source: Zdroj

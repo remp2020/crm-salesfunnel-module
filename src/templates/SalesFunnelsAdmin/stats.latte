@@ -1,0 +1,39 @@
+{block #title}{$funnel->name}{/block}
+
+{block #content}
+
+{include 'header.latte', funnel => $funnel}
+
+<div class="row">
+    <div class="col-md-12">
+        {control funnelGraph}
+    </div>
+    <div class="col-md-12">
+        {control funnelShowGraph}
+    </div>
+    <div class="col-md-12">
+        {control funnelConversionRateGraph}
+    </div>
+</div>
+
+<div class="row" style="margin-top:2em">
+    <div class="col-md-6">
+        {control subscriptionsGraph}
+    </div>
+    <div class="col-md-6">
+        {control paymentGatewaysGraph}
+    </div>
+
+    <div class="col-md-12">
+        <hr>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <h2 class="page-header">{_sales_funnel.admin.sales_funnels.show.distribution.label}</h2>
+
+        {control simpleWidget 'sales_funnels.admin.show.distribution', $funnel->id}
+
+    </div>
+</div>

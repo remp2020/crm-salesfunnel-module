@@ -8,20 +8,7 @@
 
 {block #content}
 
-<div class="row">
-  <div class="col-md-12">
-    <a n:href="default"><i class="fa fa-angle-left"></i> {_sales_funnel.admin.sales_funnels.show.back}</a>
-
-    <div class="page-header">
-      <h1>
-        {$funnel->name}
-        {control simpleWidget 'admin.sales_funnel.after_name', $funnel}
-        <a n:href="edit $funnel->id" class="btn btn-primary btn-lg pull-right"><i class="fa fa-edit"></i>  {_sales_funnel.admin.sales_funnels.show.edit}</a>
-        <a n:href="preview $funnel->id" class="btn btn-default btn-lg pull-right" style="margin-right:10px"><i class="fa fa-eye"></i>  {_sales_funnel.admin.sales_funnels.show.preview}</a>
-      </h1>
-    </div>
-  </div>
-</div>
+{include 'header.latte'}
 
 <div class="row">
   <div class="col-md-6">
@@ -69,19 +56,6 @@
     </div>
   </div>
 </div>
-
-<div class="row">
-  <div class="col-md-12">
-    {control funnelGraph}
-  </div>
-  <div class="col-md-12">
-    {control funnelShowGraph}
-  </div>
-  <div class="col-md-12">
-    {control funnelConversionRateGraph}
-  </div>
-</div>
-
 
 <div class="row">
 
@@ -187,34 +161,13 @@
       });
     </script>
   {/snippet}
-
-</div>
-
-<div class="row" style="margin-top:2em">
-  <div class="col-md-6">
-    {control subscriptionsGraph}
-  </div>
-  <div class="col-md-6">
-    {control paymentGatewaysGraph}
-  </div>
-
-  <div class="col-md-12">
-    <hr>
-  </div>
 </div>
 
 <div class="row">
   <div class="col-md-12">
-    <h2 class="page-header">{_sales_funnel.admin.sales_funnels.show.distribution.label}</h2>
-
-    {control simpleWidget 'sales_funnels.admin.show.distribution', $funnel->id}
-
-  </div>
-</div>
-
-<div class="row">
-  <div class="col-md-12">
-    <h2 class="page-header">{_sales_funnel.admin.sales_funnels.show.last_payments}</h2>
+    <h2 class="page-header">{_sales_funnel.admin.sales_funnels.show.last_payments}
+      <a n:href=":Payments:PaymentsAdmin: formData => ['sales_funnel' => $funnel->id]" class="btn btn-default btn-xs">{_sales_funnel.admin.sales_funnels.show.all_payments} <i class="fas fa-share"></i></a>
+    </h2>
     {control lastPayments}
   </div>
 </div>
@@ -228,40 +181,6 @@
         <span class="pull-right">{$value}</span>
       </li>
     </ul>
-  </div>
-</div>
-
-<div class="row">
-  <div class="col-md-12">
-    <h2 class="page-header">{_sales_funnel.admin.sales_funnels.show.users} <a n:href="ExportUsersWithPayment! $funnel->id" class="btn btn-primary btn-sm"><i class="fas fa-file-export"></i> Export</a></h2>
-    <table class="table table-responsive table-bordered">
-      <thead>
-        <tr>
-          <th>{_sales_funnel.admin.sales_funnels.show.payment.email}</th>
-          <th>{_sales_funnel.admin.sales_funnels.show.payment.first_name}</th>
-          <th>{_sales_funnel.admin.sales_funnels.show.payment.last_name}</th>
-          <th>{_sales_funnel.admin.sales_funnels.show.payment.date}</th>
-          <th>{_sales_funnel.admin.sales_funnels.show.payment.amount}</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr n:foreach="$payments as $payment">
-          <td><a n:href=":Users:UsersAdmin:show $payment->user_id">{$payment->user->public_name}</a></td>
-          <td>{$payment->user->first_name}</td>
-          <td>{$payment->user->last_name}</td>
-          <td><span class="text-muted">{$payment->paid_at|userDate}</span></td>
-          <td>
-            {$payment->amount|price}
-            <span n:if="$payment->additional_type" class="label label-primary">
-              {$payment->additional_amount|price} donation
-              {if $payment->additional_type == 'recurrent'} recurrent{/if}
-            </span>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-
-    {control paymentsvp}
   </div>
 </div>
 

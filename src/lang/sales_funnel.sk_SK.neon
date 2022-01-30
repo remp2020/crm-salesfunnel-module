@@ -92,13 +92,12 @@ admin:
 			back: späť na platobné okno
 		show:
 			back: späť na zoznam okien
-			edit: Upraviť platobné okno
-			preview: Zobraziť platobné okno
 			basic_informations: Základné informácie
 			stats: Štatistiky
 			users: Používatelia s platbou
 			meta: Meta info
 			last_payments: Posledné platby
+			all_payments: Všetky platby
 			no_payment_gateway_message: Žiadna platobná brána
 			add_payment_gateway: Pridaj platobnú bránu
 			no_subscription_type_message: Žiadne typy predplatného
@@ -139,6 +138,12 @@ admin:
 		window_preview:
 			logged_user: Prihlásený užívateľ
 			unlogged_user: Neprihlásený užívateľ
+		header:
+			edit: Upraviť platobné okno
+			preview: Náhľad okna
+			export_users: Export používateľov
+			show: Všeobecné
+			stats: Štatistiky
 
 	distribution:
 		email: E-mail

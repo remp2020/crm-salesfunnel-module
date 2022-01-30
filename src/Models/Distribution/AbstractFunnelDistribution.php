@@ -28,6 +28,8 @@ abstract class AbstractFunnelDistribution
 
     protected $distributionConfiguration;
 
+    protected static int $paidPaymentsUserCount;
+
     public function __construct(
         Explorer $database,
         PaymentsRepository $paymentsRepository,
@@ -136,9 +138,18 @@ abstract class AbstractFunnelDistribution
     {
         $distributionsCount = $this->salesFunnelsConversionDistributionsRepository
             ->salesFunnelTypeDistributions($salesFunnelId, static::TYPE)->count();
-        $paymentsCount = $this->paymentsRepository->all()
-            ->where(['sales_funnel_id' => $salesFunnelId, 'status' => $this->paidStatuses])->count('DISTINCT user_id');
+        $paymentsCount = $this->paidPaymentsUserCount($salesFunnelId);
 
         return $distributionsCount === $paymentsCount;
+    }
+
+    final public function paidPaymentsUserCount($salesFunnelId)
+    {
+        if (!isset(self::$paidPaymentsUserCount)) {
+            self::$paidPaymentsUserCount = $this->paymentsRepository->all()
+                ->where(['sales_funnel_id' => $salesFunnelId, 'status' => $this->paidStatuses])->count('DISTINCT user_id');
+        }
+
+        return self::$paidPaymentsUserCount;
     }
 }

@@ -5,7 +5,6 @@ namespace Crm\SalesFunnelModule\Presenters;
 use Crm\AdminModule\Presenters\AdminPresenter;
 use Crm\ApplicationModule\Components\Graphs\GoogleBarGraphGroupControlFactoryInterface;
 use Crm\ApplicationModule\Components\Graphs\GoogleLineGraphGroupControlFactoryInterface;
-use Crm\ApplicationModule\Components\VisualPaginator;
 use Crm\ApplicationModule\ExcelFactory;
 use Crm\ApplicationModule\Graphs\Criteria;
 use Crm\ApplicationModule\Graphs\GraphDataItem;
@@ -111,20 +110,19 @@ class SalesFunnelsAdminPresenter extends AdminPresenter
         $this->template->total_paid_amount = $this->salesFunnelsRepository->totalPaidAmount($funnel);
         $this->template->subscriptionTypesPaymentsMap = $this->salesFunnelsRepository->getSalesFunnelDistribution($funnel);
         $this->template->meta = $this->salesFunnelsMetaRepository->all($funnel);
+    }
 
-        $payments = $this->paymentsRepository->getTable()
-            ->where(['status' => PaymentsRepository::STATUS_PAID, 'sales_funnel_id' => $funnel->id])
-            ->order('paid_at DESC');
-
-        $filteredCount = $this->template->filteredCount = $payments->count('*');
-        $vp = new VisualPaginator();
-        $this->addComponent($vp, 'paymentsvp');
-        $paginator = $vp->getPaginator();
-        $paginator->setItemCount($filteredCount);
-        $paginator->setItemsPerPage($this->onPage);
-
-        $this->template->vp = $vp;
-        $this->template->payments = $payments->limit($paginator->getLength(), $paginator->getOffset());
+    /**
+     * @admin-access-level read
+     */
+    public function renderStats($id)
+    {
+        $funnel = $this->salesFunnelsRepository->find($id);
+        if (!$funnel) {
+            $this->flashMessage($this->translator->translate('sales_funnel.admin.sales_funnels.messages.sales_funnel_not_found'), 'danger');
+            $this->redirect('default');
+        }
+        $this->template->funnel = $funnel;
     }
 
     /**
@@ -583,7 +581,7 @@ class SalesFunnelsAdminPresenter extends AdminPresenter
     {
         $control = $factory->create();
         $control->setSalesFunnelId($this->params['id'])
-            ->setLimit(5);
+            ->setLimit(25);
         return $control;
     }
 
