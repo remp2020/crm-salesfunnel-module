@@ -1,0 +1,35 @@
+frontend:
+	error:
+		title: "Hiba"
+	inactive:
+		title: "Nem aktív"
+	invalid:
+		title: "Hibás belépés"
+	no_access:
+		title: "Hozzáférés megtagadva"
+	sign_in:
+		title: "Ehhez a művelethez be kell jelentkeznie"
+	success_page:
+		title: "Köszönjük!"
+		payment_success: "A fizetés sikeres"
+		pass_sent: "A jelszót elküldtük e-mailben az %email% címre."
+		foreign_country: "A külföldi kézbesítéssel kapcsolatos információkért, kérjük, írjon az <a href=\"mailto:%contactEmail%\">%contactEmail%</a> címre."
+		complete_registration: "Vissza a cikkhez"
+		complete_registration_info: "Ha minden adatot beírt, folytassa ott, ahol abbahagyta."
+	error_page:
+		title: "Hiba"
+		message: "A fizetés sajnos sikertelen."
+		reason_default: "Kérjük, próbálja meg újra vagy lépjen kapcsolatba az ügyfélszolgálattal."
+	cancel_page:
+		title: "A fizetés törölve lett."
+		message: "A fizetése törölve lett. Bezárhatja ezt az ablakot, vagy továbbléphet az előfizetési kínálathoz."
+		reason_default: "Vissza a kínálathoz"
+	not_settled_page:
+		title: "A kifizetés nem érkezett be"
+		message: "A kifizetés a fizetési kaput üzemeltető bank üzemszünete alatt történt, és nem ellenőrizhető az állapota. Amint a bank megerősíti a kifizetést, ezt jelezzük önnek."
+	invalid_email:
+		title: "A megadott e-mail cím érvénytelen"
+	invalid_credentials:
+		title: "Nem sikerült bejelentkezni a megadott jelszóval "
+	disabled_auto_login:
+	    title: "Letiltva az automatikus bejelentkezés fizetés után az adminisztrátor felhasználó számára"

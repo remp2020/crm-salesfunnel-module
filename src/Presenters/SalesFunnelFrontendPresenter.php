@@ -28,7 +28,6 @@ use Crm\SubscriptionsModule\PaymentItem\SubscriptionTypePaymentItem;
 use Crm\SubscriptionsModule\Repository\ContentAccessRepository;
 use Crm\SubscriptionsModule\Repository\SubscriptionTypesRepository;
 use Crm\SubscriptionsModule\Subscription\ActualUserSubscription;
-use Crm\UsersModule\Auth\Authorizator;
 use Crm\UsersModule\Auth\InvalidEmailException;
 use Crm\UsersModule\Auth\UserManager;
 use Crm\UsersModule\Forms\SignInFormFactory;
@@ -47,8 +46,6 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
 
     private $subscriptionTypesRepository;
 
-    private $salesFunnelsStatsRepository;
-
     private $salesFunnelsMetaRepository;
 
     private $paymentGatewaysRepository;
@@ -60,8 +57,6 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
     private $segmentFactory;
 
     private $hermesEmitter;
-
-    private $authorizator;
 
     private $actualUserSubscription;
 
@@ -81,7 +76,6 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
 
     public function __construct(
         SalesFunnelsRepository $salesFunnelsRepository,
-        SalesFunnelsStatsRepository $salesFunnelsStatsRepository,
         SalesFunnelsMetaRepository $salesFunnelsMetaRepository,
         SubscriptionTypesRepository $subscriptionTypesRepository,
         PaymentGatewaysRepository $paymentGatewaysRepository,
@@ -90,7 +84,6 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
         SegmentFactoryInterface $segmentFactory,
         ActualUserSubscription $actualUserSubscription,
         Emitter $hermesEmitter,
-        Authorizator $authorizator,
         AddressesRepository $addressesRepository,
         UserManager $userManager,
         GatewayFactory $gatewayFactory,
@@ -101,7 +94,6 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
     ) {
         parent::__construct();
         $this->salesFunnelsRepository = $salesFunnelsRepository;
-        $this->salesFunnelsStatsRepository = $salesFunnelsStatsRepository;
         $this->salesFunnelsMetaRepository = $salesFunnelsMetaRepository;
         $this->subscriptionTypesRepository = $subscriptionTypesRepository;
         $this->paymentGatewaysRepository = $paymentGatewaysRepository;
@@ -110,7 +102,6 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
         $this->segmentFactory = $segmentFactory;
         $this->actualUserSubscription = $actualUserSubscription;
         $this->hermesEmitter = $hermesEmitter;
-        $this->authorizator = $authorizator;
         $this->addressesRepository = $addressesRepository;
         $this->userManager = $userManager;
         $this->gatewayFactory = $gatewayFactory;
@@ -206,7 +197,6 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
             'referer' => urlencode($referer),
             'values' => $values ? Json::decode($values, Json::FORCE_ARRAY) : null,
             'errors' => $errors ? Json::decode($errors, Json::FORCE_ARRAY) : null,
-            'backLink' => $this->storeRequest(),
             'locale' => $this->translator->getLocale(),
         ];
 
@@ -390,7 +380,7 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
         }
     }
 
-    private function user($email, $password, ActiveRow $funnel, $source, $referer, bool $needAuth = true)
+    private function user($email, $password, ActiveRow $funnel, $source, $referer, bool $needAuth = true): ActiveRow
     {
         $ua = Request::getUserAgent();
 
@@ -437,9 +427,14 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
         $address = null;
         $email = filter_input(INPUT_POST, 'email');
         $password = filter_input(INPUT_POST, 'password');
+        $locale = filter_input(INPUT_POST, 'locale');
         $needAuth = true;
         if (isset($_POST['auth']) && ($_POST['auth'] == '0' || $_POST['auth'] == 'false')) {
             $needAuth = false;
+        }
+
+        if ($locale && !in_array($locale, $this->translator->getAvailableLocales(), true)) {
+            $locale = null; // accept only valid locales
         }
 
         $subscriptionTypeCode = filter_input(INPUT_POST, 'subscription_type');
@@ -451,8 +446,8 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
 
         $additionalAmount = 0;
         $additionalType = null;
-        if (isset($_POST['additional_amount']) && floatval($_POST['additional_amount']) > 0) {
-            $additionalAmount = floatval($_POST['additional_amount']);
+        if (isset($_POST['additional_amount']) && (float) $_POST['additional_amount'] > 0) {
+            $additionalAmount = (float) $_POST['additional_amount'];
             $additionalType = 'single';
             if (isset($_POST['additional_type']) && $_POST['additional_type'] == 'recurrent') {
                 $additionalType = 'recurrent';
@@ -465,6 +460,11 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
         try {
             $userError = null;
             $user = $this->user($email, $password, $funnel, $source, $referer, $needAuth);
+
+            if ($locale && $user->locale !== $locale) {
+                $this->usersRepository->update($user, ['locale' => $locale]);
+                $user = $this->usersRepository->find($user->id);
+            }
         } catch (AuthenticationException $e) {
             $userError = Json::encode(['password' => $this->translator->translate("sales_funnel.frontend.invalid_credentials.title")]);
         } catch (InvalidEmailException $e) {

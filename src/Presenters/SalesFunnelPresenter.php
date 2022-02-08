@@ -3,12 +3,14 @@
 namespace Crm\SalesFunnelModule\Presenters;
 
 use Crm\ApplicationModule\Presenters\FrontendPresenter;
+use Crm\PaymentsModule\PaymentAwareInterface;
 use Crm\PaymentsModule\Repository\PaymentLogsRepository;
 use Crm\PaymentsModule\Repository\PaymentsRepository;
 use Crm\SalesFunnelModule\Repository\SalesFunnelsRepository;
 use Nette\Application\BadRequestException;
+use Nette\Database\Table\ActiveRow;
 
-class SalesFunnelPresenter extends FrontendPresenter
+class SalesFunnelPresenter extends FrontendPresenter implements PaymentAwareInterface
 {
     /** @var  PaymentsRepository  @inject */
     public $paymentsRepository;
@@ -84,7 +86,7 @@ class SalesFunnelPresenter extends FrontendPresenter
         $this->getSession('sales_funnel')->remove();
     }
 
-    public function getPayment()
+    public function getPayment(): ?ActiveRow
     {
         if (!isset($this->variableSymbol)) {
             return null;
