@@ -1,3 +1,43 @@
+menu:
+	sales_funnels: Értékesítési Csatorna
+
+data:
+	sales_funnels:
+		fields:
+			name: Név
+			url_key: Url kulcs
+			is_active: Aktív
+			is_inactive: Inaktív
+			redirect_funnel_id: Átirányítás
+			segment_id: Szegmens
+			start_at: Érvéntesség kezdete
+			end_at: Érvéntesség vége
+			body: Csatorna HTML tartalma
+			no_access_html: Csatorna nincs jogosultság html
+			error_html: Csatorna hiba oldal html
+			head: HTML fejléc
+			created_at: Létrehozva
+			payment_gateway: Fizetési átjárók
+			subscription_type: Előfizetés típusa
+			total_show: Összes megjelenités
+			total_conversions: Összes konverzió
+			total_paid_amount: Összes fizetett összeg
+			total_errors: Összes hiba
+			last_use: Utoljára használva
+			last_conversion: Utolsó konverzió
+			only_logged: Only logged
+			only_not_logged: Only not logged
+			segment: Szegmens
+		placeholder:
+			name: pl. Main funnel
+			url_key: pl. 'winter-sale'
+			redirect_funnel_id: pl. 'default'
+			start_at: pl. 14.2.2016
+			end_at: pl. 14.2.2016
+			body: any html
+		description:
+			redirect_funnel_id: "Ha ki van töltve, a felhasználó át lesz irányítva erre a csatornára ahelyett, hogy megjelenne a 'ajánlat nem érhető el' szöveg."
+
 frontend:
 	error:
 		title: "Hiba"
@@ -33,3 +73,80 @@ frontend:
 		title: "Nem sikerült bejelentkezni a megadott jelszóval "
 	disabled_auto_login:
 	    title: "Letiltva az automatikus bejelentkezés fizetés után az adminisztrátor felhasználó számára"
+
+admin:
+	sales_funnels:
+		default:
+			title: Értékesítési csatorna
+			new: Új értékesítési csatorna
+		edit:
+			title: Értékesítési csatorna szerkesztése
+			back: vissza az értékesítési csatornához
+		show:
+			back: vissza az értékesítési csatornához
+			edit: Szerkesztés
+			preview: Megjelenités
+			basic_informations: Általános információk
+			stats: Csatorna statisztikák
+			users: Felhasználók
+			meta: Meta adatok
+			last_payments: Legutóbbi fizetések
+			no_payment_gateway_message: Nincs fizetési átjáró
+			add_payment_gateway: Fizetési átjáró hozzáadása
+			no_subscription_type_message: Nincs előfizetés típus
+			add_subscription_type: Előfizetés típus hozzáadása
+			graph_show_stats:
+				title: Értékesítési csatorna megjelenitési statisztikák
+				help: Megjelenitési statisztikák
+			graph_funnel_stats:
+				title: Értékesítési csatorna statisztikák
+				help: Minden értékesítési csatorna megjelenitési statisztikák
+			graph_conversion_rate_stats:
+				title: Értékesítési csatorna konverziós ráta eszközönként
+				help: Rate is computed as ratio of finished payments and total number of sales funnel shows * 100
+			distribution:
+				label: Részletezés
+				amounts: How much paid before buying via this sales funnel
+				payments: How many payments made before buying via this sales funnel
+				subscriptions: "Days since ending of last subscription (pre-payment)"
+				hadNever: Never had subscription
+				hadActive: Had active subscription
+		preview:
+			back: vissza az értékesítési csatornához
+			header: Előnézet
+		new:
+			title: Új értékesítési csatorna
+			back: vissza az értékesítési csatornákhoz
+		messages:
+			sales_funnel_not_found: Ismeretlen csatorna
+			funnel_created: Csatorna sikeresen létrehozva
+			funnel_updated: Csatorna sikeresen frissítve
+		window_preview:
+			logged_user: Logged user
+			unlogged_user: Unlogged user
+	distribution:
+		email: E-mail cím
+		source: Forrás
+		status: Állapot
+		created_at: Létrehozva
+		back_to_funnel: vissza a csatornához
+
+	component:
+		subscriptions_graph:
+			title: Vásárolt tételek
+			help: Vásárolt tételek száma csatornához tartozó fizetések alapján
+		sales_funnel_user_listing_widget:
+			funnel: Csatorna
+		sales_funnel_stats_by_device:
+			all_devices: Minden eszköz
+
+# components
+subscription_types_in_sales_funnels:
+	header: Elérhető az értékesítési csatornában
+	no_sales_funnels_message: Ez az előfizetés típus nincs használva egyetlen értékesítési csatornában sem
+
+config:
+	category: Értékesítési csatornák
+	default_sales_funnel_url_key:
+		name: Általános értékesítési csatorna
+		description: "URL a kiválasztott csatornához (pl. default)"
