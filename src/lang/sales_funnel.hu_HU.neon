@@ -72,7 +72,7 @@ frontend:
 	invalid_credentials:
 		title: "Nem sikerült bejelentkezni a megadott jelszóval "
 	disabled_auto_login:
-	    title: "Letiltva az automatikus bejelentkezés fizetés után az adminisztrátor felhasználó számára"
+		title: "Letiltva az automatikus bejelentkezés fizetés után az adminisztrátor felhasználó számára"
 
 admin:
 	sales_funnels:

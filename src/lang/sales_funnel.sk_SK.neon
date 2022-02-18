@@ -80,7 +80,7 @@ frontend:
 	invalid_credentials:
 		title: Nepodarilo sa prihlásiť so zadaným heslom
 	disabled_auto_login:
-	    title: Vypnuté automatické prihlasovanie po zaplatení pre admin usera
+		title: Vypnuté automatické prihlasovanie po zaplatení pre admin usera
 
 admin:
 	sales_funnels:

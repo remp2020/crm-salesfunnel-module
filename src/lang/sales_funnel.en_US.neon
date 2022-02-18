@@ -80,7 +80,7 @@ frontend:
 	invalid_credentials:
 		title: Could not login with entered credentials
 	disabled_auto_login:
-	    title: Disabled auto-login after payment because of ADMIN user
+		title: Disabled auto-login after payment because of ADMIN user
 
 admin:
 	sales_funnels:
