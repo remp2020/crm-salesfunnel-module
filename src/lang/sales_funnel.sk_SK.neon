@@ -59,7 +59,6 @@ frontend:
 	success_page:
 		title: Ďakujeme!
 		payment_success: Vaša platba prebehla v poriadku
-		zlavomat_success: Zľavomat kupón bol úspešne použitý. Vaša objednávka prebehla v poriadku.
 		pass_sent: Heslo sme vám poslali e-mailom na %email%.
 		foreign_country: "Pre informácie o doručení do zahraničia nás, prosím, kontaktujte na <a href=\"mailto:%contactEmail%\">%contactEmail%</a>"
 		complete_registration: Návrat na článok
