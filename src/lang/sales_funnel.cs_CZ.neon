@@ -1,5 +1,6 @@
 menu:
 	sales_funnels: Okná
+
 data:
 	sales_funnels:
 		fields:
@@ -164,7 +165,6 @@ admin:
 			is_from_sales_funnel_label: 'Je z platebního okna'
 			is_from_specific_sales_funnel_label: 'Je z konkrétního platebního okna'
 
-# components
 subscription_types_in_sales_funnels:
 	header: Dostupné v oknech
 	no_sales_funnels_message: Tento typ předplatného není přiřazený k žádnému platebnímu oknu.

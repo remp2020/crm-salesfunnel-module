@@ -138,7 +138,6 @@ admin:
 		sales_funnel_stats_by_device:
 			all_devices: Minden eszköz
 
-# components
 subscription_types_in_sales_funnels:
 	header: Elérhető az értékesítési csatornában
 	no_sales_funnels_message: Ez az előfizetés típus nincs használva egyetlen értékesítési csatornában sem

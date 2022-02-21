@@ -165,7 +165,6 @@ admin:
 			is_from_sales_funnel_label: 'Je z platobného okna'
 			is_from_specific_sales_funnel_label: 'Je z konkrétneho platobného okna'
 
-# components
 subscription_types_in_sales_funnels:
 	header: Dostupné v oknách
 	no_sales_funnels_message: Tento typ predplatného nie je priradený ku žiadnemu platobnému oknu.
