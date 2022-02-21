@@ -84,8 +84,6 @@ admin:
 			back: vissza az értékesítési csatornához
 		show:
 			back: vissza az értékesítési csatornához
-			edit: Szerkesztés
-			preview: Megjelenités
 			basic_informations: Általános információk
 			stats: Csatorna statisztikák
 			users: Felhasználók
