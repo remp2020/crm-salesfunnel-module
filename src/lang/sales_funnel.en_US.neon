@@ -1,178 +1,178 @@
 menu:
-	sales_funnels: Sales funnels
+    sales_funnels: Sales funnels
 
 data:
-	sales_funnels:
-		fields:
-			name: Name
-			url_key: Url key
-			is_active: Active
-			is_inactive: Inactive
-			redirect_funnel_id: Redirect
-			segment_id: Segment
-			start_at: Valid from
-			end_at: Valid to
-			limit_per_user: Max. number of purchases per user
-			funnel_purchase_limit: Max. number of purchases
-			body: Funnel HTML content
-			no_access_html: Funnel no access html
-			error_html: Funnel error screen html
-			head_meta: HTML header - meta information
-			head_script: HTML header - scripts
-			created_at: Created at
-			payment_gateway: Payment gateways
-			subscription_type: Subscription types
-			total_show: Total shows
-			total_conversions: Total conversions
-			total_paid_amount: Total amount paid
-			total_errors: Total errors
-			last_use: Last used
-			last_conversion: Last conversion
-			only_logged: Only logged
-			only_not_logged: Only not logged
-			segment: Segment
-		validation:
-			minimum:
-				limit_per_user: Minimum value %1$d
-				funnel_purchase_limit: Minimum number of purchases %1$d
-		placeholder:
-			name: for example Main funnel
-			url_key: for example 'winter-sale'
-			redirect_funnel_id: for example 'default'
-			start_at: for example 14.2.2016
-			end_at: for example 14.2.2016
-			body: any html
-		description:
-			redirect_funnel_id: "If filled, user will be redirected to the target sales funnel instead of seeing 'offer not available' message."
+    sales_funnels:
+        fields:
+            name: Name
+            url_key: Url key
+            is_active: Active
+            is_inactive: Inactive
+            redirect_funnel_id: Redirect
+            segment_id: Segment
+            start_at: Valid from
+            end_at: Valid to
+            limit_per_user: Max. number of purchases per user
+            funnel_purchase_limit: Max. number of purchases
+            body: Funnel HTML content
+            no_access_html: Funnel no access html
+            error_html: Funnel error screen html
+            head_meta: HTML header - meta information
+            head_script: HTML header - scripts
+            created_at: Created at
+            payment_gateway: Payment gateways
+            subscription_type: Subscription types
+            total_show: Total shows
+            total_conversions: Total conversions
+            total_paid_amount: Total amount paid
+            total_errors: Total errors
+            last_use: Last used
+            last_conversion: Last conversion
+            only_logged: Only logged
+            only_not_logged: Only not logged
+            segment: Segment
+        validation:
+            minimum:
+                limit_per_user: Minimum value %1$d
+                funnel_purchase_limit: Minimum number of purchases %1$d
+        placeholder:
+            name: for example Main funnel
+            url_key: for example 'winter-sale'
+            redirect_funnel_id: for example 'default'
+            start_at: for example 14.2.2016
+            end_at: for example 14.2.2016
+            body: any html
+        description:
+            redirect_funnel_id: "If filled, user will be redirected to the target sales funnel instead of seeing 'offer not available' message."
 
 frontend:
-	error:
-		title: Error
-	inactive:
-		title: Inactive
-	invalid:
-		title: Invalid
-	no_access:
-		title: No access
-	sign_in:
-		title: You have to sign in for this action
-	success_page:
-		title: Thank you!
-		payment_success: Your payment was successful.
-		pass_sent: "We sent you the password via e-mail: %email%."
-		foreign_country: "For delivery to foreign countries please contact as <a href=\"mailto:%contactEmail%\">%contactEmail%</a>"
-		complete_registration: Back to article
-		complete_registration_info: "If you filled all the info,<br>continue where you left off."
-	error_page:
-		title: Error
-		message: Unfortunately your payment was not successful.
-		reason_default: "Please try again later or contact our tech support."
-	cancel_page:
-		title: Payment cancelled
-		message: "Your payment was cancelled. You can close this window or proceed back to the subscription offer."
-		reason_default: "Back to the offer."
-	not_settled_page:
-		title: Payment not settled
-		message: "Payment was executed during technical break of bank operating the payment gateway and system cannot confirm the status of payment. Payment will be confirmed as soon as the bank notifies the system."
-	invalid_email:
-		title: Invalid email entered
-	invalid_credentials:
-		title: Could not login with entered credentials
-	disabled_auto_login:
-		title: Disabled auto-login after payment because of ADMIN user
+    error:
+        title: Error
+    inactive:
+        title: Inactive
+    invalid:
+        title: Invalid
+    no_access:
+        title: No access
+    sign_in:
+        title: You have to sign in for this action
+    success_page:
+        title: Thank you!
+        payment_success: Your payment was successful.
+        pass_sent: "We sent you the password via e-mail: %email%."
+        foreign_country: "For delivery to foreign countries please contact as <a href=\"mailto:%contactEmail%\">%contactEmail%</a>"
+        complete_registration: Back to article
+        complete_registration_info: "If you filled all the info,<br>continue where you left off."
+    error_page:
+        title: Error
+        message: Unfortunately your payment was not successful.
+        reason_default: "Please try again later or contact our tech support."
+    cancel_page:
+        title: Payment cancelled
+        message: "Your payment was cancelled. You can close this window or proceed back to the subscription offer."
+        reason_default: "Back to the offer."
+    not_settled_page:
+        title: Payment not settled
+        message: "Payment was executed during technical break of bank operating the payment gateway and system cannot confirm the status of payment. Payment will be confirmed as soon as the bank notifies the system."
+    invalid_email:
+        title: Invalid email entered
+    invalid_credentials:
+        title: Could not login with entered credentials
+    disabled_auto_login:
+        title: Disabled auto-login after payment because of ADMIN user
 
 admin:
-	sales_funnels:
-		default:
-			title: Sales funnels
-			new: New sales funnel
-		edit:
-			title: Edit sales funnel
-			back: back to sales funnel
-		show:
-			back: back to sales funnels
-			basic_informations: Basic information
-			stats: Funnel stats
-			users: Users
-			meta: Meta info
-			last_payments: Last payments
-			all_payments: All payments
-			no_payment_gateway_message: No payment gatewaya
-			add_payment_gateway: Add payment gateway
-			no_subscription_type_message: No subscription types
-			add_subscription_type: Add subscription type
-			graph_show_stats:
-				title: Sales funnel show stats
-				help: Show stats
-			graph_funnel_stats:
-				title: Sales funnel stats
-				help: All sales funnel stats
-			graph_conversion_rate_stats:
-				title: Sales funnel conversion rate by device
-				help: Rate is computed as ratio of finished payments and total number of sales funnel shows * 100
-			distribution:
-				label: Distribution
-				amounts: How much paid before buying via this sales funnel
-				payments: How many payments made before buying via this sales funnel
-				subscriptions: "Days since ending of last subscription (pre-payment)"
-				hadNever: Never had subscription
-				hadActive: Had active subscription
-				warning: Distribution is out of date. Please run `sales-funnel:distributions` command.
-			payment:
-				email: E-mail
-				first_name: First name
-				last_name: Last name
-				date: Date
-				amount: Amount
-		preview:
-			back: back to sales funnel
-			header: Preview funnel
-		new:
-			title: New sales funnel
-			back: back to sales funnels
-		messages:
-			sales_funnel_not_found: Funnel not found
-			funnel_created: Funnel successfully created
-			funnel_updated: Funnel successfully updated
-		window_preview:
-			logged_user: Logged user
-			unlogged_user: Unlogged user
-		header:
-			edit: Edit sales funnel
-			preview: Preview funnel
-			export_users: Export users
-			show: General
-			stats: Stats
+    sales_funnels:
+        default:
+            title: Sales funnels
+            new: New sales funnel
+        edit:
+            title: Edit sales funnel
+            back: back to sales funnel
+        show:
+            back: back to sales funnels
+            basic_informations: Basic information
+            stats: Funnel stats
+            users: Users
+            meta: Meta info
+            last_payments: Last payments
+            all_payments: All payments
+            no_payment_gateway_message: No payment gatewaya
+            add_payment_gateway: Add payment gateway
+            no_subscription_type_message: No subscription types
+            add_subscription_type: Add subscription type
+            graph_show_stats:
+                title: Sales funnel show stats
+                help: Show stats
+            graph_funnel_stats:
+                title: Sales funnel stats
+                help: All sales funnel stats
+            graph_conversion_rate_stats:
+                title: Sales funnel conversion rate by device
+                help: Rate is computed as ratio of finished payments and total number of sales funnel shows * 100
+            distribution:
+                label: Distribution
+                amounts: How much paid before buying via this sales funnel
+                payments: How many payments made before buying via this sales funnel
+                subscriptions: "Days since ending of last subscription (pre-payment)"
+                hadNever: Never had subscription
+                hadActive: Had active subscription
+                warning: Distribution is out of date. Please run `sales-funnel:distributions` command.
+            payment:
+                email: E-mail
+                first_name: First name
+                last_name: Last name
+                date: Date
+                amount: Amount
+        preview:
+            back: back to sales funnel
+            header: Preview funnel
+        new:
+            title: New sales funnel
+            back: back to sales funnels
+        messages:
+            sales_funnel_not_found: Funnel not found
+            funnel_created: Funnel successfully created
+            funnel_updated: Funnel successfully updated
+        window_preview:
+            logged_user: Logged user
+            unlogged_user: Unlogged user
+        header:
+            edit: Edit sales funnel
+            preview: Preview funnel
+            export_users: Export users
+            show: General
+            stats: Stats
 
-	distribution:
-		email: E-mail
-		source: Source
-		status: Status
-		created_at: Created at
-		back_to_funnel: Back to funnel
+    distribution:
+        email: E-mail
+        source: Source
+        status: Status
+        created_at: Created at
+        back_to_funnel: Back to funnel
 
-	component:
-		subscriptions_graph:
-			title: Items bought
-			help: Number of bought items based on funnel payments
-		sales_funnel_user_listing_widget:
-			funnel: Funnel
-		sales_funnel_stats_by_device:
-			all_devices: All devices
-	scenarios:
-		criteria:
-			is_from_sales_funnel_label: 'Is from sales funnel'
-			is_from_specific_sales_funnel_label: 'Is from specific sales funnel'
+    component:
+        subscriptions_graph:
+            title: Items bought
+            help: Number of bought items based on funnel payments
+        sales_funnel_user_listing_widget:
+            funnel: Funnel
+        sales_funnel_stats_by_device:
+            all_devices: All devices
+    scenarios:
+        criteria:
+            is_from_sales_funnel_label: 'Is from sales funnel'
+            is_from_specific_sales_funnel_label: 'Is from specific sales funnel'
 
 subscription_types_in_sales_funnels:
-	header: Available in sales funnels
-	no_sales_funnels_message: "This subscription type isn't used by any sales funnel"
+    header: Available in sales funnels
+    no_sales_funnels_message: "This subscription type isn't used by any sales funnel"
 
 config:
-	category: Sales funnels
-	default_sales_funnel_url_key:
-		name: Default sales funnel
-		description: "URL of chosen sales funnel (e.g. default)"
-	sales_funnel_head_block:
-		name: "Code in header"
-		description: "Any optional code (e.g. Remp Tracker) that should be injected to the head of sales funnel layout"
+    category: Sales funnels
+    default_sales_funnel_url_key:
+        name: Default sales funnel
+        description: "URL of chosen sales funnel (e.g. default)"
+    sales_funnel_head_block:
+        name: "Code in header"
+        description: "Any optional code (e.g. Remp Tracker) that should be injected to the head of sales funnel layout"
