@@ -59,7 +59,6 @@ frontend:
 	success_page:
 		title: Ďakujeme!
 		payment_success: Vaša platba prebehla v poriadku
-		zlavomat_success: Zľavomat kupón bol úspešne použitý. Vaša objednávka prebehla v poriadku.
 		pass_sent: Heslo sme vám poslali e-mailom na %email%.
 		foreign_country: "Pre informácie o doručení do zahraničia nás, prosím, kontaktujte na <a href=\"mailto:%contactEmail%\">%contactEmail%</a>"
 		complete_registration: Návrat na článok
@@ -80,7 +79,7 @@ frontend:
 	invalid_credentials:
 		title: Nepodarilo sa prihlásiť so zadaným heslom
 	disabled_auto_login:
-	    title: Vypnuté automatické prihlasovanie po zaplatení pre admin usera
+		title: Vypnuté automatické prihlasovanie po zaplatení pre admin usera
 
 admin:
 	sales_funnels:
@@ -165,7 +164,6 @@ admin:
 			is_from_sales_funnel_label: 'Je z platobného okna'
 			is_from_specific_sales_funnel_label: 'Je z konkrétneho platobného okna'
 
-# components
 subscription_types_in_sales_funnels:
 	header: Dostupné v oknách
 	no_sales_funnels_message: Tento typ predplatného nie je priradený ku žiadnemu platobnému oknu.

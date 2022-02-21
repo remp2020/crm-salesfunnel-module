@@ -1,5 +1,6 @@
 menu:
 	sales_funnels: Okná
+
 data:
 	sales_funnels:
 		fields:
@@ -58,7 +59,6 @@ frontend:
 	success_page:
 		title: Děkujeme!
 		payment_success: Vaše platba v pořádku proběhla
-		zlavomat_success: Slevomat kupón byl úspěšně použit. Vaše objednávka proběhla v pořádku.
 		pass_sent: Heslo jsme Vám poslali emailem na %email%.
 		foreign_country: 'Pro informace o doručení do zahraniční nás, prosím, kontaktujte na <a href="mailto:%contactEmail%">%contactEmail%</a>'
 		complete_registration: Návrat na článek
@@ -164,7 +164,6 @@ admin:
 			is_from_sales_funnel_label: 'Je z platebního okna'
 			is_from_specific_sales_funnel_label: 'Je z konkrétního platebního okna'
 
-# components
 subscription_types_in_sales_funnels:
 	header: Dostupné v oknech
 	no_sales_funnels_message: Tento typ předplatného není přiřazený k žádnému platebnímu oknu.

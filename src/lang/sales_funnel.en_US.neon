@@ -59,9 +59,8 @@ frontend:
 	success_page:
 		title: Thank you!
 		payment_success: Your payment was successful.
-		zlavomat_success: Zlavomat coupon was applied. Your order was successful.
 		pass_sent: "We sent you the password via e-mail: %email%."
-		foreign_country: "For delivery to foreign countries please contact as  <a href=\"mailto:%contactEmail%\">%contactEmail%</a>"
+		foreign_country: "For delivery to foreign countries please contact as <a href=\"mailto:%contactEmail%\">%contactEmail%</a>"
 		complete_registration: Back to article
 		complete_registration_info: "If you filled all the info,<br>continue where you left off."
 	error_page:
@@ -80,7 +79,7 @@ frontend:
 	invalid_credentials:
 		title: Could not login with entered credentials
 	disabled_auto_login:
-	    title: Disabled auto-login after payment because of ADMIN user
+		title: Disabled auto-login after payment because of ADMIN user
 
 admin:
 	sales_funnels:
@@ -165,10 +164,9 @@ admin:
 			is_from_sales_funnel_label: 'Is from sales funnel'
 			is_from_specific_sales_funnel_label: 'Is from specific sales funnel'
 
-# components
 subscription_types_in_sales_funnels:
 	header: Available in sales funnels
-	no_sales_funnels_message: This subscription type isn't used by any sales funnel
+	no_sales_funnels_message: "This subscription type isn't used by any sales funnel"
 
 config:
 	category: Sales funnels
