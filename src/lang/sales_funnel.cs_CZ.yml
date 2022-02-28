@@ -1,0 +1,178 @@
+menu:
+    sales_funnels: Okná
+
+data:
+    sales_funnels:
+        fields:
+            name: Název
+            url_key: Url
+            is_active: Aktivní
+            is_inactive: Neaktivní
+            redirect_funnel_id: Přesměrování
+            segment_id: Segment
+            start_at: Platný od
+            end_at: Platný do
+            limit_per_user: Maximální počet nákupů na uživatele
+            funnel_purchase_limit: Maximální počet nákupů
+            body: HTML obsah
+            no_access_html: HTML stránka pro nedovolený přístup
+            error_html: HTML stránka pro chybový výpis
+            head_meta: Kód HTML do hlavičky - meta informace
+            head_script: Kód HTML do hlavičky - skripty
+            created_at: Vytvořený
+            payment_gateway: Platební brány
+            subscription_type: Typy předplatných
+            total_show: Celkové zobrazení
+            total_conversions: Počet konverzí
+            total_paid_amount: Celkově zaplaceno
+            total_errors: Počet chyb
+            last_use: Poslední použití
+            last_conversion: Poslední konverze
+            only_logged: Pouze přihlášení
+            only_not_logged: Pouze nepřihlášení
+            segment: Segment
+        validation:
+            minimum:
+                limit_per_user: Minimální hodnota %1$d
+                funnel_purchase_limit: Minimální počet nákupů %1$d
+        placeholder:
+            name: Například Speciální zimní akce
+            url_key: například 'winter-sale'
+            redirect_funnel_id: například 'default'
+            start_at: například 14.2. 2019
+            end_at: například 14.2.2019
+            body: libovolné html
+        description:
+            redirect_funnel_id: "Pokud je přesměrování vyplněno, uživatel bude přesměrován na cílové okno a neuvidí obrazovku informující o nedostupnosti nabídky."
+
+frontend:
+    error:
+        title: Chyba
+    inactive:
+        title: Neaktivní
+    invalid:
+        title: Chybný vstup
+    no_access:
+        title: Nemáte přístup
+    sign_in:
+        title: Pro využití této akce se musíte přihlásit
+    success_page:
+        title: Děkujeme!
+        payment_success: Vaše platba v pořádku proběhla
+        pass_sent: Heslo jsme Vám poslali emailem na %email%.
+        foreign_country: 'Pro informace o doručení do zahraniční nás, prosím, kontaktujte na <a href="mailto:%contactEmail%">%contactEmail%</a>'
+        complete_registration: Návrat na článek
+        complete_registration_info: "Pokud jste vyplnili všechny údaje,<br>pokračujte kde jste skončili."
+    error_page:
+        title: Chyba
+        message: "Bohužel, vaše platba nebyla úspěšná."
+        reason_default: "Prosím, zkuste ji zopakovat ještě jednou nebo kontaktujte naši technickou podporu."
+    cancel_page:
+        title: Platba zrušena
+        message: "Vaše platba byla zrušena. Toto okno můžete zavřít nebo pokračovat na nabídku předplatného."
+        back: "Zpět na nabídku"
+    not_settled_page:
+        title: Platba zúčtována
+        message: "Platba byla realizována během technické přestávky banky provozující platební bránu a nelze potvrdit její stav. Platba bude potvrzena, jakmile nám ji potvrdí banka."
+    invalid_email:
+        title: Zadaný email není platný
+    invalid_credentials:
+        title: Se zadaným heslem se nepodařilo přihlásit
+    disabled_auto_login:
+        title: Zakázáno automatické přihlášení po zaplacení kvůli ADMIN uživateli
+
+admin:
+    sales_funnels:
+        default:
+            title: Platební okna
+            new: Nové platební okno
+        edit:
+            title: Úprava platebního okna
+            back: zpět na platební okno
+        show:
+            back: zpět na seznam oken
+            basic_informations: Základní informace
+            stats: Statistiky
+            users: Uživatelé s platbou
+            meta: Meta info
+            last_payments: Poslední platby
+            all_payments: Všechny platby
+            no_payment_gateway_message: Žádná platební brána
+            add_payment_gateway: Přidej platební bránu
+            no_subscription_type_message: Žádné typy předplatného
+            add_subscription_type: Přidej typ předplatného
+            graph_show_stats:
+                title: Statistika zobrazení platebního okna
+                help: Statistika zobrazení
+            graph_funnel_stats:
+                title: Statistika platebního okna
+                help: Statistika platebního okna
+            graph_conversion_rate_stats:
+                title: Statistika konverzního poměru podle zařízení
+                help: Konverzní poměr se počítá jako podíl počtu ukončených plateb a počtu zobrazení platebního okna * 100
+            distribution:
+                label: Distribuce
+                amounts: Kolik zaplatil před zakoupením prostřednictvím tohoto okna
+                payments: Kolik plateb provedl před zakoupením prostřednictvím tohoto okna
+                subscriptions: Před kolika dny mu skončilo poslední předplatné
+                hadNever: Nikdy neměl
+                hadActive: Měl aktivní
+                warning: "Distribuce je zastaralá. Spusťte příkaz `sales-funnel:distributions`."
+            payment:
+                email: E-mail
+                first_name: Jméno
+                last_name: Příjmení
+                date: Datum platby
+                amount: Částka
+        preview:
+            back: zpět na platební okno
+            header: Náhled okna
+        new:
+            title: Nové platební okno
+            back: zpět na platební okno
+        messages:
+            sales_funnel_not_found: Platební okno nebylo nalezeno
+            funnel_created: Platební okno bylo úspěšně vytvořeno
+            funnel_updated: Platební okno bylo úspěšně změněno
+        window_preview:
+            logged_user: Přihlášený uživatel
+            unlogged_user: Nepřihlášený uživatel
+        header:
+            edit: Upravit platební okno
+            preview: Náhled okna
+            export_users: Export uživatelů
+            show: Obecné
+            stats: Statistiky
+
+    distribution:
+        email: E-mail
+        source: Zdroj
+        status: Stav
+        created_at: Vytvořený
+        back_to_funnel: Zpět na okno
+
+    component:
+        subscriptions_graph:
+            title: Zakoupené položky
+            help: Počet zakoupených položek na platbách
+        sales_funnel_user_listing_widget:
+            funnel: Okno
+        sales_funnel_stats_by_device:
+            all_devices: Všechna zařízení
+    scenarios:
+        criteria:
+            is_from_sales_funnel_label: 'Je z platebního okna'
+            is_from_specific_sales_funnel_label: 'Je z konkrétního platebního okna'
+
+subscription_types_in_sales_funnels:
+    header: Dostupné v oknech
+    no_sales_funnels_message: Tento typ předplatného není přiřazený k žádnému platebnímu oknu.
+
+config:
+    category: Platební okna
+    default_sales_funnel_url_key:
+        name: Výchozí platební okno
+        description: "URL vybraného platebního okna (např. default)"
+    sales_funnel_head_block:
+        name: "Kód v hlavičce"
+        description: "Libovolný kód (např. Remp Tracker), který se má vložit do hlavičky šablony platebního okna"
