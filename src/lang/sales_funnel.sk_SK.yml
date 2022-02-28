@@ -131,9 +131,9 @@ admin:
             title: Nové platobné okno
             back: spať na platobné okná
         messages:
-            sales_funnel_not_found: Platobné okno sa nenašlo
-            funnel_created: Platobné okno bolo úspešne vytvorené
-            funnel_updated: Platobné okno bolo úspešne zmenené
+            sales_funnel_not_found: Platobné okno sa nenašlo.
+            funnel_created: Platobné okno bolo úspešne vytvorené.
+            funnel_updated: Platobné okno bolo úspešne zmenené.
         window_preview:
             logged_user: Prihlásený užívateľ
             unlogged_user: Neprihlásený užívateľ
