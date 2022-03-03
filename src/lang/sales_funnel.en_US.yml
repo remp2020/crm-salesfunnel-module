@@ -173,6 +173,6 @@ config:
     default_sales_funnel_url_key:
         name: Default sales funnel
         description: "URL of chosen sales funnel (e.g. default)"
-    sales_funnel_head_block:
+    sales_funnel_header_block:
         name: "Code in header"
         description: "Any optional code (e.g. Remp Tracker) that should be injected to the head of sales funnel layout"
