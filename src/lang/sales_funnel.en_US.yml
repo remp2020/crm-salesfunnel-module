@@ -58,7 +58,7 @@ frontend:
         title: You have to sign in for this action
     success_page:
         title: Thank you!
-        payment_success: Your payment was successful.
+        payment_success: Your payment was successful
         pass_sent: "We sent you the password via e-mail: %email%."
         foreign_country: "For delivery to foreign countries please contact as <a href=\"mailto:%contactEmail%\">%contactEmail%</a>"
         complete_registration: Back to article
@@ -70,7 +70,7 @@ frontend:
     cancel_page:
         title: Payment cancelled
         message: "Your payment was cancelled. You can close this window or proceed back to the subscription offer."
-        back: "Back to the offer."
+        back: "Back to the offer"
     not_settled_page:
         title: Payment not settled
         message: "Payment was executed during technical break of bank operating the payment gateway and system cannot confirm the status of payment. Payment will be confirmed as soon as the bank notifies the system."
@@ -131,9 +131,9 @@ admin:
             title: New sales funnel
             back: back to sales funnels
         messages:
-            sales_funnel_not_found: Funnel not found
-            funnel_created: Funnel successfully created
-            funnel_updated: Funnel successfully updated
+            sales_funnel_not_found: Funnel not found.
+            funnel_created: Funnel successfully created.
+            funnel_updated: Funnel successfully updated.
         window_preview:
             logged_user: Logged user
             unlogged_user: Unlogged user
@@ -166,7 +166,7 @@ admin:
 
 subscription_types_in_sales_funnels:
     header: Available in sales funnels
-    no_sales_funnels_message: "This subscription type isn't used by any sales funnel"
+    no_sales_funnels_message: "This subscription type isn't used by any sales funnel."
 
 config:
     category: Sales funnels

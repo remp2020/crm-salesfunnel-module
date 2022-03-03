@@ -15,7 +15,6 @@ data:
             body: Csatorna HTML tartalma
             no_access_html: Csatorna nincs jogosultság html
             error_html: Csatorna hiba oldal html
-            head: HTML fejléc
             created_at: Létrehozva
             payment_gateway: Fizetési átjárók
             subscription_type: Előfizetés típusa
@@ -53,7 +52,7 @@ frontend:
         title: "Köszönjük!"
         payment_success: "A fizetés sikeres"
         pass_sent: "A jelszót elküldtük e-mailben az %email% címre."
-        foreign_country: "A külföldi kézbesítéssel kapcsolatos információkért, kérjük, írjon az <a href=\"mailto:%contactEmail%\">%contactEmail%</a> címre."
+        foreign_country: "A külföldi kézbesítéssel kapcsolatos információkért, kérjük, írjon az <a href=\"mailto:%contactEmail%\">%contactEmail%</a> címre"
         complete_registration: "Vissza a cikkhez"
         complete_registration_info: "Ha minden adatot beírt, folytassa ott, ahol abbahagyta."
     error_page:
@@ -61,7 +60,7 @@ frontend:
         message: "A fizetés sajnos sikertelen."
         reason_default: "Kérjük, próbálja meg újra vagy lépjen kapcsolatba az ügyfélszolgálattal."
     cancel_page:
-        title: "A fizetés törölve lett."
+        title: "A fizetés törölve lett"
         message: "A fizetése törölve lett. Bezárhatja ezt az ablakot, vagy továbbléphet az előfizetési kínálathoz."
         back: "Vissza a kínálathoz"
     not_settled_page:
@@ -70,7 +69,7 @@ frontend:
     invalid_email:
         title: "A megadott e-mail cím érvénytelen"
     invalid_credentials:
-        title: "Nem sikerült bejelentkezni a megadott jelszóval "
+        title: "Nem sikerült bejelentkezni a megadott jelszóval"
     disabled_auto_login:
         title: "Letiltva az automatikus bejelentkezés fizetés után az adminisztrátor felhasználó számára"
 
@@ -116,9 +115,9 @@ admin:
             title: Új értékesítési csatorna
             back: vissza az értékesítési csatornákhoz
         messages:
-            sales_funnel_not_found: Ismeretlen csatorna
-            funnel_created: Csatorna sikeresen létrehozva
-            funnel_updated: Csatorna sikeresen frissítve
+            sales_funnel_not_found: Ismeretlen csatorna.
+            funnel_created: Csatorna sikeresen létrehozva.
+            funnel_updated: Csatorna sikeresen frissítve.
         window_preview:
             logged_user: Logged user
             unlogged_user: Unlogged user
@@ -140,7 +139,7 @@ admin:
 
 subscription_types_in_sales_funnels:
     header: Elérhető az értékesítési csatornában
-    no_sales_funnels_message: Ez az előfizetés típus nincs használva egyetlen értékesítési csatornában sem
+    no_sales_funnels_message: Ez az előfizetés típus nincs használva egyetlen értékesítési csatornában sem.
 
 config:
     category: Értékesítési csatornák

@@ -131,9 +131,9 @@ admin:
             title: Nové platební okno
             back: zpět na platební okno
         messages:
-            sales_funnel_not_found: Platební okno nebylo nalezeno
-            funnel_created: Platební okno bylo úspěšně vytvořeno
-            funnel_updated: Platební okno bylo úspěšně změněno
+            sales_funnel_not_found: Platební okno nebylo nalezeno.
+            funnel_created: Platební okno bylo úspěšně vytvořeno.
+            funnel_updated: Platební okno bylo úspěšně změněno.
         window_preview:
             logged_user: Přihlášený uživatel
             unlogged_user: Nepřihlášený uživatel
