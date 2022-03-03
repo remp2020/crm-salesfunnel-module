@@ -1,5 +1,7 @@
 # CRM SalesFunnel Module
 
+[![Translation status @ Weblate](https://hosted.weblate.org/widgets/remp-crm/-/sales_funnel-module/svg-badge.svg)](https://hosted.weblate.org/projects/remp-crm/sales_funnel-module/)
+
 ## Installing module
 
 We recommend using Composer for installation and update management.
