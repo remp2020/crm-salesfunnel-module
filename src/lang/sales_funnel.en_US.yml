@@ -70,7 +70,7 @@ frontend:
     cancel_page:
         title: Payment cancelled
         message: "Your payment was cancelled. You can close this window or proceed back to the subscription offer."
-        reason_default: "Back to the offer."
+        back: "Back to the offer."
     not_settled_page:
         title: Payment not settled
         message: "Payment was executed during technical break of bank operating the payment gateway and system cannot confirm the status of payment. Payment will be confirmed as soon as the bank notifies the system."

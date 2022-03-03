@@ -63,7 +63,7 @@ frontend:
     cancel_page:
         title: "A fizetés törölve lett."
         message: "A fizetése törölve lett. Bezárhatja ezt az ablakot, vagy továbbléphet az előfizetési kínálathoz."
-        reason_default: "Vissza a kínálathoz"
+        back: "Vissza a kínálathoz"
     not_settled_page:
         title: "A kifizetés nem érkezett be"
         message: "A kifizetés a fizetési kaput üzemeltető bank üzemszünete alatt történt, és nem ellenőrizhető az állapota. Amint a bank megerősíti a kifizetést, ezt jelezzük önnek."
