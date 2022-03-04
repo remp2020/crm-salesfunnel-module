@@ -70,7 +70,7 @@ frontend:
     cancel_page:
         title: Platba zrušená
         message: "Vaša platba bola zrušená. Toto okno môžete zavrieť alebo pokračovať na ponuku predplatného."
-        reason_default: "Späť na ponuku"
+        back: "Späť na ponuku"
     not_settled_page:
         title: Platba nezúčtovaná
         message: "Platba bola realizovaná počas technickej prestávky banky prevádzkujúcej platobnú bránu a nie je možné potvrdiť jej stav. Platba bude potvrdená hneď, ako nám ju potvrdí banka."
