@@ -23,7 +23,7 @@ class PaymentStatusChangeHandler extends AbstractListener
     public function handle(EventInterface $event)
     {
         if (!($event instanceof PaymentChangeStatusEvent)) {
-//            throw new \Exception('unable to handle event, expected PaymentChangeStatusEvent but got other');
+            throw new \Exception('unable to handle event, expected PaymentChangeStatusEvent but got other');
         }
         $payment = $event->getPayment();
 
