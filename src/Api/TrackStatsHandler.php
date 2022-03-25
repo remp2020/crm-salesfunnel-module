@@ -3,15 +3,15 @@
 namespace Crm\SalesFunnelModule\Api;
 
 use Crm\ApiModule\Api\ApiHandler;
-use Crm\ApiModule\Api\JsonResponse;
 use Crm\ApiModule\Params\InputParam;
 use Crm\ApiModule\Params\ParamsProcessor;
-use Crm\ApiModule\Response\ApiResponseInterface;
 use Crm\ApplicationModule\Request;
 use Crm\SalesFunnelModule\Events\SalesFunnelEvent;
 use Crm\SalesFunnelModule\Repository\SalesFunnelsRepository;
 use League\Event\Emitter;
 use Nette\Http\Response;
+use Tomaj\NetteApi\Response\JsonApiResponse;
+use Tomaj\NetteApi\Response\ResponseInterface;
 
 class TrackStatsHandler extends ApiHandler
 {
@@ -34,18 +34,17 @@ class TrackStatsHandler extends ApiHandler
         ];
     }
 
-    public function handle(array $params): ApiResponseInterface
+    public function handle(array $params): ResponseInterface
     {
         $paramsProcessor = new ParamsProcessor($this->params());
         $params = $paramsProcessor->getValues();
 
         $funnel = $this->salesFunnelsRepository->findByUrlKey($params['url_key']);
         if (!$funnel) {
-            $response = new JsonResponse([
+            $response = new JsonApiResponse(Response::S404_NOT_FOUND, [
                 'status' => 'error',
                 'message' => "Sales funnel [{$params['url_key']}] doesn't exist",
             ]);
-            $response->setHttpCode(Response::S404_NOT_FOUND);
             return $response;
         }
 
@@ -58,8 +57,7 @@ class TrackStatsHandler extends ApiHandler
             'result' => true,
         ];
 
-        $response = new JsonResponse($result);
-        $response->setHttpCode(Response::S200_OK);
+        $response = new JsonApiResponse(Response::S200_OK, $result);
         return $response;
     }
 }
