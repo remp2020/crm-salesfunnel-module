@@ -1,5 +1,5 @@
 menu:
-    sales_funnels: Értékesítési Csatorna
+    sales_funnels: Értékesítési csatorna
 
 data:
     sales_funnels:
@@ -10,33 +10,41 @@ data:
             is_inactive: Inaktív
             redirect_funnel_id: Átirányítás
             segment_id: Szegmens
-            start_at: Érvéntesség kezdete
-            end_at: Érvéntesség vége
+            start_at: Érvényesség kezdete
+            end_at: Érvényesség vége
             body: Csatorna HTML tartalma
-            no_access_html: Csatorna nincs jogosultság html
-            error_html: Csatorna hiba oldal html
+            no_access_html: Csatorna nincs jogosultság HTML
+            error_html: Csatorna hiba oldal HTML
             created_at: Létrehozva
-            payment_gateway: Fizetési átjárók
-            subscription_type: Előfizetés típusa
-            total_show: Összes megjelenités
+            payment_gateway: Fizetési kapuk
+            subscription_type: Előfizetés típusai
+            total_show: Összes megjelenítés
             total_conversions: Összes konverzió
             total_paid_amount: Összes fizetett összeg
             total_errors: Összes hiba
             last_use: Utoljára használva
             last_conversion: Utolsó konverzió
-            only_logged: Only logged
-            only_not_logged: Only not logged
+            only_logged: Csak a bejelentkezett felhasználók
+            only_not_logged: Csak a nem bejelentkezett felhasználók
             segment: Szegmens
+            limit_per_user: Az egy felhasználóra eső vásárlások maximális mennyisége
+            head_meta: HTML kód a fejlécbe - metaadatok
+            head_script: HTML kód a fejlécbe - szkriptek
+            funnel_purchase_limit: A vásárlások max. mennyisége
         placeholder:
-            name: pl. Main funnel
+            name: például Különleges téli akció
             url_key: pl. 'winter-sale'
             redirect_funnel_id: pl. 'default'
             start_at: pl. 14.2.2016
             end_at: pl. 14.2.2016
-            body: any html
+            body: tetszőleges html
         description:
             redirect_funnel_id: "Ha ki van töltve, a felhasználó át lesz irányítva erre a csatornára ahelyett, hogy megjelenne a 'ajánlat nem érhető el' szöveg."
 
+        validation:
+            minimum:
+                limit_per_user: Minimális érték %1$d
+                funnel_purchase_limit: A vásárlások minimális száma %1$d
 frontend:
     error:
         title: "Hiba"
@@ -51,7 +59,7 @@ frontend:
     success_page:
         title: "Köszönjük!"
         payment_success: "A fizetés sikeres"
-        pass_sent: "A jelszót elküldtük e-mailben az %email% címre."
+        pass_sent: "A jelszót az alábbi e-mail címre küldtük %email%."
         foreign_country: "A külföldi kézbesítéssel kapcsolatos információkért, kérjük, írjon az <a href=\"mailto:%contactEmail%\">%contactEmail%</a> címre"
         complete_registration: "Vissza a cikkhez"
         complete_registration_info: "Ha minden adatot beírt, folytassa ott, ahol abbahagyta."
@@ -138,8 +146,8 @@ admin:
             all_devices: Minden eszköz
 
 subscription_types_in_sales_funnels:
-    header: Elérhető az értékesítési csatornában
-    no_sales_funnels_message: Ez az előfizetés típus nincs használva egyetlen értékesítési csatornában sem.
+    header: Elérhető az értékesítési csatornákban
+    no_sales_funnels_message: Ez az előfizetés típus nincs hozzárendelve egyetlen értékesítési csatornához sem.
 
 config:
     category: Értékesítési csatornák
