@@ -25,7 +25,7 @@ data:
             last_use: Utoljára használva
             last_conversion: Utolsó konverzió
             only_logged: Csak a bejelentkezett felhasználók
-            only_not_logged: Csak a nem bejelentkezett felhasználók
+            only_not_logged: Bejelentkezés nélkül
             segment: Szegmens
             limit_per_user: Az egy felhasználóra eső vásárlások maximális mennyisége
             head_meta: HTML kód a fejlécbe - metaadatok
