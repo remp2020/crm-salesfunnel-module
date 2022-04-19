@@ -23,6 +23,8 @@ data:
             payment_gateway: Payment gateways
             subscription_type: Subscription types
             total_show: Total shows
+            loggedin_show: Logged in shows
+            notloggedin_show: Not logged in shows
             total_conversions: Total conversions
             total_paid_amount: Total amount paid
             total_errors: Total errors

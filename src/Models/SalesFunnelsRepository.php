@@ -92,6 +92,16 @@ class SalesFunnelsRepository extends Repository
         return $this->increment($funnel, 'total_show');
     }
 
+    final public function incrementLoggedInShows(ActiveRow $funnel)
+    {
+        return $this->increment($funnel, 'loggedin_show');
+    }
+
+    final public function incrementNotLoggedInShows(ActiveRow $funnel)
+    {
+        return $this->increment($funnel, 'notloggedin_show');
+    }
+
     final public function incrementConversions(ActiveRow $funnel)
     {
         $this->update($funnel, ['last_conversion' => new DateTime()]);

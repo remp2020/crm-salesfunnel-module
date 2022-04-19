@@ -23,6 +23,8 @@ data:
             payment_gateway: Platební brány
             subscription_type: Typy předplatných
             total_show: Celkové zobrazení
+            loggedin_show: Zobrazení přihlášenými uživateli
+            notloggedin_show: Zobrazení nepřihlášenými uživateli
             total_conversions: Počet konverzí
             total_paid_amount: Celkově zaplaceno
             total_errors: Počet chyb

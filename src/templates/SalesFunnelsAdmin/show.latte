@@ -47,6 +47,8 @@
       <div class="panel-heading">{_sales_funnel.admin.sales_funnels.show.stats}</div>
       <ul class="list-group">
         <li class="list-group-item"><b>{_sales_funnel.data.sales_funnels.fields.total_show}:</b> {$funnel->total_show}</li>
+        <li class="list-group-item"><b>{_sales_funnel.data.sales_funnels.fields.loggedin_show}:</b> {$funnel->loggedin_show}</li>
+        <li class="list-group-item"><b>{_sales_funnel.data.sales_funnels.fields.notloggedin_show}:</b> {$funnel->notloggedin_show}</li>
         <li class="list-group-item"><b>{_sales_funnel.data.sales_funnels.fields.total_conversions}:</b> {$funnel->total_conversions}</li>
         <li class="list-group-item"><b>{_sales_funnel.data.sales_funnels.fields.total_paid_amount}:</b> {$total_paid_amount|price}</li>
         <li class="list-group-item"><b>{_sales_funnel.data.sales_funnels.fields.total_errors}:</b> {$funnel->total_errors}</li>

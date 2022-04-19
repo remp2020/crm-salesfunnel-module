@@ -40,6 +40,12 @@ class SalesFunnelHandler extends AbstractListener
 
         if ($event->getType() === SalesFunnelsStatsRepository::TYPE_SHOW) {
             $this->salesFunnelsRepository->incrementShows($salesFunnel);
+
+            if ($event->getEmail()) {
+                $this->salesFunnelsRepository->incrementLoggedInShows($salesFunnel);
+            } else {
+                $this->salesFunnelsRepository->incrementNotLoggedInShows($salesFunnel);
+            }
         }
         if ($event->getType() === SalesFunnelsStatsRepository::TYPE_OK) {
             $this->salesFunnelsRepository->incrementConversions($salesFunnel);
