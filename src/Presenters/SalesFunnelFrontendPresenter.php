@@ -23,6 +23,7 @@ use Crm\SalesFunnelModule\Events\SalesFunnelEvent;
 use Crm\SalesFunnelModule\Repository\SalesFunnelsMetaRepository;
 use Crm\SalesFunnelModule\Repository\SalesFunnelsRepository;
 use Crm\SalesFunnelModule\Repository\SalesFunnelsStatsRepository;
+use Crm\SegmentModule\SegmentFactory;
 use Crm\SegmentModule\SegmentFactoryInterface;
 use Crm\SubscriptionsModule\PaymentItem\SubscriptionTypePaymentItem;
 use Crm\SubscriptionsModule\Repository\ContentAccessRepository;
@@ -42,37 +43,24 @@ use Tomaj\Hermes\Emitter;
 
 class SalesFunnelFrontendPresenter extends FrontendPresenter
 {
-    private $salesFunnelsRepository;
+    public const DEFAULT_ACTION_LAYOUT_NAME = 'default_action_layout_name';
 
-    private $subscriptionTypesRepository;
-
-    private $salesFunnelsMetaRepository;
-
-    private $paymentGatewaysRepository;
-
-    private $paymentProcessor;
-
-    private $paymentsRepository;
-
-    private $segmentFactory;
-
-    private $hermesEmitter;
-
-    private $actualUserSubscription;
-
-    private $addressesRepository;
-
-    private $userManager;
-
-    private $gatewayFactory;
-
-    private $recurrentPaymentsRepository;
-
-    private $contentAccessRepository;
-
-    private $signInFormFactory;
-
-    private $dataProviderManager;
+    private SalesFunnelsRepository $salesFunnelsRepository;
+    private SubscriptionTypesRepository $subscriptionTypesRepository;
+    private SalesFunnelsMetaRepository $salesFunnelsMetaRepository;
+    private PaymentGatewaysRepository $paymentGatewaysRepository;
+    private PaymentProcessor $paymentProcessor;
+    private PaymentsRepository $paymentsRepository;
+    private SegmentFactory $segmentFactory;
+    private Emitter $hermesEmitter;
+    private ActualUserSubscription $actualUserSubscription;
+    private AddressesRepository $addressesRepository;
+    private UserManager $userManager;
+    private GatewayFactory $gatewayFactory;
+    private RecurrentPaymentsRepository $recurrentPaymentsRepository;
+    private ContentAccessRepository $contentAccessRepository;
+    private SignInFormFactory $signInFormFactory;
+    private DataProviderManager $dataProviderManager;
 
     public function __construct(
         SalesFunnelsRepository $salesFunnelsRepository,
@@ -133,6 +121,11 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
 
         if ($salesFunnel->redirect_funnel) {
             $this->redirect('default', array_merge(['funnel' => $salesFunnel->redirect_funnel->url_key], $_GET));
+        }
+
+        $layoutName = $this->salesFunnelsMetaRepository->get($salesFunnel, self::DEFAULT_ACTION_LAYOUT_NAME);
+        if ($layoutName && $this->layoutManager->exists($layoutName)) {
+            $this->setLayout($layoutName);
         }
 
         $this->template->funnel = $salesFunnel;
