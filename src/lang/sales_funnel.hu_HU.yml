@@ -5,7 +5,7 @@ data:
     sales_funnels:
         fields:
             name: Név
-            url_key: Url kulcs
+            url_key: Url
             is_active: Aktív
             is_inactive: Inaktív
             redirect_funnel_id: Átirányítás
@@ -13,15 +13,15 @@ data:
             start_at: Érvényesség kezdete
             end_at: Érvényesség vége
             body: Csatorna HTML tartalma
-            no_access_html: Csatorna nincs jogosultság HTML
-            error_html: Csatorna hiba oldal HTML
+            no_access_html: HTML oldal jogosultság nélküli hozzéféréshez
+            error_html: HTML hibaoldal
             created_at: Létrehozva
             payment_gateway: Fizetési kapuk
             subscription_type: Előfizetés típusai
             total_show: Összes megjelenítés
             total_conversions: Összes konverzió
-            total_paid_amount: Összes fizetett összeg
-            total_errors: Összes hiba
+            total_paid_amount: Befizetve összesen
+            total_errors: Hibák száma
             last_use: Utoljára használva
             last_conversion: Utolsó konverzió
             only_logged: Csak a bejelentkezett felhasználók
@@ -39,7 +39,7 @@ data:
             end_at: pl. 14.2.2016
             body: tetszőleges html
         description:
-            redirect_funnel_id: "Ha ki van töltve, a felhasználó át lesz irányítva erre a csatornára ahelyett, hogy megjelenne a 'ajánlat nem érhető el' szöveg."
+            redirect_funnel_id: "Ha az átirányítás ki van töltve, a felhasználó át lesz irányítva a célcsatornára ahelyett, hogy megjelenne az 'ajánlat nem érhető el' szöveg."
 
         validation:
             minimum:
@@ -59,7 +59,7 @@ frontend:
     success_page:
         title: "Köszönjük!"
         payment_success: "A fizetés sikeres"
-        pass_sent: "A jelszót az alábbi e-mail címre küldtük %email%."
+        pass_sent: "A jelszót elküldtük az alábbi e-mail címre %email%."
         foreign_country: "A külföldi kézbesítéssel kapcsolatos információkért, kérjük, írjon az <a href=\"mailto:%contactEmail%\">%contactEmail%</a> címre"
         complete_registration: "Vissza a cikkhez"
         complete_registration_info: "Ha minden adatot beírt, folytassa ott, ahol abbahagyta."
@@ -79,7 +79,7 @@ frontend:
     invalid_credentials:
         title: "Nem sikerült bejelentkezni a megadott jelszóval"
     disabled_auto_login:
-        title: "Letiltva az automatikus bejelentkezés fizetés után az adminisztrátor felhasználó számára"
+        title: "A fizetés utáni automatikus bejelentkezés az adminisztrátor-felhasználó számára letiltva"
 
 admin:
     sales_funnels:
@@ -90,22 +90,22 @@ admin:
             title: Értékesítési csatorna szerkesztése
             back: vissza az értékesítési csatornához
         show:
-            back: vissza az értékesítési csatornához
+            back: vissza a csatornák listájához
             basic_informations: Általános információk
-            stats: Csatorna statisztikák
+            stats: Csatornastatisztikák
             users: Felhasználók
-            meta: Meta adatok
+            meta: Metaadatok
             last_payments: Legutóbbi fizetések
-            no_payment_gateway_message: Nincs fizetési átjáró
-            add_payment_gateway: Fizetési átjáró hozzáadása
+            no_payment_gateway_message: Nincs fizetési kapu
+            add_payment_gateway: Fizetési kapu hozzáadása
             no_subscription_type_message: Nincs előfizetés típus
             add_subscription_type: Előfizetés típus hozzáadása
             graph_show_stats:
-                title: Értékesítési csatorna megjelenitési statisztikák
-                help: Megjelenitési statisztikák
+                title: Értékesítési csatorna megjelenítési statisztikák
+                help: Megjelenítési statisztikák
             graph_funnel_stats:
                 title: Értékesítési csatorna statisztikák
-                help: Minden értékesítési csatorna megjelenitési statisztikák
+                help: Minden értékesítési csatorna megjelenítési statisztikák
             graph_conversion_rate_stats:
                 title: Értékesítési csatorna konverziós ráta eszközönként
                 help: Rate is computed as ratio of finished payments and total number of sales funnel shows * 100
@@ -152,5 +152,5 @@ subscription_types_in_sales_funnels:
 config:
     category: Értékesítési csatornák
     default_sales_funnel_url_key:
-        name: Általános értékesítési csatorna
+        name: Alapértelmezett értékesítési csatorna
         description: "URL a kiválasztott csatornához (pl. default)"
