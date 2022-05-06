@@ -16,6 +16,7 @@ use Crm\PaymentsModule\PaymentProcessor;
 use Crm\PaymentsModule\Repository\PaymentGatewaysRepository;
 use Crm\PaymentsModule\Repository\PaymentsRepository;
 use Crm\PaymentsModule\Repository\RecurrentPaymentsRepository;
+use Crm\SalesFunnelModule\DataProvider\SalesFunnelTemplateVariablesDataProviderInterface;
 use Crm\SalesFunnelModule\DataProvider\TrackerDataProviderInterface;
 use Crm\SalesFunnelModule\DataProvider\ValidateUserFunnelAccessDataProviderInterface;
 use Crm\SalesFunnelModule\Events\PaymentItemContainerReadyEvent;
@@ -131,6 +132,23 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
         $this->template->funnel = $salesFunnel;
         $this->template->referer = $this->getReferer();
         $this->template->host = $this->getHttpRequest()->getUrl()->getHostUrl();
+
+        /** @var SalesFunnelTemplateVariablesDataProviderInterface[] $providers */
+        $providers = $this->dataProviderManager->getProviders(
+            'sales_funnel.dataprovider.template_variables',
+            SalesFunnelTemplateVariablesDataProviderInterface::class
+        );
+        foreach ($providers as $provider) {
+            foreach ($provider->provide([
+                SalesFunnelTemplateVariablesDataProviderInterface::PARAM_SALES_FUNNEL => $salesFunnel
+            ]) as $templateSystem => $variables) {
+                if ($templateSystem === SalesFunnelTemplateVariablesDataProviderInterface::TEMPLATE_VARIABLES) {
+                    foreach ($variables as $name => $value) {
+                        $this->template->$name = $value;
+                    }
+                }
+            }
+        }
     }
 
     public function renderShow($funnel, $referer = null, $values = null, $errors = null)
