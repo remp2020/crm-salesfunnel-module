@@ -536,7 +536,7 @@ class SalesFunnelsAdminPresenter extends AdminPresenter
         $graphDataItem = new GraphDataItem();
         $graphDataItem->setCriteria((new Criteria())
             ->setTableName('payments')
-            ->setTimeField('modified_at')
+            ->setTimeField('paid_at')
             ->setWhere("AND payments.status = 'paid' AND payments.sales_funnel_id=" . intval($this->params['id']))
             ->setGroupBy('payment_gateways.name')
             ->setJoin('LEFT JOIN payment_gateways on payment_gateways.id = payments.payment_gateway_id')
@@ -549,6 +549,34 @@ class SalesFunnelsAdminPresenter extends AdminPresenter
         $control->setGraphTitle($this->translator->translate('dashboard.payments.gateways.title'))
             ->setGraphHelp($this->translator->translate('dashboard.payments.gateways.tooltip'))
             ->addGraphDataItem($graphDataItem);
+
+        return $control;
+    }
+
+    protected function createComponentRecurrentAndNotRecurrentPaymentsGraph(GoogleBarGraphGroupControlFactoryInterface $factory)
+    {
+        $graphDataItem = new GraphDataItem();
+        $graphDataItem->setCriteria((new Criteria())
+            ->setTableName('payments')
+            ->setTimeField('paid_at')
+            ->setWhere("AND payments.status = 'paid' AND payments.sales_funnel_id=" . intval($this->params['id']))
+            ->setGroupBy('payment_gateways.is_recurrent')
+            ->setJoin('LEFT JOIN payment_gateways on payment_gateways.id = payments.payment_gateway_id')
+            ->setSeries('payment_gateways.is_recurrent')
+            ->setValueField('count(*)')
+            ->setStart((new DateTime())->modify('-1 month')->format('Y-m-d'))
+            ->setEnd((new DateTime())->format('Y-m-d')));
+
+        $control = $factory->create();
+        $control->setGraphTitle($this->translator->translate('sales_funnel.admin.component.recurrent_payments_graph.title'))
+            ->setGraphHelp($this->translator->translate('sales_funnel.admin.component.recurrent_payments_graph.tooltip'))
+            ->addGraphDataItem($graphDataItem)
+            ->setSerieTitleCallback(function ($isRecurrent) {
+                if ($isRecurrent) {
+                    return $this->translator->translate('sales_funnel.admin.component.recurrent_payments_graph.recurrent_serie_title');
+                }
+                return $this->translator->translate('sales_funnel.admin.component.recurrent_payments_graph.not_recurrent_serie_title');
+            });
 
         return $control;
     }

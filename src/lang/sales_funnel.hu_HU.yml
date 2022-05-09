@@ -144,6 +144,11 @@ admin:
             funnel: Csatorna
         sales_funnel_stats_by_device:
             all_devices: Minden eszköz
+        recurrent_payments_graph:
+            title: Az ismétlődő és nem ismétlődő kifizetések száma
+            tooltip: Az ismétlődő és nem ismétlődő (egyszeri) kifizetések száma
+            recurrent_serie_title: Visszatérő
+            not_recurrent_serie_title: Nem visszatérő
 
 subscription_types_in_sales_funnels:
     header: Elérhető az értékesítési csatornákban

@@ -5,27 +5,23 @@
 {include 'header.latte', funnel => $funnel}
 
 <div class="row">
-    <div class="col-md-12">
+    <div class="col-lg-6 col-md-12">
         {control funnelGraph}
     </div>
-    <div class="col-md-12">
+    <div class="col-lg-6 col-md-12">
         {control funnelShowGraph}
     </div>
-    <div class="col-md-12">
+    <div class="col-lg-6 col-md-12">
         {control funnelConversionRateGraph}
     </div>
-</div>
-
-<div class="row" style="margin-top:2em">
-    <div class="col-md-6">
+    <div class="col-lg-6 col-md-12">
         {control subscriptionsGraph}
     </div>
-    <div class="col-md-6">
+    <div class="col-lg-6 col-md-12">
         {control paymentGatewaysGraph}
     </div>
-
-    <div class="col-md-12">
-        <hr>
+    <div class="col-lg-6 col-md-12">
+        {control recurrentAndNotRecurrentPaymentsGraph}
     </div>
 </div>
 

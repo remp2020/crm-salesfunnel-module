@@ -161,6 +161,11 @@ admin:
             funnel: Okno
         sales_funnel_stats_by_device:
             all_devices: Všechna zařízení
+        recurrent_payments_graph:
+            title: Poměr rekurentních a jednorázových plateb
+            tooltip: Poměr počtů rekurentních a nerekurentních (jednorázových) plateb.
+            recurrent_serie_title: Rekurentní
+            not_recurrent_serie_title: Jednorázové
     scenarios:
         criteria:
             is_from_sales_funnel_label: 'Je z platebního okna'
