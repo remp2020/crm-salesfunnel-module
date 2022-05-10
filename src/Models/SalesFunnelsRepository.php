@@ -14,20 +14,24 @@ class SalesFunnelsRepository extends Repository
 {
     protected $tableName = 'sales_funnels';
 
-    private $salesFunnelsSubscriptionTypesRepository;
+    private SalesFunnelsSubscriptionTypesRepository $salesFunnelsSubscriptionTypesRepository;
 
-    private $salesFunnelsPaymentGatewaysRepository;
+    private SalesFunnelsPaymentGatewaysRepository $salesFunnelsPaymentGatewaysRepository;
+
+    private SalesFunnelsMetaRepository $salesFunnelsMetaRepository;
 
     public function __construct(
         Explorer $database,
         AuditLogRepository $auditLogRepository,
         SalesFunnelsSubscriptionTypesRepository $salesFunnelsSubscriptionTypesRepository,
-        SalesFunnelsPaymentGatewaysRepository $salesFunnelsPaymentGatewaysRepository
+        SalesFunnelsPaymentGatewaysRepository $salesFunnelsPaymentGatewaysRepository,
+        SalesFunnelsMetaRepository $salesFunnelsMetaRepository
     ) {
         parent::__construct($database);
         $this->auditLogRepository = $auditLogRepository;
         $this->salesFunnelsSubscriptionTypesRepository = $salesFunnelsSubscriptionTypesRepository;
         $this->salesFunnelsPaymentGatewaysRepository = $salesFunnelsPaymentGatewaysRepository;
+        $this->salesFunnelsMetaRepository = $salesFunnelsMetaRepository;
     }
 
     public function add(
@@ -44,7 +48,8 @@ class SalesFunnelsRepository extends Repository
         ActiveRow $segment = null,
         $noAccessHtml = null,
         $errorHtml = null,
-        $redirectFunnelId = null
+        $redirectFunnelId = null,
+        $limitPerUser = null
     ) {
         return $this->insert([
             'name' => $name,
@@ -63,6 +68,7 @@ class SalesFunnelsRepository extends Repository
             'only_not_logged' => $onlyNotLogged,
             'segment_id' => $segment ? $segment->id : null,
             'redirect_funnel_id' => $redirectFunnelId,
+            'limit_per_user' => $limitPerUser
         ]);
     }
 
@@ -182,5 +188,41 @@ class SalesFunnelsRepository extends Repository
         return $this->getTable()->where([
             ':payments.sales_funnel_id' => $salesFunnelId
         ])->where(':payments.paid_at IS NOT NULL');
+    }
+
+    final public function duplicate(ActiveRow $funnel, string $name, string $urlKey): ActiveRow
+    {
+        $newFunnel = $this->add(
+            $name,
+            $urlKey,
+            $funnel->body,
+            $funnel->head_meta,
+            $funnel->head_script,
+            $funnel->start_at,
+            $funnel->end_at,
+            $funnel->is_active,
+            $funnel->only_logged,
+            $funnel->only_not_logged,
+            $funnel->segment,
+            $funnel->no_access_html,
+            $funnel->error_html,
+            $funnel->redirect_funnel_id,
+            $funnel->limit_per_user
+        );
+
+        foreach ($funnel->related('sales_funnels_payment_gateways') as $paymentGateway) {
+            $this->salesFunnelsPaymentGatewaysRepository->add($newFunnel, $paymentGateway->payment_gateway);
+        }
+
+        foreach ($funnel->related('sales_funnels_subscription_types') as $subscriptionType) {
+            $this->salesFunnelsSubscriptionTypesRepository->add($newFunnel, $subscriptionType->subscription_type);
+        }
+
+        $funnelPurchaseLimit = $this->salesFunnelsMetaRepository->get($funnel, 'funnel_purchase_limit');
+        if ($funnelPurchaseLimit) {
+            $this->salesFunnelsMetaRepository->add($newFunnel, 'funnel_purchase_limit', $funnelPurchaseLimit);
+        }
+
+        return $newFunnel;
     }
 }

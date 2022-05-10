@@ -132,6 +132,10 @@ admin:
         new:
             title: Nové platobné okno
             back: spať na platobné okná
+        copy:
+            title: Kopírovať platobné okno
+            validation:
+                url_key: Platobné okno s rovnakou URL už existuje
         messages:
             sales_funnel_not_found: Platobné okno sa nenašlo.
             funnel_created: Platobné okno bolo úspešne vytvorené.

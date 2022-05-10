@@ -132,6 +132,10 @@ admin:
         new:
             title: New sales funnel
             back: back to sales funnels
+        copy:
+            title: Copy sales funnel
+            validation:
+                url_key: Sales funnel with same URL already exists
         messages:
             sales_funnel_not_found: Funnel not found.
             funnel_created: Funnel successfully created.

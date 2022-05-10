@@ -12,17 +12,20 @@ use Crm\PaymentsModule\Components\LastPaymentsControlFactoryInterface;
 use Crm\PaymentsModule\Repository\PaymentGatewaysRepository;
 use Crm\PaymentsModule\Repository\PaymentsRepository;
 use Crm\SalesFunnelModule\Components\WindowPreviewControlFactoryInterface;
+use Crm\SalesFunnelModule\DI\Config;
 use Crm\SalesFunnelModule\Forms\SalesFunnelAdminFormFactory;
 use Crm\SalesFunnelModule\Repository\SalesFunnelsMetaRepository;
 use Crm\SalesFunnelModule\Repository\SalesFunnelsPaymentGatewaysRepository;
 use Crm\SalesFunnelModule\Repository\SalesFunnelsRepository;
 use Crm\SalesFunnelModule\Repository\SalesFunnelsStatsRepository;
 use Crm\SalesFunnelModule\Repository\SalesFunnelsSubscriptionTypesRepository;
+use Crm\SalesFunnelModule\SalesFunnelsCache;
 use Crm\SubscriptionsModule\Repository\SubscriptionTypesRepository;
 use Crm\SubscriptionsModule\Subscription\SubscriptionTypeHelper;
 use Nette\Application\Responses\CallbackResponse;
 use Nette\Application\UI\Form;
 use Nette\Database\Table\ActiveRow;
+use Nette\Forms\Controls\TextInput;
 use Nette\Utils\DateTime;
 use PhpOffice\PhpSpreadsheet\Writer\Csv;
 use Tomaj\Form\Renderer\BootstrapRenderer;
@@ -51,6 +54,10 @@ class SalesFunnelsAdminPresenter extends AdminPresenter
 
     private $subscriptionTypeHelper;
 
+    private Config $config;
+
+    private SalesFunnelsCache $salesFunnelsCache;
+
     public function __construct(
         SalesFunnelsRepository $salesFunnelsRepository,
         SalesFunnelAdminFormFactory $salesFunnelAdminFormFactory,
@@ -62,7 +69,9 @@ class SalesFunnelsAdminPresenter extends AdminPresenter
         SalesFunnelsSubscriptionTypesRepository $salesFunnelsSubscriptionTypesRepository,
         SalesFunnelsPaymentGatewaysRepository $salesFunnelsPaymentGatewaysRepository,
         ExcelFactory $excelFactory,
-        SubscriptionTypeHelper $subscriptionTypeHelper
+        SubscriptionTypeHelper $subscriptionTypeHelper,
+        Config $config,
+        SalesFunnelsCache $salesFunnelsCache
     ) {
         parent::__construct();
         $this->salesFunnelsRepository = $salesFunnelsRepository;
@@ -76,6 +85,8 @@ class SalesFunnelsAdminPresenter extends AdminPresenter
         $this->salesFunnelsPaymentGatewaysRepository = $salesFunnelsPaymentGatewaysRepository;
         $this->excelFactory = $excelFactory;
         $this->subscriptionTypeHelper = $subscriptionTypeHelper;
+        $this->config = $config;
+        $this->salesFunnelsCache = $salesFunnelsCache;
     }
 
     /**
@@ -618,5 +629,49 @@ class SalesFunnelsAdminPresenter extends AdminPresenter
         $control = $factory->create();
         $control->setSalesFunnelId($this->params['id']);
         return $control;
+    }
+
+    protected function createComponentCopyForm(): Form
+    {
+        $form = new Form;
+
+        $form->setTranslator($this->translator);
+        $form->setRenderer(new BootstrapRenderer());
+        $form->getElementPrototype()->addClass('ajax');
+
+        $form->addText('name', 'sales_funnel.data.sales_funnels.fields.name')
+            ->setRequired();
+
+        $form->addText('url_key', 'sales_funnel.data.sales_funnels.fields.url_key')
+            ->setRequired()
+            ->addRule(function (TextInput $control) {
+                return $this->salesFunnelsRepository->findByUrlKey($control->getValue()) === null;
+            }, 'sales_funnel.admin.sales_funnels.copy.validation.url_key');
+
+        $form->addHidden('sales_funnel_id');
+
+        $form->addSubmit('send', 'system.save')
+            ->getControlPrototype()
+            ->setName('button')
+            ->setHtml('<i class="fa fa-save"></i> ' . $this->translator->translate('system.save'));
+
+        $form->onSubmit[] = function (Form $form) {
+            $this->redrawControl('copyModal');
+        };
+
+        $form->onSuccess[] = function (Form $form) {
+            $values = $form->getValues();
+
+            $salesFunnel = $this->salesFunnelsRepository->find($values['sales_funnel_id']);
+
+            $newSalesFunnel = $this->salesFunnelsRepository->duplicate($salesFunnel, $values['name'], $values['url_key']);
+            if ($this->config->getFunnelRoutes()) {
+                $this->salesFunnelsCache->add($newSalesFunnel->id, $values['url_key']);
+            }
+
+            $this->redirect('edit', $newSalesFunnel->id);
+        };
+
+        return $form;
     }
 }

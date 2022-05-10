@@ -47,6 +47,7 @@
             <p class="text-nowrap">
               <a n:href="show $funnel->id" class="btn btn-sm btn-info" title="{_system.show}"><i class="fa fa-eye"></i> </a>
               <a n:href="edit $funnel->id" class="btn btn-sm btn-primary" title="{_system.edit}"><i class="fa fa-edit"></i> </a>
+                <a href="#" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#copyModal" data-sales-funnel-id="{$funnel->id}" title="{_sales_funnel.admin.sales_funnels.copy.title}"><i class="fa fa-copy"></i> </a>
             </p>
           </td>
         </tr>
@@ -54,4 +55,30 @@
     </table>
   </div>
 </div>
+
+<div class="modal fade" id="copyModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">{_sales_funnel.admin.sales_funnels.copy.title}</h4>
+            </div>
+            {snippet copyModal}
+                <div class="modal-body">
+                    {control copyForm}
+                </div>
+            {/snippet}
+        </div>
+    </div>
+</div>
+
+<script type="application/javascript">
+  $('#copyModal').on('show.bs.modal', function (event) {
+    var button = $(event.relatedTarget);
+    var salesFunnelId = button.data('sales-funnel-id');
+
+    var modal = $(this);
+    modal.find(".modal-body input[name='sales_funnel_id']").val(salesFunnelId);
+  })
+</script>
 
