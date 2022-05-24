@@ -9,7 +9,6 @@ use Crm\ApplicationModule\Presenters\FrontendPresenter;
 use Crm\ApplicationModule\Request;
 use Crm\PaymentsModule\CannotProcessPayment;
 use Crm\PaymentsModule\GatewayFactory;
-use Crm\PaymentsModule\Gateways\RecurrentPaymentInterface;
 use Crm\PaymentsModule\PaymentItem\DonationPaymentItem;
 use Crm\PaymentsModule\PaymentItem\PaymentItemContainer;
 use Crm\PaymentsModule\PaymentProcessor;
@@ -30,6 +29,7 @@ use Crm\SubscriptionsModule\PaymentItem\SubscriptionTypePaymentItem;
 use Crm\SubscriptionsModule\Repository\ContentAccessRepository;
 use Crm\SubscriptionsModule\Repository\SubscriptionTypesRepository;
 use Crm\SubscriptionsModule\Subscription\ActualUserSubscription;
+use Crm\SubscriptionsModule\Subscription\SubscriptionTypeHelper;
 use Crm\UsersModule\Auth\InvalidEmailException;
 use Crm\UsersModule\Auth\UserManager;
 use Crm\UsersModule\Forms\SignInFormFactory;
@@ -62,6 +62,7 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
     private ContentAccessRepository $contentAccessRepository;
     private SignInFormFactory $signInFormFactory;
     private DataProviderManager $dataProviderManager;
+    private SubscriptionTypeHelper $subscriptionTypeHelper;
 
     public function __construct(
         SalesFunnelsRepository $salesFunnelsRepository,
@@ -79,7 +80,8 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
         RecurrentPaymentsRepository $recurrentPaymentsRepository,
         ContentAccessRepository $contentAccessRepository,
         SignInFormFactory $signInFormFactory,
-        DataProviderManager $dataProviderManager
+        DataProviderManager $dataProviderManager,
+        SubscriptionTypeHelper $subscriptionTypeHelper
     ) {
         parent::__construct();
         $this->salesFunnelsRepository = $salesFunnelsRepository;
@@ -98,6 +100,7 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
         $this->contentAccessRepository = $contentAccessRepository;
         $this->signInFormFactory = $signInFormFactory;
         $this->dataProviderManager = $dataProviderManager;
+        $this->subscriptionTypeHelper = $subscriptionTypeHelper;
     }
 
     public function startup()
@@ -520,7 +523,7 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
             }
         }
 
-        if (!$this->validateSubscriptionTypeCounts($subscriptionType, $user)) {
+        if (!$this->subscriptionTypeHelper->validateSubscriptionTypeCounts($subscriptionType, $user)) {
             $this->redirectOrSendJson('limitReached', $funnel->id);
         }
 
@@ -601,7 +604,7 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
             )
         );
 
-        if ($this->hasStoredCard($user, $payment->payment_gateway)) {
+        if ($this->recurrentPaymentsRepository->hasStoredCard($user, $payment->payment_gateway)) {
             $this->redirectOrSendJson(':Payments:Recurrent:selectCard', $payment->id);
         }
 
@@ -613,25 +616,6 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
         } catch (CannotProcessPayment $err) {
             $this->redirectOrSendJson('error');
         }
-    }
-
-    private function hasStoredCard(ActiveRow $user, ActiveRow $paymentGateway)
-    {
-        $gateway = $this->gatewayFactory->getGateway($paymentGateway->code);
-
-        // Only gateways supporting recurrent payments have support for stored cards
-        if (!$gateway instanceof RecurrentPaymentInterface) {
-            return false;
-        }
-
-        $usableRecurrentsCount = $this->recurrentPaymentsRepository
-            ->userRecurrentPayments($user->id)
-            ->where(['payment_gateway.code = ?' => $paymentGateway->code])
-            ->where(['cid IS NOT NULL AND expires_at > ?' => new DateTime()])
-            ->order('id DESC, charge_at DESC')
-            ->count();
-
-        return $usableRecurrentsCount > 0;
     }
 
     public function renderSignIn($referer, $funnel)
@@ -745,22 +729,6 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
             if ($purchases >= (int) $purchaseLimit) {
                 $this->redirectOrSendJson('limitReached', $funnel->id);
             }
-        }
-        return true;
-    }
-
-    private function validateSubscriptionTypeCounts(ActiveRow $subscriptionType, ActiveRow $user)
-    {
-        if (!$subscriptionType->limit_per_user) {
-            return true;
-        }
-
-        $userSubscriptionsTypesCount = $this->subscriptionsRepository->userSubscriptionTypesCounts($user->id, [$subscriptionType->id]);
-        if (!isset($userSubscriptionsTypesCount[$subscriptionType->id])) {
-            return true;
-        }
-        if ($subscriptionType->limit_per_user <= $userSubscriptionsTypesCount[$subscriptionType->id]) {
-            return false;
         }
         return true;
     }
