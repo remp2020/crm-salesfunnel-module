@@ -117,7 +117,6 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
 
     public function renderDefault($funnel)
     {
-        $this->template->queryString = $_SERVER['QUERY_STRING'];
         $salesFunnel = $this->salesFunnelsRepository->findByUrlKey($funnel);
         if (!$salesFunnel) {
             throw new BadRequestException('Funnel not found');
@@ -135,6 +134,9 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
         $this->template->funnel = $salesFunnel;
         $this->template->referer = $this->getReferer();
         $this->template->host = $this->getHttpRequest()->getUrl()->getHostUrl();
+
+        $this->template->queryParams = $this->request->getQuery();
+        unset($this->template->queryParams['referer']); // already passed separately
 
         /** @var SalesFunnelTemplateVariablesDataProviderInterface[] $providers */
         $providers = $this->dataProviderManager->getProviders(

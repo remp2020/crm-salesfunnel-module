@@ -45,7 +45,7 @@
       <img id="iframe_preloader" src="{$basePath}/layouts/default/images/iframe_preloader.gif" class="preloader" alt="preloader">
       <iframe id="myiframe"
         width="100%" scrolling="no" onload="window.ScrollToTop()"
-        src="{link :SalesFunnel:SalesFunnelFrontend:show $funnel->url_key, referer => $referer}&{$queryString}"
+        src="{link :SalesFunnel:SalesFunnelFrontend:show $funnel->url_key, referer => $referer}&{http_build_query($queryParams)}"
       ></iframe>
     </div>
   </div>
