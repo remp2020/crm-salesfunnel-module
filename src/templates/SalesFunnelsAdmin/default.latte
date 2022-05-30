@@ -1,4 +1,4 @@
-{block #title}{_sales_funnel.admin.sales_funnels.default.title}{/block}
+{block #title}{_'sales_funnel.admin.sales_funnels.default.title'}{/block}
 
 {block #content}
 
@@ -11,9 +11,9 @@
 <div class="row">
   <div class="col-md-12">
     <h2>
-      {_sales_funnel.admin.sales_funnels.default.title}
-      <small> / {_system.total} {$funnels->count('*')}</small>
-      <a n:href="new" class="btn btn-success btn-lg pull-right"><i class="fa fa-coffee"></i>  {_sales_funnel.admin.sales_funnels.default.new}</a>
+      {_'sales_funnel.admin.sales_funnels.default.title'}
+      <small> / {_'system.total'} {$funnels->count('*')}</small>
+      <a n:href="new" class="btn btn-success btn-lg pull-right"><i class="fa fa-coffee"></i>  {_'sales_funnel.admin.sales_funnels.default.new'}</a>
     </h2>
     <hr>
   </div>
@@ -21,12 +21,12 @@
     <table class="table table-striped table-hover table-bordered">
       <thead>
         <tr>
-          <th>{_sales_funnel.data.sales_funnels.fields.name}</th>
-          <th>{_sales_funnel.data.sales_funnels.fields.url_key}</th>
-          <th>{_sales_funnel.data.sales_funnels.fields.total_conversions}</th>
-          <th>{_sales_funnel.data.sales_funnels.fields.last_conversion}</th>
-          <th>{_sales_funnel.data.sales_funnels.fields.created_at}</th>
-          <th>{_system.actions}</th>
+          <th>{_'sales_funnel.data.sales_funnels.fields.name'}</th>
+          <th>{_'sales_funnel.data.sales_funnels.fields.url_key'}</th>
+          <th>{_'sales_funnel.data.sales_funnels.fields.total_conversions'}</th>
+          <th>{_'sales_funnel.data.sales_funnels.fields.last_conversion'}</th>
+          <th>{_'sales_funnel.data.sales_funnels.fields.created_at'}</th>
+          <th>{_'system.actions'}</th>
         </tr>
       </thead>
       <tbody>
@@ -36,8 +36,8 @@
               {$funnel->name}
             </a>
             {control simpleWidget 'admin.sales_funnel.after_name', $funnel}
-            <span n:if="$funnel->only_logged" class="label label-default">{_sales_funnel.data.sales_funnels.fields.only_logged}</span>
-            <span n:if="$funnel->only_not_logged" class="label label-default">{_sales_funnel.data.sales_funnels.fields.only_not_logged}</span>
+            <span n:if="$funnel->only_logged" class="label label-default">{_'sales_funnel.data.sales_funnels.fields.only_logged'}</span>
+            <span n:if="$funnel->only_not_logged" class="label label-default">{_'sales_funnel.data.sales_funnels.fields.only_not_logged'}</span>
           </td>
           <td><code>{$funnel->url_key}</code></td>
           <td>{$funnel->total_conversions}</td>
@@ -45,9 +45,9 @@
           <td class="text-muted">{$funnel->created_at}</td>
           <td>
             <p class="text-nowrap">
-              <a n:href="show $funnel->id" class="btn btn-sm btn-info" title="{_system.show}"><i class="fa fa-eye"></i> </a>
-              <a n:href="edit $funnel->id" class="btn btn-sm btn-primary" title="{_system.edit}"><i class="fa fa-edit"></i> </a>
-                <a href="#" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#copyModal" data-sales-funnel-id="{$funnel->id}" title="{_sales_funnel.admin.sales_funnels.copy.title}"><i class="fa fa-copy"></i> </a>
+              <a n:href="show $funnel->id" class="btn btn-sm btn-info" title="{_'system.show'}"><i class="fa fa-eye"></i> </a>
+              <a n:href="edit $funnel->id" class="btn btn-sm btn-primary" title="{_'system.edit'}"><i class="fa fa-edit"></i> </a>
+                <a href="#" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#copyModal" data-sales-funnel-id="{$funnel->id}" title="{_'sales_funnel.admin.sales_funnels.copy.title'}"><i class="fa fa-copy"></i> </a>
             </p>
           </td>
         </tr>
@@ -61,7 +61,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">{_sales_funnel.admin.sales_funnels.copy.title}</h4>
+                <h4 class="modal-title">{_'sales_funnel.admin.sales_funnels.copy.title'}</h4>
             </div>
             {snippet copyModal}
                 <div class="modal-body">
