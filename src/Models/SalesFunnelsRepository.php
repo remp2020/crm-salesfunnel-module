@@ -125,7 +125,6 @@ class SalesFunnelsRepository extends Repository
 
     final public function incrementConversions(ActiveRow $funnel)
     {
-        $this->update($funnel, ['last_conversion' => new DateTime()]);
         return $this->increment($funnel, 'total_conversions');
     }
 
@@ -134,10 +133,19 @@ class SalesFunnelsRepository extends Repository
         return $this->increment($funnel, 'total_errors');
     }
 
-    private function increment(ActiveRow $funnel, $field, $value = 1)
+    private function increment(ActiveRow $funnel, string $field, $value = 1)
     {
-        $date = new DateTime();
-        return $this->getDatabase()->query("UPDATE sales_funnels SET {$field}={$field}+{$value}, last_use='{$date->format('Y-m-d H:i:s')}' WHERE id=" . $funnel->id);
+        $formattedDate = (new DateTime())->format('Y-m-d H:i:s');
+
+        $query = "UPDATE sales_funnels SET {$field}={$field}+{$value}, last_use='{$formattedDate}'";
+
+        if ($field === 'total_conversions') {
+            $query .= ", last_conversion='{$formattedDate}'";
+        }
+
+        $query .= " WHERE id={$funnel->id}";
+
+        return $this->getDatabase()->query($query);
     }
 
     final public function totalPaidAmount(ActiveRow $funnel)
