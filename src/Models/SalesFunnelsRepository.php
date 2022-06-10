@@ -5,7 +5,10 @@ namespace Crm\SalesFunnelModule\Repository;
 use Crm\ApplicationModule\Repository;
 use Crm\ApplicationModule\Repository\AuditLogRepository;
 use Crm\PaymentsModule\Repository\PaymentsRepository;
+use Crm\SalesFunnelModule\Events\SalesFunnelCreatedEvent;
+use Crm\SalesFunnelModule\Events\SalesFunnelUpdatedEvent;
 use DateTime;
+use League\Event\Emitter;
 use Nette\Database\Explorer;
 use Nette\Database\Table\ActiveRow;
 use Nette\Database\Table\Selection;
@@ -13,6 +16,8 @@ use Nette\Database\Table\Selection;
 class SalesFunnelsRepository extends Repository
 {
     protected $tableName = 'sales_funnels';
+
+    private Emitter $emitter;
 
     private SalesFunnelsSubscriptionTypesRepository $salesFunnelsSubscriptionTypesRepository;
 
@@ -23,12 +28,14 @@ class SalesFunnelsRepository extends Repository
     public function __construct(
         Explorer $database,
         AuditLogRepository $auditLogRepository,
+        Emitter $emitter,
         SalesFunnelsSubscriptionTypesRepository $salesFunnelsSubscriptionTypesRepository,
         SalesFunnelsPaymentGatewaysRepository $salesFunnelsPaymentGatewaysRepository,
         SalesFunnelsMetaRepository $salesFunnelsMetaRepository
     ) {
         parent::__construct($database);
         $this->auditLogRepository = $auditLogRepository;
+        $this->emitter = $emitter;
         $this->salesFunnelsSubscriptionTypesRepository = $salesFunnelsSubscriptionTypesRepository;
         $this->salesFunnelsPaymentGatewaysRepository = $salesFunnelsPaymentGatewaysRepository;
         $this->salesFunnelsMetaRepository = $salesFunnelsMetaRepository;
@@ -51,7 +58,7 @@ class SalesFunnelsRepository extends Repository
         $redirectFunnelId = null,
         $limitPerUser = null
     ) {
-        return $this->insert([
+        $result = $this->insert([
             'name' => $name,
             'url_key' => $urlKey,
             'start_at' => $startAt,
@@ -70,6 +77,9 @@ class SalesFunnelsRepository extends Repository
             'redirect_funnel_id' => $redirectFunnelId,
             'limit_per_user' => $limitPerUser
         ]);
+
+        $this->emitter->emit(new SalesFunnelCreatedEvent($result));
+        return $result;
     }
 
     final public function all()
@@ -89,8 +99,13 @@ class SalesFunnelsRepository extends Repository
 
     final public function update(ActiveRow &$row, $data)
     {
+        $oldSalesFunnel = $this->find($row->id);
+
         $data['updated_at'] = new DateTime();
-        return parent::update($row, $data);
+        $result = parent::update($row, $data);
+
+        $this->emitter->emit(new SalesFunnelUpdatedEvent($oldSalesFunnel, $row));
+        return $result;
     }
 
     final public function incrementShows(ActiveRow $funnel)

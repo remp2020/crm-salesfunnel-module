@@ -3,10 +3,8 @@
 namespace Crm\SalesFunnelModule\Forms;
 
 use Contributte\Translation\Translator;
-use Crm\SalesFunnelModule\DI\Config;
 use Crm\SalesFunnelModule\Repository\SalesFunnelsMetaRepository;
 use Crm\SalesFunnelModule\Repository\SalesFunnelsRepository;
-use Crm\SalesFunnelModule\SalesFunnelsCache;
 use Crm\SegmentModule\Repository\SegmentsRepository;
 use Nette\Application\UI\Form;
 use Nette\Database\Table\ActiveRow;
@@ -23,10 +21,6 @@ class SalesFunnelAdminFormFactory
 
     private $translator;
 
-    private $config;
-
-    private $salesFunnelsCache;
-
     public $onUpdate;
 
     public $onSave;
@@ -35,16 +29,12 @@ class SalesFunnelAdminFormFactory
         SalesFunnelsRepository $salesFunnelsRepository,
         SalesFunnelsMetaRepository $salesFunnelsMetaRepository,
         SegmentsRepository $segmentsRepository,
-        SalesFunnelsCache $salesFunnelsCache,
-        Translator $translator,
-        Config $config
+        Translator $translator
     ) {
         $this->salesFunnelsRepository = $salesFunnelsRepository;
         $this->salesFunnelsMetaRepository = $salesFunnelsMetaRepository;
         $this->segmentsRepository = $segmentsRepository;
-        $this->salesFunnelsCache = $salesFunnelsCache;
         $this->translator = $translator;
-        $this->config = $config;
     }
 
     public function create($id)
@@ -174,9 +164,6 @@ class SalesFunnelAdminFormFactory
         if ($id) {
             $row = $this->salesFunnelsRepository->find($id);
             $this->salesFunnelsRepository->update($row, $values);
-            if ($this->config->getFunnelRoutes()) {
-                $this->salesFunnelsCache->add($id, $values['url_key']);
-            }
             $this->updateMeta($row, $meta);
             $this->onUpdate->__invoke($row);
         } else {
@@ -196,9 +183,6 @@ class SalesFunnelAdminFormFactory
                 $values->error_html,
                 $values->redirect_funnel_id
             );
-            if ($this->config->getFunnelRoutes()) {
-                $this->salesFunnelsCache->add($row['id'], $values['url_key']);
-            }
             $this->updateMeta($row, $meta);
             $this->onSave->__invoke($row);
         }

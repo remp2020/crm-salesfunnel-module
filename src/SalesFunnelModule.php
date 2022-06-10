@@ -80,6 +80,14 @@ class SalesFunnelModule extends CrmModule
             \Crm\SalesFunnelModule\Events\SalesFunnelEvent::class,
             $this->getInstance(\Crm\SalesFunnelModule\Events\SalesFunnelHandler::class)
         );
+        $emitter->addListener(
+            \Crm\SalesFunnelModule\Events\SalesFunnelCreatedEvent::class,
+            $this->getInstance(\Crm\SalesFunnelModule\Events\SalesFunnelChangedEventsHandler::class)
+        );
+        $emitter->addListener(
+            \Crm\SalesFunnelModule\Events\SalesFunnelUpdatedEvent::class,
+            $this->getInstance(\Crm\SalesFunnelModule\Events\SalesFunnelChangedEventsHandler::class)
+        );
 
         $emitter->addListener(
             \Crm\SalesFunnelModule\Events\CalculateSalesFunnelConversionDistributionEvent::class,
@@ -179,6 +187,8 @@ class SalesFunnelModule extends CrmModule
     public function registerEvents(EventsStorage $eventsStorage)
     {
         $eventsStorage->register('sales_funnel', Events\SalesFunnelEvent::class);
+        $eventsStorage->register('sales_funnel_created', Events\SalesFunnelCreatedEvent::class);
+        $eventsStorage->register('sales_funnel_updated', Events\SalesFunnelUpdatedEvent::class);
     }
 
     public function registerDataProviders(DataProviderManager $dataProviderManager)

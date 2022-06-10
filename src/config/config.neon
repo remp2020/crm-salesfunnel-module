@@ -49,6 +49,7 @@ services:
 
 	- Crm\SalesFunnelModule\Events\PaymentStatusChangeHandler
 	- Crm\SalesFunnelModule\Events\CalculateSalesFunnelConversionDistributionEventHandler
+	- Crm\SalesFunnelModule\Events\SalesFunnelChangedEventsHandler
 	- Crm\SalesFunnelModule\Events\SalesFunnelHandler
 	- Crm\SalesFunnelModule\Forms\SalesFunnelAdminFormFactory
 	salesFunnelsCache: Crm\SalesFunnelModule\SalesFunnelsCache
