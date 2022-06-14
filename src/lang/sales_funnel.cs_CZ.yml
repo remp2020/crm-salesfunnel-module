@@ -114,6 +114,7 @@ admin:
                 help: Konverzní poměr se počítá jako podíl počtu ukončených plateb a počtu zobrazení platebního okna * 100
             distribution:
                 label: Distribuce
+                tooltip: Zahrnuje pouze první platbu každého uživatele na tomto platebním okně
                 amounts: Kolik zaplatil před zakoupením prostřednictvím tohoto okna
                 payments: Kolik plateb provedl před zakoupením prostřednictvím tohoto okna
                 subscriptions: Před kolika dny mu skončilo poslední předplatné

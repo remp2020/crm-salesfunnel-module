@@ -114,6 +114,7 @@ admin:
                 help: Rate is computed as ratio of finished payments and total number of sales funnel shows * 100
             distribution:
                 label: Distribution
+                tooltip: Includes only the first payment of each user on this sales funnel
                 amounts: How much paid before buying via this sales funnel
                 payments: How many payments made before buying via this sales funnel
                 subscriptions: "Days since ending of last subscription (pre-payment)"

@@ -27,7 +27,12 @@
 
 <div class="row">
     <div class="col-md-12">
-        <h2 class="page-header">{_sales_funnel.admin.sales_funnels.show.distribution.label}</h2>
+        <h2 class="page-header">
+            {_sales_funnel.admin.sales_funnels.show.distribution.label}
+            <i class="fa fa-question-circle" style="font-size: 25px" data-toggle="tooltip"
+               data-original-title="{_sales_funnel.admin.sales_funnels.show.distribution.tooltip}">
+            </i>
+        </h2>
 
         {control simpleWidget 'sales_funnels.admin.show.distribution', $funnel->id}
 
