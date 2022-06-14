@@ -9,12 +9,14 @@ use Crm\ApplicationModule\Presenters\FrontendPresenter;
 use Crm\ApplicationModule\Request;
 use Crm\PaymentsModule\CannotProcessPayment;
 use Crm\PaymentsModule\GatewayFactory;
+use Crm\PaymentsModule\Gateways\ProcessResponse;
 use Crm\PaymentsModule\PaymentItem\DonationPaymentItem;
 use Crm\PaymentsModule\PaymentItem\PaymentItemContainer;
 use Crm\PaymentsModule\PaymentProcessor;
 use Crm\PaymentsModule\Repository\PaymentGatewaysRepository;
 use Crm\PaymentsModule\Repository\PaymentsRepository;
 use Crm\PaymentsModule\Repository\RecurrentPaymentsRepository;
+use Crm\SalesFunnelModule\DataProvider\SalesFunnelPaymentFormDataProviderInterface;
 use Crm\SalesFunnelModule\DataProvider\SalesFunnelTemplateVariablesDataProviderInterface;
 use Crm\SalesFunnelModule\DataProvider\TrackerDataProviderInterface;
 use Crm\SalesFunnelModule\DataProvider\ValidateUserFunnelAccessDataProviderInterface;
@@ -593,6 +595,11 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
 
         $this->paymentsRepository->update($payment, ['sales_funnel_id' => $funnel->id]);
 
+        $providers = $this->dataProviderManager->getProviders('salesfunnel.dataprovider.payment_form_data', SalesFunnelPaymentFormDataProviderInterface::class);
+        foreach ($providers as $sorting => $provider) {
+            $provider->provide(['payment' => $payment, 'post_data' => $this->request->post]);
+        }
+
         $eventParams = [
             'type' => 'payment',
             'user_id' => $user->id,
@@ -613,7 +620,14 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
         try {
             $result = $this->paymentProcessor->begin($payment, $this->isAllowedRedirect());
             if ($result) {
-                $this->sendJson(['status' => 'ok', 'url' => $result]);
+                if (is_string($result)) { // backward compatibility
+                    $result = new ProcessResponse('url', $result);
+                }
+                $this->sendJson([
+                    'status' => 'ok',
+                    'type' => $result->getType(),
+                    $result->getType() => $result->getData(),
+                ]);
             }
         } catch (CannotProcessPayment $err) {
             $this->redirectOrSendJson('error');
