@@ -4,11 +4,8 @@ namespace Crm\SalesFunnelModule\DataProvider;
 
 use Crm\ApplicationModule\DataProvider\DataProviderInterface;
 
-interface SalesFunnelTemplateVariablesDataProviderInterface extends DataProviderInterface
+interface SalesFunnelVariablesDataProviderInterface extends DataProviderInterface
 {
-    // variables passed to latte template
-    public const TEMPLATE_VARIABLES = 'template_variables';
-
     public const PARAM_SALES_FUNNEL = 'sales_funnel';
 
     /**

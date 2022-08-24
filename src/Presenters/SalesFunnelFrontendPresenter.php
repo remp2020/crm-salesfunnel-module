@@ -17,7 +17,7 @@ use Crm\PaymentsModule\Repository\PaymentGatewaysRepository;
 use Crm\PaymentsModule\Repository\PaymentsRepository;
 use Crm\PaymentsModule\Repository\RecurrentPaymentsRepository;
 use Crm\SalesFunnelModule\DataProvider\SalesFunnelPaymentFormDataProviderInterface;
-use Crm\SalesFunnelModule\DataProvider\SalesFunnelTemplateVariablesDataProviderInterface;
+use Crm\SalesFunnelModule\DataProvider\SalesFunnelVariablesDataProviderInterface;
 use Crm\SalesFunnelModule\DataProvider\TrackerDataProviderInterface;
 use Crm\SalesFunnelModule\DataProvider\ValidateUserFunnelAccessDataProviderInterface;
 use Crm\SalesFunnelModule\Events\PaymentItemContainerReadyEvent;
@@ -140,20 +140,16 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
         $this->template->queryParams = $this->request->getQuery();
         unset($this->template->queryParams['referer']); // already passed separately
 
-        /** @var SalesFunnelTemplateVariablesDataProviderInterface[] $providers */
+        /** @var SalesFunnelVariablesDataProviderInterface[] $providers */
         $providers = $this->dataProviderManager->getProviders(
             'sales_funnel.dataprovider.template_variables',
-            SalesFunnelTemplateVariablesDataProviderInterface::class
+            SalesFunnelVariablesDataProviderInterface::class
         );
         foreach ($providers as $provider) {
             foreach ($provider->provide([
-                SalesFunnelTemplateVariablesDataProviderInterface::PARAM_SALES_FUNNEL => $salesFunnel
-            ]) as $templateSystem => $variables) {
-                if ($templateSystem === SalesFunnelTemplateVariablesDataProviderInterface::TEMPLATE_VARIABLES) {
-                    foreach ($variables as $name => $value) {
-                        $this->template->$name = $value;
-                    }
-                }
+                SalesFunnelVariablesDataProviderInterface::PARAM_SALES_FUNNEL => $salesFunnel
+            ]) as $name => $value) {
+                $this->template->$name = $value;
             }
         }
     }
@@ -217,6 +213,19 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
             'errors' => $errors ? Json::decode($errors, Json::FORCE_ARRAY) : null,
             'locale' => $this->translator->getLocale(),
         ];
+
+        /** @var SalesFunnelVariablesDataProviderInterface[] $providers */
+        $providers = $this->dataProviderManager->getProviders(
+            'sales_funnel.dataprovider.twig_variables',
+            SalesFunnelVariablesDataProviderInterface::class
+        );
+        foreach ($providers as $provider) {
+            foreach ($provider->provide([
+                SalesFunnelVariablesDataProviderInterface::PARAM_SALES_FUNNEL => $salesFunnel
+            ]) as $name => $value) {
+                $params[$name] = $value;
+            }
+        }
 
         if ($isLoggedIn) {
             $params['email'] = $this->getUser()->getIdentity()->email;
