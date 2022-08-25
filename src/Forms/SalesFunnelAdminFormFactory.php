@@ -2,12 +2,12 @@
 
 namespace Crm\SalesFunnelModule\Forms;
 
+use Contributte\Translation\Translator;
 use Crm\SalesFunnelModule\DI\Config;
 use Crm\SalesFunnelModule\Repository\SalesFunnelsMetaRepository;
 use Crm\SalesFunnelModule\Repository\SalesFunnelsRepository;
 use Crm\SalesFunnelModule\SalesFunnelsCache;
 use Crm\SegmentModule\Repository\SegmentsRepository;
-use Kdyby\Translation\Translator;
 use Nette\Application\UI\Form;
 use Nette\Database\Table\ActiveRow;
 use Nette\Utils\DateTime;

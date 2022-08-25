@@ -2,6 +2,7 @@
 
 namespace Crm\SalesFunnelModule;
 
+use Contributte\Translation\Translator;
 use Crm\ApiModule\Api\ApiRoutersContainerInterface;
 use Crm\ApiModule\Authorization\NoAuthorization;
 use Crm\ApiModule\Router\ApiIdentifier;
@@ -25,7 +26,6 @@ use Crm\SalesFunnelModule\Scenarios\PaymentIsFromSalesFunnelCriteria;
 use Crm\SalesFunnelModule\Scenarios\PaymentIsFromSpecificSalesFunnelCriteria;
 use Crm\SalesFunnelModule\Seeders\ConfigsSeeder;
 use Crm\SalesFunnelModule\Seeders\SalesFunnelsSeeder;
-use Kdyby\Translation\Translator;
 use League\Event\Emitter;
 use Nette\Application\Routers\RouteList;
 use Nette\DI\Container;
