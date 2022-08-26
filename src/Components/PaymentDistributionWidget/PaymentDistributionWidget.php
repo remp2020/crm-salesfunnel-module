@@ -2,10 +2,9 @@
 
 namespace Crm\SalesFunnelModule\Components;
 
-use Crm\ApplicationModule\Widget\BaseWidget;
-use Crm\ApplicationModule\Widget\WidgetManager;
+use Crm\ApplicationModule\Widget\BaseLazyWidget;
+use Crm\ApplicationModule\Widget\LazyWidgetManager;
 use Crm\SalesFunnelModule\Distribution\PaymentsCountDistribution;
-use Crm\SalesFunnelModule\Repository\SalesFunnelsRepository;
 
 /**
  * This widget fetches stats from sales funnel repository
@@ -15,23 +14,19 @@ use Crm\SalesFunnelModule\Repository\SalesFunnelsRepository;
  *
  * @package Crm\SalesFunnelModule\Components
  */
-class PaymentDistributionWidget extends BaseWidget
+class PaymentDistributionWidget extends BaseLazyWidget
 {
     private $templateName = 'payment_distribution_widget.latte';
-
-    private $salesFunnelsRepository;
 
     private $paymentsCountDistribution;
 
     public function __construct(
-        WidgetManager $widgetManager,
-        PaymentsCountDistribution $paymentsCountDistribution,
-        SalesFunnelsRepository $salesFunnelsRepository
+        LazyWidgetManager $lazyWidgetManager,
+        PaymentsCountDistribution $paymentsCountDistribution
     ) {
-        parent::__construct($widgetManager);
-        $this->widgetManager = $widgetManager;
+        parent::__construct($lazyWidgetManager);
+
         $this->paymentsCountDistribution = $paymentsCountDistribution;
-        $this->salesFunnelsRepository = $salesFunnelsRepository;
     }
 
     public function identifier()

@@ -3,11 +3,10 @@
 namespace Crm\SalesFunnelModule\Components;
 
 use Crm\ApplicationModule\Presenters\FrontendPresenter;
-use Crm\ApplicationModule\Widget\BaseWidget;
-use Crm\ApplicationModule\Widget\WidgetManager;
+use Crm\ApplicationModule\Widget\BaseLazyWidget;
+use Crm\ApplicationModule\Widget\LazyWidgetManager;
 use Crm\SalesFunnelModule\Repository\SalesFunnelsRepository;
 use Nette\Application\BadRequestException;
-use Nette\Http\Request;
 
 /**
  * Widget that renders page with iframe containing sales funnels.
@@ -15,21 +14,18 @@ use Nette\Http\Request;
  * @property FrontendPresenter $presenter
  * @package Crm\SalesFunnelModule\Components
  */
-class NewSubscriptionWidget extends BaseWidget
+class NewSubscriptionWidget extends BaseLazyWidget
 {
     private $templateName = 'new_subscription_widget.latte';
-
-    private $request;
 
     private $salesFunnelsRepository;
 
     public function __construct(
-        Request $request,
         SalesFunnelsRepository $salesFunnelsRepository,
-        WidgetManager $widgetManager
+        LazyWidgetManager $lazyWidgetManager
     ) {
-        parent::__construct($widgetManager);
-        $this->request = $request;
+        parent::__construct($lazyWidgetManager);
+
         $this->salesFunnelsRepository = $salesFunnelsRepository;
     }
 

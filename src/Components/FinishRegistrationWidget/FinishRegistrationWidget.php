@@ -2,7 +2,7 @@
 
 namespace Crm\SalesFunnelModule\Components;
 
-use Crm\ApplicationModule\Widget\BaseWidget;
+use Crm\ApplicationModule\Widget\BaseLazyWidget;
 
 /**
  * Simple registration success page widget.
@@ -10,7 +10,7 @@ use Crm\ApplicationModule\Widget\BaseWidget;
  *
  * @package Crm\SalesFunnelModule\Components
  */
-class FinishRegistrationWidget extends BaseWidget
+class FinishRegistrationWidget extends BaseLazyWidget
 {
     private $templateName = 'finish_registration_widget.latte';
 

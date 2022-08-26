@@ -2,8 +2,8 @@
 
 namespace Crm\SalesFunnelModule\Components;
 
-use Crm\ApplicationModule\Widget\BaseWidget;
-use Crm\ApplicationModule\Widget\WidgetManager;
+use Crm\ApplicationModule\Widget\BaseLazyWidget;
+use Crm\ApplicationModule\Widget\LazyWidgetManager;
 use Crm\SalesFunnelModule\Distribution\SubscriptionDaysDistribution;
 
 /**
@@ -14,18 +14,18 @@ use Crm\SalesFunnelModule\Distribution\SubscriptionDaysDistribution;
  *
  * @package Crm\SalesFunnelModule\Components
  */
-class DaysFromLastSubscriptionDistributionWidget extends BaseWidget
+class DaysFromLastSubscriptionDistributionWidget extends BaseLazyWidget
 {
     private $templateName = 'days_from_last_subscription_distribution_widget.latte';
 
     private $subscriptionDaysDistribution;
 
     public function __construct(
-        WidgetManager $widgetManager,
+        LazyWidgetManager $lazyWidgetManager,
         SubscriptionDaysDistribution $subscriptionDaysDistribution
     ) {
-        parent::__construct($widgetManager);
-        $this->widgetManager = $widgetManager;
+        parent::__construct($lazyWidgetManager);
+
         $this->subscriptionDaysDistribution = $subscriptionDaysDistribution;
     }
 

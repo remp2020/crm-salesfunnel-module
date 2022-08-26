@@ -2,7 +2,7 @@
 
 namespace Crm\SalesFunnelModule\Components;
 
-use Crm\ApplicationModule\Widget\BaseWidget;
+use Crm\ApplicationModule\Widget\BaseLazyWidget;
 use Nette\Database\Table\ActiveRow;
 
 /**
@@ -11,7 +11,7 @@ use Nette\Database\Table\ActiveRow;
  *
  * @package Crm\SalesFunnelModule\Components
  */
-class SalesFunnelUserListingWidget extends BaseWidget
+class SalesFunnelUserListingWidget extends BaseLazyWidget
 {
     private $templateName = 'sales_funnel_user_listing_widget.latte';
 

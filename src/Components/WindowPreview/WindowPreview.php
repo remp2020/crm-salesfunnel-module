@@ -2,7 +2,8 @@
 
 namespace Crm\SalesFunnelModule\Components;
 
-use Crm\ApplicationModule\Widget\WidgetManager;
+use Crm\ApplicationModule\Widget\BaseLazyWidget;
+use Crm\ApplicationModule\Widget\LazyWidgetManager;
 use Crm\SalesFunnelModule\Repository\SalesFunnelsRepository;
 
 /**
@@ -11,7 +12,7 @@ use Crm\SalesFunnelModule\Repository\SalesFunnelsRepository;
  *
  * @package Crm\SalesFunnelModule\Components
  */
-class WindowPreview extends \Crm\ApplicationModule\Widget\BaseWidget
+class WindowPreview extends BaseLazyWidget
 {
     private $view = 'window_preview';
 
@@ -19,9 +20,11 @@ class WindowPreview extends \Crm\ApplicationModule\Widget\BaseWidget
 
     private $salesFunnelId;
 
-    public function __construct(WidgetManager $widgetManager, SalesFunnelsRepository $salesFunnelsRepository)
-    {
-        parent::__construct($widgetManager);
+    public function __construct(
+        LazyWidgetManager $lazyWidgetManager,
+        SalesFunnelsRepository $salesFunnelsRepository
+    ) {
+        parent::__construct($lazyWidgetManager);
         $this->salesFunnelsRepository = $salesFunnelsRepository;
     }
 

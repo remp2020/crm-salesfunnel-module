@@ -2,8 +2,8 @@
 
 namespace Crm\SalesFunnelModule\Components;
 
-use Crm\ApplicationModule\Widget\BaseWidget;
-use Crm\ApplicationModule\Widget\WidgetManager;
+use Crm\ApplicationModule\Widget\BaseLazyWidget;
+use Crm\ApplicationModule\Widget\LazyWidgetManager;
 use Crm\SalesFunnelModule\Repository\SalesFunnelsRepository;
 
 /**
@@ -12,17 +12,17 @@ use Crm\SalesFunnelModule\Repository\SalesFunnelsRepository;
  *
  * @package Crm\SalesFunnelModule\Components
  */
-class SubscriptionTypesInSalesFunnelsWidget extends BaseWidget
+class SubscriptionTypesInSalesFunnelsWidget extends BaseLazyWidget
 {
     private $templateName = 'subscription_types_in_sales_funnels_widget.latte';
 
     private $salesFunnelsRepository;
 
     public function __construct(
-        WidgetManager $widgetManager,
+        LazyWidgetManager $lazyWidgetManager,
         SalesFunnelsRepository $salesFunnelsRepository
     ) {
-        parent::__construct($widgetManager);
+        parent::__construct($lazyWidgetManager);
         $this->salesFunnelsRepository = $salesFunnelsRepository;
     }
 

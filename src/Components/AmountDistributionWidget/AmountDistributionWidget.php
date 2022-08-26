@@ -2,8 +2,8 @@
 
 namespace Crm\SalesFunnelModule\Components;
 
-use Crm\ApplicationModule\Widget\BaseWidget;
-use Crm\ApplicationModule\Widget\WidgetManager;
+use Crm\ApplicationModule\Widget\BaseLazyWidget;
+use Crm\ApplicationModule\Widget\LazyWidgetManager;
 use Crm\SalesFunnelModule\Distribution\PaymentsSumDistribution;
 
 /**
@@ -14,18 +14,18 @@ use Crm\SalesFunnelModule\Distribution\PaymentsSumDistribution;
  *
  * @package Crm\SalesFunnelModule\Components
  */
-class AmountDistributionWidget extends BaseWidget
+class AmountDistributionWidget extends BaseLazyWidget
 {
     private $templateName = 'amount_distribution_widget.latte';
 
     private $paymentsSumDistribution;
 
     public function __construct(
-        WidgetManager $widgetManager,
+        LazyWidgetManager $lazyWidgetManager,
         PaymentsSumDistribution $paymentsSumDistribution
     ) {
-        parent::__construct($widgetManager);
-        $this->widgetManager = $widgetManager;
+        parent::__construct($lazyWidgetManager);
+
         $this->paymentsSumDistribution = $paymentsSumDistribution;
     }
 

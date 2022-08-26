@@ -16,7 +16,7 @@ use Crm\ApplicationModule\LayoutManager;
 use Crm\ApplicationModule\Menu\MenuContainerInterface;
 use Crm\ApplicationModule\Menu\MenuItem;
 use Crm\ApplicationModule\SeederManager;
-use Crm\ApplicationModule\Widget\WidgetManagerInterface;
+use Crm\ApplicationModule\Widget\LazyWidgetManagerInterface;
 use Crm\SalesFunnelModule\Api\TrackStatsHandler;
 use Crm\SalesFunnelModule\DI\Config;
 use Crm\SalesFunnelModule\DataProvider\PaymentsAdminFilterFormDataProvider;
@@ -147,40 +147,40 @@ class SalesFunnelModule extends CrmModule
         );
     }
 
-    public function registerWidgets(WidgetManagerInterface $widgetManager)
+    public function registerLazyWidgets(LazyWidgetManagerInterface $widgetManager)
     {
         $widgetManager->registerWidget(
             'subscriptions.new',
-            $this->getInstance(\Crm\SalesFunnelModule\Components\NewSubscriptionWidget::class),
+            \Crm\SalesFunnelModule\Components\NewSubscriptionWidget::class,
             100
         );
         $widgetManager->registerWidget(
             'subscription_types_admin.show.right',
-            $this->getInstance(\Crm\SalesFunnelModule\Components\SubscriptionTypesInSalesFunnelsWidget::class),
+            \Crm\SalesFunnelModule\Components\SubscriptionTypesInSalesFunnelsWidget::class,
             200
         );
 
         $widgetManager->registerWidget(
             'frontend.payment.success.finish_registration',
-            $this->getInstance(\Crm\SalesFunnelModule\Components\FinishRegistrationWidget::class),
+            \Crm\SalesFunnelModule\Components\FinishRegistrationWidget::class,
             200
         );
 
         $widgetManager->registerWidget(
             'sales_funnels.admin.show.distribution',
-            $this->getInstance(\Crm\SalesFunnelModule\Components\AmountDistributionWidget::class)
+            \Crm\SalesFunnelModule\Components\AmountDistributionWidget::class
         );
         $widgetManager->registerWidget(
             'sales_funnels.admin.show.distribution',
-            $this->getInstance(\Crm\SalesFunnelModule\Components\PaymentDistributionWidget::class)
+            \Crm\SalesFunnelModule\Components\PaymentDistributionWidget::class
         );
         $widgetManager->registerWidget(
             'sales_funnels.admin.show.distribution',
-            $this->getInstance(\Crm\SalesFunnelModule\Components\DaysFromLastSubscriptionDistributionWidget::class)
+            \Crm\SalesFunnelModule\Components\DaysFromLastSubscriptionDistributionWidget::class
         );
         $widgetManager->registerWidget(
             'payments.admin.payment_source_listing',
-            $this->getInstance(\Crm\SalesFunnelModule\Components\SalesFunnelUserListingWidget::class)
+            \Crm\SalesFunnelModule\Components\SalesFunnelUserListingWidget::class
         );
     }
 
