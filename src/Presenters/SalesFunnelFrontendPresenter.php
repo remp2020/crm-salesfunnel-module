@@ -160,6 +160,13 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
         if (!$salesFunnel) {
             throw new BadRequestException('Funnel not found');
         }
+
+        $preview = $this->request->query['preview'] ?? null;
+
+        if ($preview === null && $salesFunnel->redirect_funnel) {
+            $this->redirect('default', array_merge(['funnel' => $salesFunnel->redirect_funnel->url_key], $_GET));
+        }
+
         $this->validateFunnel($salesFunnel);
 
         $isLoggedIn = $this->getUser()->isLoggedIn();
@@ -179,7 +186,7 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
         ]);
         $twig = new \Twig\Environment($loader);
 
-        if (($this->request->query['preview'] ?? null) === 'no-user' && $this->isValidPreview()) {
+        if ($preview === 'no-user' && $this->isValidPreview()) {
             $isLoggedIn = false;
         }
 
