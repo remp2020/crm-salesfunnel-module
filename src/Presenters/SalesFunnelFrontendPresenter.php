@@ -562,7 +562,7 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
             if ($donationPaymentVat === null) {
                 throw new \Exception("Config 'donation_vat_rate' is not set");
             }
-            $paymentItemContainer->addItem(new DonationPaymentItem($this->translator->translate('payments.admin.donation'), $additionalAmount, (int)$donationPaymentVat));
+            $paymentItemContainer->addItem(new DonationPaymentItem($this->translator->translate('payments.admin.donation'), (float) $additionalAmount, (int) $donationPaymentVat));
         }
 
         // let modules add own items to PaymentItemContainer before payment is created
