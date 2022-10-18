@@ -26,6 +26,7 @@
       <ul class="list-group">
         <li class="list-group-item text-muted"><b>{_system.fields.created}:</b> <span class="text-muted">{$funnel->created_at|userDate}</span></li>
         <li class="list-group-item"><b>{_sales_funnel.data.sales_funnels.fields.url_key}:</b> <code>{$funnel->url_key}</code> <a href="{plink :SalesFunnel:SalesFunnelFrontend:Show $funnel->url_key}" class="btn btn-xs btn-default" target="_blank"><i class="fa fa-share"></i></a></li>
+        <li class="list-group-item"><b>{_sales_funnel.data.sales_funnels.fields.note}:</b> {if $funnel->note}<br>{$funnel->note|breaklines}{/if}</li>
         <li n:if="$funnel->redirect_funnel" class="list-group-item">
           <b>{_sales_funnel.data.sales_funnels.fields.redirect_funnel_id}:</b>
           <code>{$funnel->redirect_funnel->url_key}</code>

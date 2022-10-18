@@ -6,6 +6,7 @@ data:
         fields:
             name: Name
             url_key: Url key
+            note: Note
             is_active: Active
             is_inactive: Inactive
             redirect_funnel_id: Redirect

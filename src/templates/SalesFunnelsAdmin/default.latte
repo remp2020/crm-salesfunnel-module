@@ -23,6 +23,7 @@
         <tr>
           <th>{_'sales_funnel.data.sales_funnels.fields.name'}</th>
           <th>{_'sales_funnel.data.sales_funnels.fields.url_key'}</th>
+          <th>{_'sales_funnel.data.sales_funnels.fields.note'}</th>
           <th>{_'sales_funnel.data.sales_funnels.fields.total_conversions'}</th>
           <th>{_'sales_funnel.data.sales_funnels.fields.last_conversion'}</th>
           <th>{_'sales_funnel.data.sales_funnels.fields.created_at'}</th>
@@ -40,6 +41,7 @@
             <span n:if="$funnel->only_not_logged" class="label label-default">{_'sales_funnel.data.sales_funnels.fields.only_not_logged'}</span>
           </td>
           <td><code>{$funnel->url_key}</code></td>
+          <td>{$funnel->note|breaklines}</td>
           <td>{$funnel->total_conversions}</td>
           <td class="text-muted">{$funnel->last_conversion}</td>
           <td class="text-muted">{$funnel->created_at}</td>

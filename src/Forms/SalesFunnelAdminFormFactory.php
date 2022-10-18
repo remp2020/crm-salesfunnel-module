@@ -57,6 +57,12 @@ class SalesFunnelAdminFormFactory
             ->setHtmlAttribute('placeholder', 'sales_funnel.data.sales_funnels.placeholder.name')
             ->setRequired();
 
+        $form->addTextArea('note', 'sales_funnel.data.sales_funnels.fields.note')
+            ->setNullable()
+            ->setHtmlAttribute('rows', 4)
+            ->getControlPrototype()
+            ->addAttributes(['class' => 'ace', 'data-lang' => 'text']);
+
         $isActive = $form->addCheckbox('is_active', 'sales_funnel.data.sales_funnels.fields.is_active');
 
         $activeFunnels = [];
@@ -181,7 +187,9 @@ class SalesFunnelAdminFormFactory
                 $segment,
                 $values->no_access_html,
                 $values->error_html,
-                $values->redirect_funnel_id
+                $values->redirect_funnel_id,
+                $values->limit_per_user,
+                $values->note
             );
             $this->updateMeta($row, $meta);
             $this->onSave->__invoke($row);

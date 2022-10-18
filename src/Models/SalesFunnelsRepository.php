@@ -56,7 +56,8 @@ class SalesFunnelsRepository extends Repository
         $noAccessHtml = null,
         $errorHtml = null,
         $redirectFunnelId = null,
-        $limitPerUser = null
+        $limitPerUser = null,
+        $note = null
     ) {
         $result = $this->insert([
             'name' => $name,
@@ -75,7 +76,8 @@ class SalesFunnelsRepository extends Repository
             'only_not_logged' => $onlyNotLogged,
             'segment_id' => $segment ? $segment->id : null,
             'redirect_funnel_id' => $redirectFunnelId,
-            'limit_per_user' => $limitPerUser
+            'limit_per_user' => $limitPerUser,
+            'note' => $note,
         ]);
 
         $this->emitter->emit(new SalesFunnelCreatedEvent($result));

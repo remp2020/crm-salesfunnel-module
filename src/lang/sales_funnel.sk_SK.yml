@@ -6,6 +6,7 @@ data:
         fields:
             name: Názov
             url_key: Url
+            note: Poznámka
             is_active: Aktívny
             is_inactive: Neaktívny
             redirect_funnel_id: Presmerovanie
