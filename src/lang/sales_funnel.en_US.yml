@@ -63,7 +63,6 @@ frontend:
         title: Thank you!
         payment_success: Your payment was successful
         pass_sent: "We sent you the password via e-mail: %email%."
-        foreign_country: "For delivery to foreign countries please contact as <a href=\"mailto:%contactEmail%\">%contactEmail%</a>"
         complete_registration: Back to article
         complete_registration_info: "If you filled all the info,<br>continue where you left off."
     error_page:

@@ -63,7 +63,6 @@ frontend:
         title: Děkujeme!
         payment_success: Vaše platba v pořádku proběhla
         pass_sent: Heslo jsme Vám poslali emailem na %email%.
-        foreign_country: 'Pro informace o doručení do zahraniční nás, prosím, kontaktujte na <a href="mailto:%contactEmail%">%contactEmail%</a>'
         complete_registration: Návrat na článek
         complete_registration_info: "Pokud jste vyplnili všechny údaje,<br>pokračujte kde jste skončili."
     error_page:

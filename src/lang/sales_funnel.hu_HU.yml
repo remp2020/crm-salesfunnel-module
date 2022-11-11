@@ -60,7 +60,6 @@ frontend:
         title: "Köszönjük!"
         payment_success: "A fizetés sikeres"
         pass_sent: "A jelszót elküldtük az alábbi e-mail címre %email%."
-        foreign_country: "A külföldi kézbesítéssel kapcsolatos információkért, kérjük, írjon az <a href=\"mailto:%contactEmail%\">%contactEmail%</a> címre"
         complete_registration: "Vissza a cikkhez"
         complete_registration_info: "Ha minden adatot beírt, folytassa ott, ahol abbahagyta."
     error_page:
