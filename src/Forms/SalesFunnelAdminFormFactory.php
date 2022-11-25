@@ -8,36 +8,25 @@ use Crm\SalesFunnelModule\Repository\SalesFunnelsRepository;
 use Crm\SegmentModule\Repository\SegmentsRepository;
 use Nette\Application\UI\Form;
 use Nette\Database\Table\ActiveRow;
+use Nette\Forms\Controls\TextInput;
 use Nette\Utils\DateTime;
 use Tomaj\Form\Renderer\BootstrapRenderer;
 
 class SalesFunnelAdminFormFactory
 {
-    private $salesFunnelsRepository;
-
-    private $salesFunnelsMetaRepository;
-
-    private $segmentsRepository;
-
-    private $translator;
-
     public $onUpdate;
 
     public $onSave;
 
     public function __construct(
-        SalesFunnelsRepository $salesFunnelsRepository,
-        SalesFunnelsMetaRepository $salesFunnelsMetaRepository,
-        SegmentsRepository $segmentsRepository,
-        Translator $translator
+        private SalesFunnelsRepository $salesFunnelsRepository,
+        private SalesFunnelsMetaRepository $salesFunnelsMetaRepository,
+        private SegmentsRepository $segmentsRepository,
+        private Translator $translator
     ) {
-        $this->salesFunnelsRepository = $salesFunnelsRepository;
-        $this->salesFunnelsMetaRepository = $salesFunnelsMetaRepository;
-        $this->segmentsRepository = $segmentsRepository;
-        $this->translator = $translator;
     }
 
-    public function create($id)
+    public function create($id): Form
     {
         $defaults = [];
         if (isset($id)) {
@@ -83,7 +72,10 @@ class SalesFunnelAdminFormFactory
 
         $form->addText('url_key', 'sales_funnel.data.sales_funnels.fields.url_key')
             ->setHtmlAttribute('placeholder', 'sales_funnel.data.sales_funnels.placeholder.url_key')
-            ->setRequired();
+            ->setRequired()
+            ->addRule(function (TextInput $control) {
+                return $this->salesFunnelsRepository->findByUrlKey($control->getValue()) === null;
+            }, 'sales_funnel.admin.sales_funnels.copy.validation.url_key');
 
         $form->addCheckbox('only_logged', 'sales_funnel.data.sales_funnels.fields.only_logged');
         $form->addCheckbox('only_not_logged', 'sales_funnel.data.sales_funnels.fields.only_not_logged');

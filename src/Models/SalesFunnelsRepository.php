@@ -7,38 +7,28 @@ use Crm\ApplicationModule\Repository\AuditLogRepository;
 use Crm\PaymentsModule\Repository\PaymentsRepository;
 use Crm\SalesFunnelModule\Events\SalesFunnelCreatedEvent;
 use Crm\SalesFunnelModule\Events\SalesFunnelUpdatedEvent;
+use Crm\SalesFunnelModule\SalesFunnelAlreadyExistsException;
 use DateTime;
 use League\Event\Emitter;
 use Nette\Database\Explorer;
 use Nette\Database\Table\ActiveRow;
 use Nette\Database\Table\Selection;
+use Nette\Database\UniqueConstraintViolationException;
 
 class SalesFunnelsRepository extends Repository
 {
     protected $tableName = 'sales_funnels';
 
-    private Emitter $emitter;
-
-    private SalesFunnelsSubscriptionTypesRepository $salesFunnelsSubscriptionTypesRepository;
-
-    private SalesFunnelsPaymentGatewaysRepository $salesFunnelsPaymentGatewaysRepository;
-
-    private SalesFunnelsMetaRepository $salesFunnelsMetaRepository;
-
     public function __construct(
         Explorer $database,
         AuditLogRepository $auditLogRepository,
-        Emitter $emitter,
-        SalesFunnelsSubscriptionTypesRepository $salesFunnelsSubscriptionTypesRepository,
-        SalesFunnelsPaymentGatewaysRepository $salesFunnelsPaymentGatewaysRepository,
-        SalesFunnelsMetaRepository $salesFunnelsMetaRepository
+        private Emitter $emitter,
+        private SalesFunnelsSubscriptionTypesRepository $salesFunnelsSubscriptionTypesRepository,
+        private SalesFunnelsPaymentGatewaysRepository $salesFunnelsPaymentGatewaysRepository,
+        private SalesFunnelsMetaRepository $salesFunnelsMetaRepository
     ) {
         parent::__construct($database);
         $this->auditLogRepository = $auditLogRepository;
-        $this->emitter = $emitter;
-        $this->salesFunnelsSubscriptionTypesRepository = $salesFunnelsSubscriptionTypesRepository;
-        $this->salesFunnelsPaymentGatewaysRepository = $salesFunnelsPaymentGatewaysRepository;
-        $this->salesFunnelsMetaRepository = $salesFunnelsMetaRepository;
     }
 
     public function add(
@@ -59,26 +49,30 @@ class SalesFunnelsRepository extends Repository
         $limitPerUser = null,
         $note = null
     ) {
-        $result = $this->insert([
-            'name' => $name,
-            'url_key' => $urlKey,
-            'start_at' => $startAt,
-            'end_at' => $endAt,
-            'body' => $body,
-            'no_access_html' => $noAccessHtml,
-            'error_html' => $errorHtml,
-            'head_meta' => $headMeta,
-            'head_script' => $headScript,
-            'created_at' => new DateTime(),
-            'updated_at' => new DateTime(),
-            'is_active' => $isActive,
-            'only_logged' => $onlyLogged,
-            'only_not_logged' => $onlyNotLogged,
-            'segment_id' => $segment ? $segment->id : null,
-            'redirect_funnel_id' => $redirectFunnelId,
-            'limit_per_user' => $limitPerUser,
-            'note' => $note,
-        ]);
+        try {
+            $result = $this->insert([
+                'name' => $name,
+                'url_key' => $urlKey,
+                'start_at' => $startAt,
+                'end_at' => $endAt,
+                'body' => $body,
+                'no_access_html' => $noAccessHtml,
+                'error_html' => $errorHtml,
+                'head_meta' => $headMeta,
+                'head_script' => $headScript,
+                'created_at' => new DateTime(),
+                'updated_at' => new DateTime(),
+                'is_active' => $isActive,
+                'only_logged' => $onlyLogged,
+                'only_not_logged' => $onlyNotLogged,
+                'segment_id' => $segment ? $segment->id : null,
+                'redirect_funnel_id' => $redirectFunnelId,
+                'limit_per_user' => $limitPerUser,
+                'note' => $note,
+            ]);
+        } catch (UniqueConstraintViolationException $e) {
+            throw new SalesFunnelAlreadyExistsException('Sales funnel already exists: '. $urlKey);
+        }
 
         $this->emitter->emit(new SalesFunnelCreatedEvent($result));
         return $result;

@@ -32,61 +32,22 @@ use Tomaj\Form\Renderer\BootstrapRenderer;
 
 class SalesFunnelsAdminPresenter extends AdminPresenter
 {
-    private $salesFunnelsRepository;
-
-    private $salesFunnelAdminFormFactory;
-
-    private $salesFunnelsMetaRepository;
-
-    private $salesFunnelsStatsRepository;
-
-    private $paymentGatewaysRepository;
-
-    private $paymentsRepository;
-
-    private $subscriptionTypesRepository;
-
-    private $salesFunnelsSubscriptionTypesRepository;
-
-    private $salesFunnelsPaymentGatewaysRepository;
-
-    private $excelFactory;
-
-    private $subscriptionTypeHelper;
-
-    private Config $config;
-
-    private SalesFunnelsCache $salesFunnelsCache;
-
     public function __construct(
-        SalesFunnelsRepository $salesFunnelsRepository,
-        SalesFunnelAdminFormFactory $salesFunnelAdminFormFactory,
-        SalesFunnelsMetaRepository $salesFunnelsMetaRepository,
-        SalesFunnelsStatsRepository $salesFunnelsStatsRepository,
-        PaymentGatewaysRepository $paymentGatewaysRepository,
-        PaymentsRepository $paymentsRepository,
-        SubscriptionTypesRepository $subscriptionTypesRepository,
-        SalesFunnelsSubscriptionTypesRepository $salesFunnelsSubscriptionTypesRepository,
-        SalesFunnelsPaymentGatewaysRepository $salesFunnelsPaymentGatewaysRepository,
-        ExcelFactory $excelFactory,
-        SubscriptionTypeHelper $subscriptionTypeHelper,
-        Config $config,
-        SalesFunnelsCache $salesFunnelsCache
+        private SalesFunnelsRepository $salesFunnelsRepository,
+        private SalesFunnelAdminFormFactory $salesFunnelAdminFormFactory,
+        private SalesFunnelsMetaRepository $salesFunnelsMetaRepository,
+        private SalesFunnelsStatsRepository $salesFunnelsStatsRepository,
+        private PaymentGatewaysRepository $paymentGatewaysRepository,
+        private PaymentsRepository $paymentsRepository,
+        private SubscriptionTypesRepository $subscriptionTypesRepository,
+        private SalesFunnelsSubscriptionTypesRepository $salesFunnelsSubscriptionTypesRepository,
+        private SalesFunnelsPaymentGatewaysRepository $salesFunnelsPaymentGatewaysRepository,
+        private ExcelFactory $excelFactory,
+        private SubscriptionTypeHelper $subscriptionTypeHelper,
+        private Config $config,
+        private SalesFunnelsCache $salesFunnelsCache
     ) {
         parent::__construct();
-        $this->salesFunnelsRepository = $salesFunnelsRepository;
-        $this->salesFunnelAdminFormFactory = $salesFunnelAdminFormFactory;
-        $this->salesFunnelsMetaRepository = $salesFunnelsMetaRepository;
-        $this->salesFunnelsStatsRepository = $salesFunnelsStatsRepository;
-        $this->paymentGatewaysRepository = $paymentGatewaysRepository;
-        $this->paymentsRepository = $paymentsRepository;
-        $this->subscriptionTypesRepository = $subscriptionTypesRepository;
-        $this->salesFunnelsSubscriptionTypesRepository = $salesFunnelsSubscriptionTypesRepository;
-        $this->salesFunnelsPaymentGatewaysRepository = $salesFunnelsPaymentGatewaysRepository;
-        $this->excelFactory = $excelFactory;
-        $this->subscriptionTypeHelper = $subscriptionTypeHelper;
-        $this->config = $config;
-        $this->salesFunnelsCache = $salesFunnelsCache;
     }
 
     /**
