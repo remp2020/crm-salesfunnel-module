@@ -55,8 +55,8 @@ class SalesFunnelAdminFormFactory
         $isActive = $form->addCheckbox('is_active', 'sales_funnel.data.sales_funnels.fields.is_active');
 
         $activeFunnels = [];
-        foreach ($this->salesFunnelsRepository->active()->fetchAll() as $funnel) {
-            $activeFunnels[strval($funnel->id)] = "{$funnel->name} <small>({$funnel->url_key})</small>";
+        foreach ($this->salesFunnelsRepository->active()->fetchAll() as $f) {
+            $activeFunnels[(string)$f->id] = "{$f->name} <small>({$f->url_key})</small>";
         }
 
         $redirectFunnelId = $form->addSelect('redirect_funnel_id', 'sales_funnel.data.sales_funnels.fields.redirect_funnel_id', $activeFunnels)
@@ -73,8 +73,12 @@ class SalesFunnelAdminFormFactory
         $form->addText('url_key', 'sales_funnel.data.sales_funnels.fields.url_key')
             ->setHtmlAttribute('placeholder', 'sales_funnel.data.sales_funnels.placeholder.url_key')
             ->setRequired()
-            ->addRule(function (TextInput $control) {
-                return $this->salesFunnelsRepository->findByUrlKey($control->getValue()) === null;
+            ->addRule(function (TextInput $control) use (&$funnel) {
+                $newValue = $control->getValue();
+                if ($funnel && $funnel->url_key === $newValue) {
+                    return true;
+                }
+                return $this->salesFunnelsRepository->findByUrlKey($newValue) === null;
             }, 'sales_funnel.admin.sales_funnels.copy.validation.url_key');
 
         $form->addCheckbox('only_logged', 'sales_funnel.data.sales_funnels.fields.only_logged');
