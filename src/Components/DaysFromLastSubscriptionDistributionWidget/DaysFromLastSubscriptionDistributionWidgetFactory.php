@@ -4,6 +4,5 @@ namespace Crm\SalesFunnelModule\Components;
 
 interface DaysFromLastSubscriptionDistributionWidgetFactory
 {
-    /** @return DaysFromLastSubscriptionDistributionWidget */
-    public function create();
+    public function create(): DaysFromLastSubscriptionDistributionWidget;
 }
