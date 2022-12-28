@@ -15,7 +15,14 @@ class PaymentIsFromSpecificSalesFunnelCriteriaTest extends PaymentsTestCase
     {
         parent::setUp();
 
-        $this->salesFunnelsRepository = $this->inject(SalesFunnelsRepository::class);
+        $this->salesFunnelsRepository = $this->getRepository(SalesFunnelsRepository::class);
+    }
+
+    public function requiredRepositories(): array
+    {
+        $repositories = parent::requiredRepositories();
+        $repositories[] = SalesFunnelsRepository::class;
+        return $repositories;
     }
 
     public function testPaymentIsNotFromSpecificSalesFunnel(): void
