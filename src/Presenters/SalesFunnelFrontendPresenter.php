@@ -8,7 +8,6 @@ use Crm\ApplicationModule\Hermes\HermesMessage;
 use Crm\ApplicationModule\Presenters\FrontendPresenter;
 use Crm\ApplicationModule\Request;
 use Crm\PaymentsModule\CannotProcessPayment;
-use Crm\PaymentsModule\GatewayFactory;
 use Crm\PaymentsModule\Gateways\ProcessResponse;
 use Crm\PaymentsModule\PaymentItem\DonationPaymentItem;
 use Crm\PaymentsModule\PaymentItem\PaymentItemContainer;
@@ -25,7 +24,6 @@ use Crm\SalesFunnelModule\Events\SalesFunnelEvent;
 use Crm\SalesFunnelModule\Repository\SalesFunnelsMetaRepository;
 use Crm\SalesFunnelModule\Repository\SalesFunnelsRepository;
 use Crm\SalesFunnelModule\Repository\SalesFunnelsStatsRepository;
-use Crm\SegmentModule\SegmentFactory;
 use Crm\SegmentModule\SegmentFactoryInterface;
 use Crm\SubscriptionsModule\PaymentItem\SubscriptionTypePaymentItem;
 use Crm\SubscriptionsModule\Repository\ContentAccessRepository;
@@ -48,61 +46,25 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
 {
     public const DEFAULT_ACTION_LAYOUT_NAME = 'default_action_layout_name';
 
-    private SalesFunnelsRepository $salesFunnelsRepository;
-    private SubscriptionTypesRepository $subscriptionTypesRepository;
-    private SalesFunnelsMetaRepository $salesFunnelsMetaRepository;
-    private PaymentGatewaysRepository $paymentGatewaysRepository;
-    private PaymentProcessor $paymentProcessor;
-    private PaymentsRepository $paymentsRepository;
-    private SegmentFactory $segmentFactory;
-    private Emitter $hermesEmitter;
-    private ActualUserSubscription $actualUserSubscription;
-    private AddressesRepository $addressesRepository;
-    private UserManager $userManager;
-    private GatewayFactory $gatewayFactory;
-    private RecurrentPaymentsRepository $recurrentPaymentsRepository;
-    private ContentAccessRepository $contentAccessRepository;
-    private SignInFormFactory $signInFormFactory;
-    private DataProviderManager $dataProviderManager;
-    private SubscriptionTypeHelper $subscriptionTypeHelper;
-
     public function __construct(
-        SalesFunnelsRepository $salesFunnelsRepository,
-        SalesFunnelsMetaRepository $salesFunnelsMetaRepository,
-        SubscriptionTypesRepository $subscriptionTypesRepository,
-        PaymentGatewaysRepository $paymentGatewaysRepository,
-        PaymentsRepository $paymentsRepository,
-        PaymentProcessor $paymentProcessor,
-        SegmentFactoryInterface $segmentFactory,
-        ActualUserSubscription $actualUserSubscription,
-        Emitter $hermesEmitter,
-        AddressesRepository $addressesRepository,
-        UserManager $userManager,
-        GatewayFactory $gatewayFactory,
-        RecurrentPaymentsRepository $recurrentPaymentsRepository,
-        ContentAccessRepository $contentAccessRepository,
-        SignInFormFactory $signInFormFactory,
-        DataProviderManager $dataProviderManager,
-        SubscriptionTypeHelper $subscriptionTypeHelper
+        private SalesFunnelsRepository $salesFunnelsRepository,
+        private SalesFunnelsMetaRepository $salesFunnelsMetaRepository,
+        private SubscriptionTypesRepository $subscriptionTypesRepository,
+        private PaymentGatewaysRepository $paymentGatewaysRepository,
+        private PaymentsRepository $paymentsRepository,
+        private PaymentProcessor $paymentProcessor,
+        private SegmentFactoryInterface $segmentFactory,
+        private ActualUserSubscription $actualUserSubscription,
+        private Emitter $hermesEmitter,
+        private AddressesRepository $addressesRepository,
+        private UserManager $userManager,
+        private RecurrentPaymentsRepository $recurrentPaymentsRepository,
+        private ContentAccessRepository $contentAccessRepository,
+        private SignInFormFactory $signInFormFactory,
+        private DataProviderManager $dataProviderManager,
+        private SubscriptionTypeHelper $subscriptionTypeHelper
     ) {
         parent::__construct();
-        $this->salesFunnelsRepository = $salesFunnelsRepository;
-        $this->salesFunnelsMetaRepository = $salesFunnelsMetaRepository;
-        $this->subscriptionTypesRepository = $subscriptionTypesRepository;
-        $this->paymentGatewaysRepository = $paymentGatewaysRepository;
-        $this->paymentProcessor = $paymentProcessor;
-        $this->paymentsRepository = $paymentsRepository;
-        $this->segmentFactory = $segmentFactory;
-        $this->actualUserSubscription = $actualUserSubscription;
-        $this->hermesEmitter = $hermesEmitter;
-        $this->addressesRepository = $addressesRepository;
-        $this->userManager = $userManager;
-        $this->gatewayFactory = $gatewayFactory;
-        $this->recurrentPaymentsRepository = $recurrentPaymentsRepository;
-        $this->contentAccessRepository = $contentAccessRepository;
-        $this->signInFormFactory = $signInFormFactory;
-        $this->dataProviderManager = $dataProviderManager;
-        $this->subscriptionTypeHelper = $subscriptionTypeHelper;
     }
 
     public function startup()
