@@ -149,7 +149,7 @@ class SalesFunnelsRepository extends Repository
         return $this->getTable()
             ->where(':payments.status = ?', PaymentsRepository::STATUS_PAID)
             ->where(':payments.sales_funnel_id = ?', $funnel->id)
-            ->sum(':payments.amount');
+            ->sum(':payments.amount') ?? 0;
     }
 
     final public function getSalesFunnelsBySubscriptionType(ActiveRow $subscriptionType)

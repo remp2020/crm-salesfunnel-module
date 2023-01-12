@@ -177,7 +177,7 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
             'meta' => $this->salesFunnelsMetaRepository->all($salesFunnel),
             'jsDomain' => $this->getJavascriptDomain(),
             'actualUserSubscription' => $this->actualUserSubscription,
-            'referer' => urlencode($referer),
+            'referer' => isset($referer) ? urlencode($referer) : null,
             'values' => $values ? Json::decode($values, Json::FORCE_ARRAY) : null,
             'errors' => $errors ? Json::decode($errors, Json::FORCE_ARRAY) : null,
             'locale' => $this->translator->getLocale(),
