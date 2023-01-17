@@ -29,9 +29,16 @@ class SalesFunnelAdminFormFactory
     public function create($id): Form
     {
         $defaults = [];
+        $activeFunnels = [];
+
         if (isset($id)) {
             $funnel = $this->salesFunnelsRepository->find($id);
             $purchaseLimit['funnel_purchase_limit'] = $this->salesFunnelsMetaRepository->get($funnel, 'funnel_purchase_limit');
+            $activeFunnels[(string) $funnel->redirect_funnel->id] = sprintf(
+                "%s <small>%s</small>",
+                $funnel->redirect_funnel->name,
+                $funnel->redirect_funnel->url_key
+            );
 
             $funnelData = $funnel->toArray();
             $defaults = array_merge($funnelData, $purchaseLimit);
@@ -54,7 +61,6 @@ class SalesFunnelAdminFormFactory
 
         $isActive = $form->addCheckbox('is_active', 'sales_funnel.data.sales_funnels.fields.is_active');
 
-        $activeFunnels = [];
         foreach ($this->salesFunnelsRepository->active()->fetchAll() as $f) {
             $activeFunnels[(string)$f->id] = "{$f->name} <small>({$f->url_key})</small>";
         }
