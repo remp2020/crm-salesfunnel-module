@@ -34,11 +34,13 @@ class SalesFunnelAdminFormFactory
         if (isset($id)) {
             $funnel = $this->salesFunnelsRepository->find($id);
             $purchaseLimit['funnel_purchase_limit'] = $this->salesFunnelsMetaRepository->get($funnel, 'funnel_purchase_limit');
-            $activeFunnels[(string) $funnel->redirect_funnel->id] = sprintf(
-                "%s <small>%s</small>",
-                $funnel->redirect_funnel->name,
-                $funnel->redirect_funnel->url_key
-            );
+            if ($funnel->redirect_funnel) {
+                $activeFunnels[(string) $funnel->redirect_funnel->id] = sprintf(
+                    "%s <small>%s</small>",
+                    $funnel->redirect_funnel->name,
+                    $funnel->redirect_funnel->url_key
+                );
+            }
 
             $funnelData = $funnel->toArray();
             $defaults = array_merge($funnelData, $purchaseLimit);
@@ -165,7 +167,7 @@ class SalesFunnelAdminFormFactory
         ];
         unset($values['funnel_purchase_limit']);
 
-        if ($values['is_active']) {
+        if ($values['is_active'] || empty($values['redirect_funnel_id'])) {
             $values['redirect_funnel_id'] = null;
         }
 
