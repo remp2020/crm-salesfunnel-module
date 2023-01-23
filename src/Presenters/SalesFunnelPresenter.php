@@ -41,6 +41,9 @@ class SalesFunnelPresenter extends FrontendPresenter implements PaymentAwareInte
 
     public function renderCancel($variableSymbol)
     {
+        if (!$variableSymbol) {
+            $this->redirect('error');
+        }
         $payment = $this->paymentsRepository->findByVs($variableSymbol);
         if (!$payment) {
             $this->redirect('error');
