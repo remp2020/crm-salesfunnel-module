@@ -332,7 +332,7 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
         return true;
     }
 
-    private function validateSubscriptionType(ActiveRow $subscriptionType, ActiveRow $funnel)
+    private function validateSubscriptionType(?ActiveRow $subscriptionType, ActiveRow $funnel)
     {
         $ua = Request::getUserAgent();
 
@@ -354,7 +354,7 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
         }
     }
 
-    private function validateGateway(ActiveRow $paymentGateway, ActiveRow $funnel)
+    private function validateGateway(?ActiveRow $paymentGateway, ActiveRow $funnel)
     {
         $ua = Request::getUserAgent();
 
