@@ -9,10 +9,10 @@ class SalesFunnelPaymentCompleteRedirectResolver implements PaymentCompleteRedir
 {
     public function wantsToRedirect(?ActiveRow $payment, string $status): bool
     {
-        if ($payment && in_array($status, [self::PAID, self::CANCELLED])) {
+        if ($payment && in_array($status, [self::PAID, self::CANCELLED], true)) {
             return true;
         }
-        if (in_array($status, [self::NOT_SETTLED, self::ERROR])) {
+        if (in_array($status, [self::NOT_SETTLED, self::ERROR], true)) {
             return true;
         }
 

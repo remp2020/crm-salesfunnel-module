@@ -72,7 +72,7 @@ class SalesFunnelPresenter extends FrontendPresenter implements PaymentAwareInte
             );
             $this->redirect('SalesFunnel:Error');
         }
-        if (!in_array($payment->status, [PaymentsRepository::STATUS_PAID, PaymentsRepository::STATUS_PREPAID])) {
+        if (!in_array($payment->status, [PaymentsRepository::STATUS_PAID, PaymentsRepository::STATUS_PREPAID], true)) {
             $this->paymentLogsRepository->add(
                 'ERROR',
                 "Payment is not paid '{$this->variableSymbol}'",

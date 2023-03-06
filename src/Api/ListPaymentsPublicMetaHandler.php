@@ -95,7 +95,7 @@ class ListPaymentsPublicMetaHandler extends ApiHandler
             ];
 
             foreach ($payment->related('payment_meta.payment_id') as $paymentMeta) {
-                if ($params['meta_keys'] && in_array($paymentMeta->key, $params['meta_keys'])) {
+                if ($params['meta_keys'] && in_array($paymentMeta->key, $params['meta_keys'], true)) {
                     $item['meta'][$paymentMeta->key] = $paymentMeta->value;
                 }
             }
