@@ -15,6 +15,7 @@
     <div class="panel panel-default">
       <div class="panel-heading">
         {_sales_funnel.admin.sales_funnels.show.basic_informations}
+        <span n:if="$funnel->url_key === $defaultSalesFunnelUrlKey" class="label label-success">{_'sales_funnel.config.default_sales_funnel_url_key.name'}</span>
         {if $funnel->is_active}
           <span class="label label-primary">{_sales_funnel.data.sales_funnels.fields.is_active}</span>
         {else}

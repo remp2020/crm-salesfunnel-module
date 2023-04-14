@@ -56,6 +56,7 @@ class SalesFunnelsAdminPresenter extends AdminPresenter
     public function renderDefault()
     {
         $this->template->funnels = $this->salesFunnelsRepository->all();
+        $this->template->defaultSalesFunnelUrlKey = $this->applicationConfig->get('default_sales_funnel_url_key');
     }
 
     /**
@@ -82,6 +83,7 @@ class SalesFunnelsAdminPresenter extends AdminPresenter
         $this->template->total_paid_amount = $this->salesFunnelsRepository->totalPaidAmount($funnel);
         $this->template->subscriptionTypesPaymentsMap = $this->salesFunnelsRepository->getSalesFunnelDistribution($funnel);
         $this->template->meta = $this->salesFunnelsMetaRepository->all($funnel);
+        $this->template->defaultSalesFunnelUrlKey = $this->applicationConfig->get('default_sales_funnel_url_key');
     }
 
     /**

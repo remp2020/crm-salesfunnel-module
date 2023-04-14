@@ -37,6 +37,7 @@
               {$funnel->name}
             </a>
             {control simpleWidget 'admin.sales_funnel.after_name', $funnel}
+            <span n:if="$funnel->url_key === $defaultSalesFunnelUrlKey" class="label label-success">{_'sales_funnel.config.default_sales_funnel_url_key.name'}</span>
             <span n:if="$funnel->only_logged" class="label label-default">{_'sales_funnel.data.sales_funnels.fields.only_logged'}</span>
             <span n:if="$funnel->only_not_logged" class="label label-default">{_'sales_funnel.data.sales_funnels.fields.only_not_logged'}</span>
           </td>
