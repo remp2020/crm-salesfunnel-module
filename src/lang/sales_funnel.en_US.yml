@@ -167,8 +167,8 @@ admin:
         sales_funnel_stats_by_device:
             all_devices: All devices
         recurrent_payments_graph:
-            title: Counts of recurrent and not recurrent payments
-            tooltip: Counts of recurrent and not recurrent (one time) payments
+            title: Ratio of recurrent and non-recurrent payments
+            tooltip: Ratio of recurrent and non-recurrent (one-time) payments
             recurrent_serie_title: Recurrent
             not_recurrent_serie_title: Not recurrent
     scenarios:

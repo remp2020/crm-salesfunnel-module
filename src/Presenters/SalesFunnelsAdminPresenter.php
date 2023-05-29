@@ -511,7 +511,7 @@ class SalesFunnelsAdminPresenter extends AdminPresenter
         $graphDataItem->setCriteria((new Criteria())
             ->setTableName('payments')
             ->setTimeField('paid_at')
-            ->setWhere("AND payments.status = 'paid' AND payments.sales_funnel_id=" . intval($this->params['id']))
+            ->setWhere("AND payments.status IN ('paid', 'prepaid') AND payments.sales_funnel_id=" . intval($this->params['id']))
             ->setGroupBy('payment_gateways.name')
             ->setJoin('LEFT JOIN payment_gateways on payment_gateways.id = payments.payment_gateway_id')
             ->setSeries('payment_gateways.name')
@@ -533,7 +533,7 @@ class SalesFunnelsAdminPresenter extends AdminPresenter
         $graphDataItem->setCriteria((new Criteria())
             ->setTableName('payments')
             ->setTimeField('paid_at')
-            ->setWhere("AND payments.status = 'paid' AND payments.sales_funnel_id=" . intval($this->params['id']))
+            ->setWhere("AND payments.status IN ('paid', 'prepaid') AND payments.sales_funnel_id=" . intval($this->params['id']))
             ->setGroupBy('payment_gateways.is_recurrent')
             ->setJoin('LEFT JOIN payment_gateways on payment_gateways.id = payments.payment_gateway_id')
             ->setSeries('payment_gateways.is_recurrent')
@@ -565,7 +565,7 @@ class SalesFunnelsAdminPresenter extends AdminPresenter
             ->setJoin(
                 "LEFT JOIN payment_items ON payment_id = payments.id"
             )
-            ->setWhere('AND payments.sales_funnel_id=' . intval($this->params['id']) . ' AND payments.status=\'paid\'')
+            ->setWhere("AND payments.status IN ('paid', 'prepaid') AND payments.sales_funnel_id=" . intval($this->params['id']))
             ->setSeries('payment_items.name')
             ->setValueField('sum(payment_items.count)')
             ->setStart((new DateTime())->modify('-1 month')->format('Y-m-d'))
