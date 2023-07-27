@@ -3,6 +3,7 @@
 namespace Crm\SalesFunnelModule\Forms;
 
 use Contributte\Translation\Translator;
+use Crm\SalesFunnelModule\Repository\SalesFunnelTagsRepository;
 use Crm\SalesFunnelModule\Repository\SalesFunnelsMetaRepository;
 use Crm\SalesFunnelModule\Repository\SalesFunnelsRepository;
 use Crm\SegmentModule\Repository\SegmentsRepository;
@@ -21,6 +22,7 @@ class SalesFunnelAdminFormFactory
     public function __construct(
         private SalesFunnelsRepository $salesFunnelsRepository,
         private SalesFunnelsMetaRepository $salesFunnelsMetaRepository,
+        private SalesFunnelTagsRepository $salesFunnelTagsRepository,
         private SegmentsRepository $segmentsRepository,
         private Translator $translator
     ) {
@@ -109,6 +111,22 @@ class SalesFunnelAdminFormFactory
             ->addCondition(Form::FILLED)
             ->addRule(Form::MIN, 'sales_funnel.data.sales_funnels.validation.minimum.funnel_purchase_limit', 1);
 
+        $sortedByOccurrences = $this->salesFunnelTagsRepository
+            ->tagsSortedByOccurrences();
+
+        $setTags = $this->salesFunnelTagsRepository->all()
+            ->where(['sales_funnel_id' => $id])
+            ->fetchPairs('tag', 'tag');
+
+        $form->addMultiSelect('tags', 'sales_funnel.data.sales_funnels.fields.tags', $sortedByOccurrences)
+            ->checkDefaultValue(false)
+            ->setDefaultValue($setTags)
+            ->getControlPrototype()->addAttributes([
+                'class' => 'select2',
+                'tags' => 'true',
+            ]);
+
+
         $form->addTextArea('body', 'sales_funnel.data.sales_funnels.fields.body')
             ->setHtmlAttribute('data-codeeditor', ['name' => 'twig', 'base' => 'text/html']);
 
@@ -133,8 +151,21 @@ class SalesFunnelAdminFormFactory
             ->setName('button')
             ->setHtml('<i class="fa fa-save"></i> ' . $this->translator->translate('system.save'));
 
+        $form->onValidate[] = [$this, 'formValidate'];
         $form->onSuccess[] = [$this, 'formSucceeded'];
         return $form;
+    }
+
+    public function formValidate($form, $b)
+    {
+        // The database currently (2023.7.27) uses a varchar(255) so we need to check that the string doesn't grow too long
+        $tags = $form->getComponent('tags')->getRawValue();
+        foreach ($tags as $tag) {
+            $tagLen = mb_strlen($tag, 'utf8');
+            if ($tagLen > 255) {
+                $form->addError('subscriptions.admin.subscription_type_items.tag_len_error');
+            };
+        }
     }
 
     public function formSucceeded($form, $values)
@@ -173,6 +204,12 @@ class SalesFunnelAdminFormFactory
 
         if ($id) {
             $row = $this->salesFunnelsRepository->find($id);
+
+            $tags = $form->getComponent('tags')->getRawValue();
+            unset($values['tags']);
+
+            $this->salesFunnelTagsRepository->setTagsForSalesFunnel($row, $tags);
+
             $this->salesFunnelsRepository->update($row, $values);
             $this->updateMeta($row, $meta);
             $this->onUpdate->__invoke($row);
@@ -195,6 +232,12 @@ class SalesFunnelAdminFormFactory
                 $values->limit_per_user,
                 $values->note
             );
+
+            $tags = $form->getComponent('tags')->getRawValue();
+            unset($values['tags']);
+
+            $this->salesFunnelTagsRepository->setTagsForSalesFunnel($row, $tags);
+
             $this->updateMeta($row, $meta);
             $this->onSave->__invoke($row);
         }

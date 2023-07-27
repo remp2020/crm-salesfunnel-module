@@ -9,6 +9,7 @@ services:
 	salesFunnelsStatsRepository: Crm\SalesFunnelModule\Repository\SalesFunnelsStatsRepository
 	salesFunnelsMetaRepository: Crm\SalesFunnelModule\Repository\SalesFunnelsMetaRepository
 	salesFunnelsConversionDistributionsRepository: Crm\SalesFunnelModule\SalesFunnelsConversionDistributionsRepository
+	salesFunnelTagsRepository: Crm\SalesFunnelModule\Repository\SalesFunnelTagsRepository
 
 	# DI
 	- Crm\SalesFunnelModule\DI\Config

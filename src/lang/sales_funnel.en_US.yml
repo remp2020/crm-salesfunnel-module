@@ -34,6 +34,7 @@ data:
             only_logged: Only logged
             only_not_logged: Only not logged
             segment: Segment
+            tags: Tags
         validation:
             minimum:
                 limit_per_user: Minimum value %1$d

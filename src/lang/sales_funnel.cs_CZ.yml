@@ -34,6 +34,7 @@ data:
             only_logged: Pouze přihlášení
             only_not_logged: Pouze nepřihlášení
             segment: Segment
+            tags: Tagy
         validation:
             minimum:
                 limit_per_user: Minimální hodnota %1$d

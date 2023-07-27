@@ -27,6 +27,7 @@
           <th>{_'sales_funnel.data.sales_funnels.fields.total_conversions'}</th>
           <th>{_'sales_funnel.data.sales_funnels.fields.last_conversion'}</th>
           <th>{_'sales_funnel.data.sales_funnels.fields.created_at'}</th>
+          <th>{_'sales_funnel.data.sales_funnels.fields.tags'}</th>
           <th>{_'system.actions'}</th>
         </tr>
       </thead>
@@ -46,6 +47,11 @@
           <td>{$funnel->total_conversions}</td>
           <td class="text-muted">{$funnel->last_conversion}</td>
           <td class="text-muted">{$funnel->created_at}</td>
+          <td>
+            {foreach $funnel->related('sales_funnel_tags') as $tag}
+              <span class="label label-default">{$tag->tag}</span>
+            {/foreach}
+          </td>
           <td>
             <p class="text-nowrap">
               <a n:href="show $funnel->id" class="btn btn-sm btn-info" title="{_'system.show'}"><i class="fa fa-eye"></i> </a>
