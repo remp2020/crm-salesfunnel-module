@@ -116,8 +116,15 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
         }
     }
 
-    public function renderShow($funnel, $referer = null, $values = null, $errors = null)
+    public function renderShow($funnel, $referer = null, $values = null, $errors = null, $body = null)
     {
+        if (!isset($funnel)) {
+            $funnel = $this->request->getPost()['funnel'] ?? null;
+        }
+        if (!isset($body)) {
+            $body = $this->request->getPost()['body'] ?? null;
+        }
+
         $salesFunnel = $this->salesFunnelsRepository->findByUrlKey($funnel);
         if (!$salesFunnel) {
             throw new BadRequestException('Funnel not found');
@@ -141,7 +148,7 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
         $subscriptionTypes = $this->getValidSubscriptionTypes($salesFunnel);
 
         $addresses = [];
-        $body = $salesFunnel->body;
+        $body = $body ?? $salesFunnel->body;
 
         $loader = new \Twig\Loader\ArrayLoader([
             'funnel_template' => $body,
