@@ -26,7 +26,6 @@ use Crm\SalesFunnelModule\Scenarios\PaymentIsFromSalesFunnelCriteria;
 use Crm\SalesFunnelModule\Scenarios\PaymentIsFromSpecificSalesFunnelCriteria;
 use Crm\SalesFunnelModule\Seeders\ConfigsSeeder;
 use Crm\SalesFunnelModule\Seeders\SalesFunnelsSeeder;
-use League\Event\Emitter;
 use Nette\Application\Routers\RouteList;
 use Nette\DI\Container;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -64,34 +63,34 @@ class SalesFunnelModule extends CrmModule
         $menuContainer->attachMenuItem($mainMenu);
     }
 
-    public function registerEventHandlers(Emitter $emitter)
+    public function registerLazyEventHandlers(\Crm\ApplicationModule\Event\LazyEventEmitter $emitter)
     {
         $emitter->addListener(
             \Crm\PaymentsModule\Events\PaymentChangeStatusEvent::class,
-            $this->getInstance(\Crm\SalesFunnelModule\Events\PaymentStatusChangeHandler::class),
+            \Crm\SalesFunnelModule\Events\PaymentStatusChangeHandler::class,
             700
         );
         $emitter->addListener(
             \Crm\PaymentsModule\Events\PaymentChangeStatusEvent::class,
-            $this->getInstance(\Crm\SalesFunnelModule\Events\CalculateSalesFunnelConversionDistributionEventHandler::class),
+            \Crm\SalesFunnelModule\Events\CalculateSalesFunnelConversionDistributionEventHandler::class,
             800
         );
         $emitter->addListener(
             \Crm\SalesFunnelModule\Events\SalesFunnelEvent::class,
-            $this->getInstance(\Crm\SalesFunnelModule\Events\SalesFunnelHandler::class)
+            \Crm\SalesFunnelModule\Events\SalesFunnelHandler::class
         );
         $emitter->addListener(
             \Crm\SalesFunnelModule\Events\SalesFunnelCreatedEvent::class,
-            $this->getInstance(\Crm\SalesFunnelModule\Events\SalesFunnelChangedEventsHandler::class)
+            \Crm\SalesFunnelModule\Events\SalesFunnelChangedEventsHandler::class
         );
         $emitter->addListener(
             \Crm\SalesFunnelModule\Events\SalesFunnelUpdatedEvent::class,
-            $this->getInstance(\Crm\SalesFunnelModule\Events\SalesFunnelChangedEventsHandler::class)
+            \Crm\SalesFunnelModule\Events\SalesFunnelChangedEventsHandler::class
         );
 
         $emitter->addListener(
             \Crm\SalesFunnelModule\Events\CalculateSalesFunnelConversionDistributionEvent::class,
-            $this->getInstance(\Crm\SalesFunnelModule\Events\CalculateSalesFunnelConversionDistributionEventHandler::class)
+            \Crm\SalesFunnelModule\Events\CalculateSalesFunnelConversionDistributionEventHandler::class
         );
     }
 
