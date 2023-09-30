@@ -580,6 +580,7 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
 
         $this->paymentsRepository->update($payment, ['sales_funnel_id' => $funnel->id]);
 
+        /** @var SalesFunnelPaymentFormDataProviderInterface[] $providers */
         $providers = $this->dataProviderManager->getProviders('salesfunnel.dataprovider.payment_form_data', SalesFunnelPaymentFormDataProviderInterface::class);
         foreach ($providers as $sorting => $provider) {
             $provider->provide(['payment' => $payment, 'post_data' => $this->request->post]);
