@@ -54,7 +54,7 @@
 <script type="text/javascript" src="{$basePath}/layouts/default/js/iframeResizer.min.js"></script>
 
 <script type="text/javascript">
-    $( window ).load(function() {
+    $(window).on('load', function() {
         iFrameResize({ log: false, heightCalculationMethod: 'max' }, '#myiframe');
     });
 
@@ -64,7 +64,7 @@
         }, 'fast');
     };
 
-    $('#myiframe').load(function() {
+    $('#myiframe').on('load', function() {
         $(this).siblings('.preloader').remove();
         $(this).parents('.iframe_wrapper').addClass('init');
     })
