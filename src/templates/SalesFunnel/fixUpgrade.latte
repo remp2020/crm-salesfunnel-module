@@ -50,7 +50,7 @@
         $('#myiframe').iFrameResize();
     });
     $
-    $('#myiframe').load(function() {
+    $('#myiframe').on('load', function() {
         $(this).siblings('.preloader').remove();
         $(this).parents('.iframe_wrapper').addClass('init');
     })
