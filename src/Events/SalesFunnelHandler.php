@@ -4,9 +4,9 @@ namespace Crm\SalesFunnelModule\Events;
 
 use Crm\SalesFunnelModule\Repository\SalesFunnelsRepository;
 use Crm\SalesFunnelModule\Repository\SalesFunnelsStatsRepository;
+use DeviceDetector\DeviceDetector;
 use League\Event\AbstractListener;
 use League\Event\EventInterface;
-use Sinergi\BrowserDetector\Browser;
 
 class SalesFunnelHandler extends AbstractListener
 {
@@ -28,15 +28,17 @@ class SalesFunnelHandler extends AbstractListener
             throw new \Exception('invalid type of event received: ' . get_class($event));
         }
 
-        $salesFunnel = $event->getSalesFunnel();
-
         if ($event->getUserAgent() !== null) {
-            $browser = new Browser($event->getUserAgent());
-            if ($browser->isRobot()) {
-                // Do not track robot visits
+            $deviceDetector = new DeviceDetector($event->getUserAgent());
+            $deviceDetector->parse();
+
+            if ($deviceDetector->isBot()) {
+                // Do not track bot visits
                 return;
             }
         }
+
+        $salesFunnel = $event->getSalesFunnel();
 
         if ($event->getType() === SalesFunnelsStatsRepository::TYPE_SHOW) {
             $this->salesFunnelsRepository->incrementShows($salesFunnel);
