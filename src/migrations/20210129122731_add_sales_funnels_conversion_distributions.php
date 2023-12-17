@@ -10,7 +10,7 @@ class AddSalesFunnelsConversionDistributions extends AbstractMigration
         $table->addColumn('sales_funnel_id', 'integer')
             ->addColumn('type', 'string')
             ->addColumn('user_id', 'integer')
-            ->addColumn('value', 'decimal', ['scale' => 2, 'precision' => '10', 'null' => false])
+            ->addColumn('value', 'decimal', ['scale' => 2, 'precision' => 10, 'null' => false])
             ->addColumn('created_at', 'datetime', ['null' => false])
             ->addForeignKey('sales_funnel_id', 'sales_funnels')
             ->addForeignKey('user_id', 'users')
