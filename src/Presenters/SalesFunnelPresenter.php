@@ -7,21 +7,23 @@ use Crm\PaymentsModule\PaymentAwareInterface;
 use Crm\PaymentsModule\Repository\PaymentLogsRepository;
 use Crm\PaymentsModule\Repository\PaymentsRepository;
 use Crm\SalesFunnelModule\Repository\SalesFunnelsRepository;
+use Nette\Application\Attributes\Persistent;
 use Nette\Application\BadRequestException;
+use Nette\DI\Attributes\Inject;
 use Nette\Database\Table\ActiveRow;
 
 class SalesFunnelPresenter extends FrontendPresenter implements PaymentAwareInterface
 {
-    /** @var  PaymentsRepository  @inject */
-    public $paymentsRepository;
+    #[Inject]
+    public PaymentsRepository $paymentsRepository;
 
-    /** @var PaymentLogsRepository  @inject */
-    public $paymentLogsRepository;
+    #[Inject]
+    public PaymentLogsRepository $paymentLogsRepository;
 
-    /** @var SalesFunnelsRepository @inject */
-    public $salesFunnelsRepository;
+    #[Inject]
+    public SalesFunnelsRepository $salesFunnelsRepository;
 
-    /** @persistent */
+    #[Persistent]
     public $variableSymbol;
 
     public function renderNewPopup()

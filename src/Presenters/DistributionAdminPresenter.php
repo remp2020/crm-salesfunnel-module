@@ -14,15 +14,15 @@ use Crm\UsersModule\Repository\UsersRepository;
 
 class DistributionAdminPresenter extends AdminPresenter
 {
-    private $salesFunnelsRepository;
+    private SalesFunnelsRepository $salesFunnelsRepository;
 
-    private $paymentsSumDistribution;
+    private PaymentsSumDistribution $paymentsSumDistribution;
 
-    private $paymentsCountDistribution;
+    private PaymentsCountDistribution $paymentsCountDistribution;
 
-    private $subscriptionDaysDistribution;
+    private SubscriptionDaysDistribution $subscriptionDaysDistribution;
 
-    private $usersRepository;
+    private UsersRepository $usersRepository;
 
     public function __construct(
         PaymentsCountDistribution $paymentsCountDistribution,
