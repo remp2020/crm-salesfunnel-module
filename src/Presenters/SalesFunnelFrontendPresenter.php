@@ -41,6 +41,8 @@ use Nette\Security\AuthenticationException;
 use Nette\Utils\DateTime;
 use Nette\Utils\Json;
 use Tomaj\Hermes\Emitter;
+use Twig\Environment;
+use Twig\Loader\ArrayLoader;
 
 class SalesFunnelFrontendPresenter extends FrontendPresenter
 {
@@ -150,10 +152,10 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
         $addresses = [];
         $body = $body ?? $salesFunnel->body;
 
-        $loader = new \Twig\Loader\ArrayLoader([
+        $loader = new ArrayLoader([
             'funnel_template' => $body,
         ]);
-        $twig = new \Twig\Environment($loader);
+        $twig = new Environment($loader);
 
         if ($preview === 'no-user' && $this->isValidPreview()) {
             $isLoggedIn = false;

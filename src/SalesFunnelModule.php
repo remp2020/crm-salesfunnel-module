@@ -12,15 +12,34 @@ use Crm\ApplicationModule\Criteria\ScenariosCriteriaStorage;
 use Crm\ApplicationModule\CrmModule;
 use Crm\ApplicationModule\DataProvider\DataProviderManager;
 use Crm\ApplicationModule\Event\EventsStorage;
+use Crm\ApplicationModule\Event\LazyEventEmitter;
 use Crm\ApplicationModule\LayoutManager;
 use Crm\ApplicationModule\Menu\MenuContainerInterface;
 use Crm\ApplicationModule\Menu\MenuItem;
 use Crm\ApplicationModule\SeederManager;
 use Crm\ApplicationModule\Widget\LazyWidgetManagerInterface;
+use Crm\PaymentsModule\Events\PaymentChangeStatusEvent;
+use Crm\SalesFunnelModule\Api\ListPaymentsPublicMetaHandler;
 use Crm\SalesFunnelModule\Api\TrackStatsHandler;
+use Crm\SalesFunnelModule\Commands\CalculateSalesFunnelsConversionDistributionsCommand;
+use Crm\SalesFunnelModule\Components\AmountDistributionWidget;
+use Crm\SalesFunnelModule\Components\DaysFromLastSubscriptionDistributionWidget;
+use Crm\SalesFunnelModule\Components\FinishRegistrationWidget;
+use Crm\SalesFunnelModule\Components\NewSubscriptionWidget;
+use Crm\SalesFunnelModule\Components\PaymentDistributionWidget;
+use Crm\SalesFunnelModule\Components\SalesFunnelUserListingWidget;
+use Crm\SalesFunnelModule\Components\SubscriptionTypesInSalesFunnelsWidget;
 use Crm\SalesFunnelModule\DI\Config;
 use Crm\SalesFunnelModule\DataProvider\PaymentsAdminFilterFormDataProvider;
 use Crm\SalesFunnelModule\DataProvider\RetentionAnalysisDataProvider;
+use Crm\SalesFunnelModule\Events\CalculateSalesFunnelConversionDistributionEvent;
+use Crm\SalesFunnelModule\Events\CalculateSalesFunnelConversionDistributionEventHandler;
+use Crm\SalesFunnelModule\Events\PaymentStatusChangeHandler;
+use Crm\SalesFunnelModule\Events\SalesFunnelChangedEventsHandler;
+use Crm\SalesFunnelModule\Events\SalesFunnelCreatedEvent;
+use Crm\SalesFunnelModule\Events\SalesFunnelEvent;
+use Crm\SalesFunnelModule\Events\SalesFunnelHandler;
+use Crm\SalesFunnelModule\Events\SalesFunnelUpdatedEvent;
 use Crm\SalesFunnelModule\Repository\SalesFunnelsRepository;
 use Crm\SalesFunnelModule\Scenarios\PaymentIsFromSalesFunnelCriteria;
 use Crm\SalesFunnelModule\Scenarios\PaymentIsFromSpecificSalesFunnelCriteria;
@@ -63,34 +82,34 @@ class SalesFunnelModule extends CrmModule
         $menuContainer->attachMenuItem($mainMenu);
     }
 
-    public function registerLazyEventHandlers(\Crm\ApplicationModule\Event\LazyEventEmitter $emitter)
+    public function registerLazyEventHandlers(LazyEventEmitter $emitter)
     {
         $emitter->addListener(
-            \Crm\PaymentsModule\Events\PaymentChangeStatusEvent::class,
-            \Crm\SalesFunnelModule\Events\PaymentStatusChangeHandler::class,
+            PaymentChangeStatusEvent::class,
+            PaymentStatusChangeHandler::class,
             700
         );
         $emitter->addListener(
-            \Crm\PaymentsModule\Events\PaymentChangeStatusEvent::class,
-            \Crm\SalesFunnelModule\Events\CalculateSalesFunnelConversionDistributionEventHandler::class,
+            PaymentChangeStatusEvent::class,
+            CalculateSalesFunnelConversionDistributionEventHandler::class,
             800
         );
         $emitter->addListener(
-            \Crm\SalesFunnelModule\Events\SalesFunnelEvent::class,
-            \Crm\SalesFunnelModule\Events\SalesFunnelHandler::class
+            SalesFunnelEvent::class,
+            SalesFunnelHandler::class
         );
         $emitter->addListener(
-            \Crm\SalesFunnelModule\Events\SalesFunnelCreatedEvent::class,
-            \Crm\SalesFunnelModule\Events\SalesFunnelChangedEventsHandler::class
+            SalesFunnelCreatedEvent::class,
+            SalesFunnelChangedEventsHandler::class
         );
         $emitter->addListener(
-            \Crm\SalesFunnelModule\Events\SalesFunnelUpdatedEvent::class,
-            \Crm\SalesFunnelModule\Events\SalesFunnelChangedEventsHandler::class
+            SalesFunnelUpdatedEvent::class,
+            SalesFunnelChangedEventsHandler::class
         );
 
         $emitter->addListener(
-            \Crm\SalesFunnelModule\Events\CalculateSalesFunnelConversionDistributionEvent::class,
-            \Crm\SalesFunnelModule\Events\CalculateSalesFunnelConversionDistributionEventHandler::class
+            CalculateSalesFunnelConversionDistributionEvent::class,
+            CalculateSalesFunnelConversionDistributionEventHandler::class
         );
     }
 
@@ -107,8 +126,8 @@ class SalesFunnelModule extends CrmModule
         $apiRoutersContainer->attachRouter(
             new ApiRoute(
                 new ApiIdentifier('1', 'sales-funnel', 'list-payments-public-meta'),
-                Api\ListPaymentsPublicMetaHandler::class,
-                \Crm\ApiModule\Authorization\NoAuthorization::class
+                ListPaymentsPublicMetaHandler::class,
+                NoAuthorization::class
             )
         );
     }
@@ -150,44 +169,44 @@ class SalesFunnelModule extends CrmModule
     {
         $widgetManager->registerWidget(
             'subscriptions.new',
-            \Crm\SalesFunnelModule\Components\NewSubscriptionWidget::class,
+            NewSubscriptionWidget::class,
             100
         );
         $widgetManager->registerWidget(
             'subscription_types_admin.show.right',
-            \Crm\SalesFunnelModule\Components\SubscriptionTypesInSalesFunnelsWidget::class,
+            SubscriptionTypesInSalesFunnelsWidget::class,
             200
         );
 
         $widgetManager->registerWidget(
             'frontend.payment.success.finish_registration',
-            \Crm\SalesFunnelModule\Components\FinishRegistrationWidget::class,
+            FinishRegistrationWidget::class,
             200
         );
 
         $widgetManager->registerWidget(
             'sales_funnels.admin.show.distribution',
-            \Crm\SalesFunnelModule\Components\AmountDistributionWidget::class
+            AmountDistributionWidget::class
         );
         $widgetManager->registerWidget(
             'sales_funnels.admin.show.distribution',
-            \Crm\SalesFunnelModule\Components\PaymentDistributionWidget::class
+            PaymentDistributionWidget::class
         );
         $widgetManager->registerWidget(
             'sales_funnels.admin.show.distribution',
-            \Crm\SalesFunnelModule\Components\DaysFromLastSubscriptionDistributionWidget::class
+            DaysFromLastSubscriptionDistributionWidget::class
         );
         $widgetManager->registerWidget(
             'payments.admin.payment_source_listing',
-            \Crm\SalesFunnelModule\Components\SalesFunnelUserListingWidget::class
+            SalesFunnelUserListingWidget::class
         );
     }
 
     public function registerEvents(EventsStorage $eventsStorage)
     {
-        $eventsStorage->register('sales_funnel', Events\SalesFunnelEvent::class);
-        $eventsStorage->register('sales_funnel_created', Events\SalesFunnelCreatedEvent::class);
-        $eventsStorage->register('sales_funnel_updated', Events\SalesFunnelUpdatedEvent::class);
+        $eventsStorage->register('sales_funnel', SalesFunnelEvent::class);
+        $eventsStorage->register('sales_funnel_created', SalesFunnelCreatedEvent::class);
+        $eventsStorage->register('sales_funnel_updated', SalesFunnelUpdatedEvent::class);
     }
 
     public function registerDataProviders(DataProviderManager $dataProviderManager)
@@ -217,6 +236,6 @@ class SalesFunnelModule extends CrmModule
 
     public function registerCommands(CommandsContainerInterface $commandsContainer)
     {
-        $commandsContainer->registerCommand($this->getInstance(\Crm\SalesFunnelModule\Commands\CalculateSalesFunnelsConversionDistributionsCommand::class));
+        $commandsContainer->registerCommand($this->getInstance(CalculateSalesFunnelsConversionDistributionsCommand::class));
     }
 }
