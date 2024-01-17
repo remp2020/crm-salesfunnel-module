@@ -24,7 +24,7 @@ use Crm\SalesFunnelModule\Events\SalesFunnelEvent;
 use Crm\SalesFunnelModule\Repositories\SalesFunnelsMetaRepository;
 use Crm\SalesFunnelModule\Repositories\SalesFunnelsRepository;
 use Crm\SalesFunnelModule\Repositories\SalesFunnelsStatsRepository;
-use Crm\SegmentModule\SegmentFactoryInterface;
+use Crm\SegmentModule\Models\SegmentFactoryInterface;
 use Crm\SubscriptionsModule\PaymentItem\SubscriptionTypePaymentItem;
 use Crm\SubscriptionsModule\Repository\ContentAccessRepository;
 use Crm\SubscriptionsModule\Repository\SubscriptionTypesRepository;
