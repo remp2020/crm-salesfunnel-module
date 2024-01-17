@@ -12,7 +12,7 @@
                    {_sales_funnel.admin.sales_funnels.show.distribution.hadActive}
                 </strong>
                 <span class="pull-right">
-                    <a href="{plink :SalesFunnel:DistributionAdmin:daysFromLastSubscription $funnelId, \Crm\SalesFunnelModule\Distribution\SubscriptionDaysDistribution::ACTIVE_SUBSCRIPTION}">
+                    <a href="{plink :SalesFunnel:DistributionAdmin:daysFromLastSubscription $funnelId, \Crm\SalesFunnelModule\Models\Distribution\SubscriptionDaysDistribution::ACTIVE_SUBSCRIPTION}">
                         {$activeSubscriptions}
                     </a>
                 </span>
@@ -41,7 +41,7 @@
                    {_sales_funnel.admin.sales_funnels.show.distribution.hadNever}
                 </strong>
                 <span class="pull-right">
-                    <a href="{plink :SalesFunnel:DistributionAdmin:daysFromLastSubscription $funnelId, \Crm\SalesFunnelModule\Distribution\SubscriptionDaysDistribution::NO_SUBSCRIPTION}">
+                    <a href="{plink :SalesFunnel:DistributionAdmin:daysFromLastSubscription $funnelId, \Crm\SalesFunnelModule\Models\Distribution\SubscriptionDaysDistribution::NO_SUBSCRIPTION}">
                         {$noSubscriptions}
                     </a>
                 </span>

@@ -3,7 +3,7 @@
 namespace Crm\SalesFunnelModule\Tests;
 
 use Crm\PaymentsModule\Tests\PaymentsTestCase;
-use Crm\SalesFunnelModule\Repository\SalesFunnelsRepository;
+use Crm\SalesFunnelModule\Repositories\SalesFunnelsRepository;
 use Crm\SalesFunnelModule\Scenarios\PaymentIsFromSpecificSalesFunnelCriteria;
 
 class PaymentIsFromSpecificSalesFunnelCriteriaTest extends PaymentsTestCase

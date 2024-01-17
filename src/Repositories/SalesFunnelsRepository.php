@@ -7,7 +7,6 @@ use Crm\ApplicationModule\Repository\AuditLogRepository;
 use Crm\PaymentsModule\Repository\PaymentsRepository;
 use Crm\SalesFunnelModule\Events\SalesFunnelCreatedEvent;
 use Crm\SalesFunnelModule\Events\SalesFunnelUpdatedEvent;
-use Crm\SalesFunnelModule\SalesFunnelAlreadyExistsException;
 use DateTime;
 use League\Event\Emitter;
 use Nette\Database\Explorer;

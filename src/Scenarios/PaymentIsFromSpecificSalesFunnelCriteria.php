@@ -5,7 +5,7 @@ namespace Crm\SalesFunnelModule\Scenarios;
 use Contributte\Translation\Translator;
 use Crm\ApplicationModule\Criteria\ScenarioParams\StringLabeledArrayParam;
 use Crm\ApplicationModule\Criteria\ScenariosCriteriaInterface;
-use Crm\SalesFunnelModule\Repository\SalesFunnelsRepository;
+use Crm\SalesFunnelModule\Repositories\SalesFunnelsRepository;
 use Nette\Database\Table\ActiveRow;
 use Nette\Database\Table\Selection;
 

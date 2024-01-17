@@ -9,8 +9,8 @@
         <div class="page-header">
             <h1>
                 {_sales_funnel.admin.sales_funnels.show.distribution.subscriptions}:
-                {if intval($fromLevel) === \Crm\SalesFunnelModule\Distribution\SubscriptionDaysDistribution::NO_SUBSCRIPTION}{_sales_funnel.admin.sales_funnels.show.distribution.hadNever}
-                {elseif intval($fromLevel) === \Crm\SalesFunnelModule\Distribution\SubscriptionDaysDistribution::ACTIVE_SUBSCRIPTION}{_sales_funnel.admin.sales_funnels.show.distribution.hadActive}
+                {if intval($fromLevel) === \Crm\SalesFunnelModule\Models\Distribution\SubscriptionDaysDistribution::NO_SUBSCRIPTION}{_sales_funnel.admin.sales_funnels.show.distribution.hadNever}
+                {elseif intval($fromLevel) === \Crm\SalesFunnelModule\Models\Distribution\SubscriptionDaysDistribution::ACTIVE_SUBSCRIPTION}{_sales_funnel.admin.sales_funnels.show.distribution.hadActive}
                 {elseif is_null($toLevel)}{$fromLevel}+
                 {else}{$fromLevel} < {$toLevel}
                 {/if}

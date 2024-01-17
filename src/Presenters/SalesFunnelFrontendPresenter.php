@@ -15,15 +15,15 @@ use Crm\PaymentsModule\PaymentProcessor;
 use Crm\PaymentsModule\Repository\PaymentGatewaysRepository;
 use Crm\PaymentsModule\Repository\PaymentsRepository;
 use Crm\PaymentsModule\Repository\RecurrentPaymentsRepository;
-use Crm\SalesFunnelModule\DataProvider\SalesFunnelPaymentFormDataProviderInterface;
-use Crm\SalesFunnelModule\DataProvider\SalesFunnelVariablesDataProviderInterface;
-use Crm\SalesFunnelModule\DataProvider\TrackerDataProviderInterface;
-use Crm\SalesFunnelModule\DataProvider\ValidateUserFunnelAccessDataProviderInterface;
+use Crm\SalesFunnelModule\DataProviders\SalesFunnelPaymentFormDataProviderInterface;
+use Crm\SalesFunnelModule\DataProviders\SalesFunnelVariablesDataProviderInterface;
+use Crm\SalesFunnelModule\DataProviders\TrackerDataProviderInterface;
+use Crm\SalesFunnelModule\DataProviders\ValidateUserFunnelAccessDataProviderInterface;
 use Crm\SalesFunnelModule\Events\PaymentItemContainerReadyEvent;
 use Crm\SalesFunnelModule\Events\SalesFunnelEvent;
-use Crm\SalesFunnelModule\Repository\SalesFunnelsMetaRepository;
-use Crm\SalesFunnelModule\Repository\SalesFunnelsRepository;
-use Crm\SalesFunnelModule\Repository\SalesFunnelsStatsRepository;
+use Crm\SalesFunnelModule\Repositories\SalesFunnelsMetaRepository;
+use Crm\SalesFunnelModule\Repositories\SalesFunnelsRepository;
+use Crm\SalesFunnelModule\Repositories\SalesFunnelsStatsRepository;
 use Crm\SegmentModule\SegmentFactoryInterface;
 use Crm\SubscriptionsModule\PaymentItem\SubscriptionTypePaymentItem;
 use Crm\SubscriptionsModule\Repository\ContentAccessRepository;
@@ -103,7 +103,6 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
 
         $this->template->queryParams = $this->request->getQuery();
         unset($this->template->queryParams['referer']); // already passed separately
-
         /** @var SalesFunnelVariablesDataProviderInterface[] $providers */
         $providers = $this->dataProviderManager->getProviders(
             'sales_funnel.dataprovider.template_variables',

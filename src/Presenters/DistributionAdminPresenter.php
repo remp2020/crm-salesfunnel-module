@@ -3,13 +3,13 @@
 namespace Crm\SalesFunnelModule\Presenters;
 
 use Crm\AdminModule\Presenters\AdminPresenter;
-use Crm\SalesFunnelModule\Components\AmountDistributionWidgetFactory;
-use Crm\SalesFunnelModule\Components\DaysFromLastSubscriptionDistributionWidgetFactory;
-use Crm\SalesFunnelModule\Components\PaymentDistributionWidgetFactory;
-use Crm\SalesFunnelModule\Distribution\PaymentsCountDistribution;
-use Crm\SalesFunnelModule\Distribution\PaymentsSumDistribution;
-use Crm\SalesFunnelModule\Distribution\SubscriptionDaysDistribution;
-use Crm\SalesFunnelModule\Repository\SalesFunnelsRepository;
+use Crm\SalesFunnelModule\Components\AmountDistributionWidget\AmountDistributionWidgetFactory;
+use Crm\SalesFunnelModule\Components\DaysFromLastSubscriptionDistributionWidget\DaysFromLastSubscriptionDistributionWidgetFactory;
+use Crm\SalesFunnelModule\Components\PaymentDistributionWidget\PaymentDistributionWidgetFactory;
+use Crm\SalesFunnelModule\Models\Distribution\PaymentsCountDistribution;
+use Crm\SalesFunnelModule\Models\Distribution\PaymentsSumDistribution;
+use Crm\SalesFunnelModule\Models\Distribution\SubscriptionDaysDistribution;
+use Crm\SalesFunnelModule\Repositories\SalesFunnelsRepository;
 use Crm\UsersModule\Repository\UsersRepository;
 
 class DistributionAdminPresenter extends AdminPresenter

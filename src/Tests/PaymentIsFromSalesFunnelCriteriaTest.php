@@ -10,7 +10,7 @@ use Crm\PaymentsModule\Repository\PaymentsRepository;
 use Crm\PaymentsModule\Repository\RecurrentPaymentsRepository;
 use Crm\PaymentsModule\Tests\PaymentsTestCase;
 use Crm\PaymentsModule\VariableSymbolInterface;
-use Crm\SalesFunnelModule\Repository\SalesFunnelsRepository;
+use Crm\SalesFunnelModule\Repositories\SalesFunnelsRepository;
 use Crm\SalesFunnelModule\Scenarios\PaymentIsFromSalesFunnelCriteria;
 use Crm\SubscriptionsModule\Repository\SubscriptionTypesMetaRepository;
 use Crm\SubscriptionsModule\Repository\SubscriptionTypesRepository;

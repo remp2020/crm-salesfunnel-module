@@ -5,9 +5,9 @@ namespace Crm\SalesFunnelModule\Events;
 
 use Crm\PaymentsModule\Events\PaymentChangeStatusEvent;
 use Crm\PaymentsModule\Repository\PaymentsRepository;
-use Crm\SalesFunnelModule\Distribution\PaymentsCountDistribution;
-use Crm\SalesFunnelModule\Distribution\PaymentsSumDistribution;
-use Crm\SalesFunnelModule\Distribution\SubscriptionDaysDistribution;
+use Crm\SalesFunnelModule\Models\Distribution\PaymentsCountDistribution;
+use Crm\SalesFunnelModule\Models\Distribution\PaymentsSumDistribution;
+use Crm\SalesFunnelModule\Models\Distribution\SubscriptionDaysDistribution;
 use League\Event\AbstractListener;
 use League\Event\EventInterface;
 

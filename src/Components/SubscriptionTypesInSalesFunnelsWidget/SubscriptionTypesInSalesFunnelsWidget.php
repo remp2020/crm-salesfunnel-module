@@ -4,7 +4,7 @@ namespace Crm\SalesFunnelModule\Components\SubscriptionTypesInSalesFunnelsWidget
 
 use Crm\ApplicationModule\Widget\BaseLazyWidget;
 use Crm\ApplicationModule\Widget\LazyWidgetManager;
-use Crm\SalesFunnelModule\Repository\SalesFunnelsRepository;
+use Crm\SalesFunnelModule\Repositories\SalesFunnelsRepository;
 
 /**
  * This widget renders listing of sales funnels for specific subscription type.

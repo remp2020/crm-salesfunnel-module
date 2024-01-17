@@ -4,7 +4,7 @@ namespace Crm\SalesFunnelModule\Components\DaysFromLastSubscriptionDistributionW
 
 use Crm\ApplicationModule\Widget\BaseLazyWidget;
 use Crm\ApplicationModule\Widget\LazyWidgetManager;
-use Crm\SalesFunnelModule\Distribution\SubscriptionDaysDistribution;
+use Crm\SalesFunnelModule\Models\Distribution\SubscriptionDaysDistribution;
 
 /**
  * This widget fetches stats from sales funnel repository

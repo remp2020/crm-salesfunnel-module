@@ -3,7 +3,7 @@
 namespace Crm\SalesFunnelModule\Commands;
 
 use Crm\SalesFunnelModule\Events\CalculateSalesFunnelConversionDistributionEvent;
-use Crm\SalesFunnelModule\Repository\SalesFunnelsRepository;
+use Crm\SalesFunnelModule\Repositories\SalesFunnelsRepository;
 use League\Event\Emitter;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;

@@ -6,7 +6,7 @@ use Crm\ApplicationModule\Presenters\FrontendPresenter;
 use Crm\PaymentsModule\PaymentAwareInterface;
 use Crm\PaymentsModule\Repository\PaymentLogsRepository;
 use Crm\PaymentsModule\Repository\PaymentsRepository;
-use Crm\SalesFunnelModule\Repository\SalesFunnelsRepository;
+use Crm\SalesFunnelModule\Repositories\SalesFunnelsRepository;
 use Nette\Application\Attributes\Persistent;
 use Nette\Application\BadRequestException;
 use Nette\DI\Attributes\Inject;

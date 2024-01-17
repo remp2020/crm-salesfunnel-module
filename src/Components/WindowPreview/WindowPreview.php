@@ -4,7 +4,7 @@ namespace Crm\SalesFunnelModule\Components\WindowPreview;
 
 use Crm\ApplicationModule\Widget\BaseLazyWidget;
 use Crm\ApplicationModule\Widget\LazyWidgetManager;
-use Crm\SalesFunnelModule\Repository\SalesFunnelsRepository;
+use Crm\SalesFunnelModule\Repositories\SalesFunnelsRepository;
 
 /**
  * Widget that renders page with iframe containing sales funnel.

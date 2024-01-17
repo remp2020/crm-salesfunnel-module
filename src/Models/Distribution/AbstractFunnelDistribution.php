@@ -3,8 +3,8 @@
 namespace Crm\SalesFunnelModule\Models\Distribution;
 
 use Crm\PaymentsModule\Repository\PaymentsRepository;
-use Crm\SalesFunnelModule\Repository\SalesFunnelsRepository;
-use Crm\SalesFunnelModule\SalesFunnelsConversionDistributionsRepository;
+use Crm\SalesFunnelModule\Repositories\SalesFunnelsConversionDistributionsRepository;
+use Crm\SalesFunnelModule\Repositories\SalesFunnelsRepository;
 use Crm\SubscriptionsModule\Repository\SubscriptionsRepository;
 use Nette\Database\Explorer;
 use Nette\Database\Table\ActiveRow;

@@ -7,7 +7,7 @@ use Crm\ApiModule\Models\Params\InputParam;
 use Crm\ApiModule\Models\Params\ParamsProcessor;
 use Crm\ApplicationModule\Request;
 use Crm\SalesFunnelModule\Events\SalesFunnelEvent;
-use Crm\SalesFunnelModule\Repository\SalesFunnelsRepository;
+use Crm\SalesFunnelModule\Repositories\SalesFunnelsRepository;
 use League\Event\Emitter;
 use Nette\Http\Response;
 use Tomaj\NetteApi\Response\JsonApiResponse;

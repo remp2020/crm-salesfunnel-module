@@ -4,7 +4,7 @@ namespace Crm\SalesFunnelModule\Components\AmountDistributionWidget;
 
 use Crm\ApplicationModule\Widget\BaseLazyWidget;
 use Crm\ApplicationModule\Widget\LazyWidgetManager;
-use Crm\SalesFunnelModule\Distribution\PaymentsSumDistribution;
+use Crm\SalesFunnelModule\Models\Distribution\PaymentsSumDistribution;
 
 /**
  * This widget fetches stats from sales funnel repository

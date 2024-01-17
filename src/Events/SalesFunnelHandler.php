@@ -2,8 +2,8 @@
 
 namespace Crm\SalesFunnelModule\Events;
 
-use Crm\SalesFunnelModule\Repository\SalesFunnelsRepository;
-use Crm\SalesFunnelModule\Repository\SalesFunnelsStatsRepository;
+use Crm\SalesFunnelModule\Repositories\SalesFunnelsRepository;
+use Crm\SalesFunnelModule\Repositories\SalesFunnelsStatsRepository;
 use DeviceDetector\DeviceDetector;
 use League\Event\AbstractListener;
 use League\Event\EventInterface;

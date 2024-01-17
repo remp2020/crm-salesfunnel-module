@@ -3,9 +3,9 @@
 namespace Crm\SalesFunnelModule\Forms;
 
 use Contributte\Translation\Translator;
-use Crm\SalesFunnelModule\Repository\SalesFunnelTagsRepository;
-use Crm\SalesFunnelModule\Repository\SalesFunnelsMetaRepository;
-use Crm\SalesFunnelModule\Repository\SalesFunnelsRepository;
+use Crm\SalesFunnelModule\Repositories\SalesFunnelTagsRepository;
+use Crm\SalesFunnelModule\Repositories\SalesFunnelsMetaRepository;
+use Crm\SalesFunnelModule\Repositories\SalesFunnelsRepository;
 use Crm\SegmentModule\Repository\SegmentsRepository;
 use Nette\Application\UI\Form;
 use Nette\Database\Table\ActiveRow;

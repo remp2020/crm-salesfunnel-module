@@ -3,7 +3,7 @@
 namespace Crm\SalesFunnelModule\Events;
 
 use Crm\SalesFunnelModule\DI\Config;
-use Crm\SalesFunnelModule\SalesFunnelsCache;
+use Crm\SalesFunnelModule\Models\SalesFunnelsCache;
 use League\Event\AbstractListener;
 use League\Event\EventInterface;
 
