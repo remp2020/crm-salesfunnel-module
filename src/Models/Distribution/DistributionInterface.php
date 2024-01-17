@@ -1,6 +1,6 @@
 <?php
 
-namespace Crm\SalesFunnelModule\Distribution;
+namespace Crm\SalesFunnelModule\Models\Distribution;
 
 interface DistributionInterface
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Crm\SalesFunnelModule\Distribution;
+namespace Crm\SalesFunnelModule\Models\Distribution;
 
 use Nette\Database\Table\ActiveRow;
 use Nette\Utils\ArrayHash;

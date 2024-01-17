@@ -1,6 +1,6 @@
 <?php
 
-namespace Crm\SalesFunnelModule;
+namespace Crm\SalesFunnelModule\Repositories;
 
 class SalesFunnelAlreadyExistsException extends \Exception
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Crm\SalesFunnelModule\Components;
+namespace Crm\SalesFunnelModule\Components\DaysFromLastSubscriptionDistributionWidget;
 
 use Crm\ApplicationModule\Widget\BaseLazyWidget;
 use Crm\ApplicationModule\Widget\LazyWidgetManager;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Crm\SalesFunnelModule;
+namespace Crm\SalesFunnelModule\Models;
 
 use Crm\PaymentsModule\Model\PaymentCompleteRedirectResolver;
 use Nette\Database\Table\ActiveRow;

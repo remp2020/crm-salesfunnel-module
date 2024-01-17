@@ -1,6 +1,6 @@
 <?php
 
-namespace Crm\SalesFunnelModule\Components;
+namespace Crm\SalesFunnelModule\Components\PaymentDistributionWidget;
 
 use Crm\ApplicationModule\Widget\BaseLazyWidget;
 use Crm\ApplicationModule\Widget\LazyWidgetManager;

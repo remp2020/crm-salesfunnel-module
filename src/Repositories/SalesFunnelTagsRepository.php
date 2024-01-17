@@ -1,6 +1,6 @@
 <?php
 
-namespace Crm\SalesFunnelModule\Repository;
+namespace Crm\SalesFunnelModule\Repositories;
 
 use Crm\ApplicationModule\Repository;
 use Nette\Database\Table\ActiveRow;

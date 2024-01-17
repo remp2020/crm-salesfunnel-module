@@ -1,6 +1,6 @@
 <?php
 
-namespace Crm\SalesFunnelModule\Components;
+namespace Crm\SalesFunnelModule\Components\SalesFunnelUserListingWidget;
 
 use Crm\ApplicationModule\Widget\BaseLazyWidget;
 use Nette\Database\Table\ActiveRow;

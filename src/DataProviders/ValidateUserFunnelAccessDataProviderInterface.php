@@ -1,6 +1,6 @@
 <?php
 
-namespace Crm\SalesFunnelModule\DataProvider;
+namespace Crm\SalesFunnelModule\DataProviders;
 
 use Crm\ApplicationModule\DataProvider\DataProviderException;
 use Crm\ApplicationModule\DataProvider\DataProviderInterface;

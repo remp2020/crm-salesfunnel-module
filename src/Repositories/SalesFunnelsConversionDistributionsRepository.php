@@ -1,6 +1,6 @@
 <?php
 
-namespace Crm\SalesFunnelModule;
+namespace Crm\SalesFunnelModule\Repositories;
 
 use Crm\ApplicationModule\Repository;
 use Crm\ApplicationModule\Selection;

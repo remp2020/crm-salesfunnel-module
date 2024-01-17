@@ -1,6 +1,6 @@
 <?php
 
-namespace Crm\SalesFunnelModule\Components;
+namespace Crm\SalesFunnelModule\Components\NewSubscriptionWidget;
 
 use Crm\ApplicationModule\Presenters\FrontendPresenter;
 use Crm\ApplicationModule\Widget\BaseLazyWidget;

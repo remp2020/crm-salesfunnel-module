@@ -1,19 +1,19 @@
 <?php
 
-namespace Crm\SalesFunnelModule\Repository;
+namespace Crm\SalesFunnelModule\Repositories;
 
 use Crm\ApplicationModule\Repository;
 use Nette\Database\Table\ActiveRow;
 
-class SalesFunnelsSubscriptionTypesRepository extends Repository
+class SalesFunnelsPaymentGatewaysRepository extends Repository
 {
-    protected $tableName = 'sales_funnels_subscription_types';
+    protected $tableName = 'sales_funnels_payment_gateways';
 
-    final public function add(ActiveRow $salesFunnel, ActiveRow $subscriptionType)
+    final public function add(ActiveRow $salesFunnel, ActiveRow $paymentGateway)
     {
         $data = [
             'sales_funnel_id' => $salesFunnel->id,
-            'subscription_type_id' => $subscriptionType->id,
+            'payment_gateway_id' => $paymentGateway->id,
         ];
 
         $row = $this->getTable()->where($data)->fetch();
@@ -28,16 +28,16 @@ class SalesFunnelsSubscriptionTypesRepository extends Repository
         return $row;
     }
 
-    final public function findByBoth(ActiveRow $salesFunnel, ActiveRow $subscriptionType)
+    final public function findByBoth(ActiveRow $salesFunnel, ActiveRow $paymentGateway)
     {
         return $this->getTable()->where([
             'sales_funnel_id' => $salesFunnel->id,
-            'subscription_type_id' => $subscriptionType->id,
+            'payment_gateway_id' => $paymentGateway->id,
         ])->fetch();
     }
 
     final public function findAllBySalesFunnel(ActiveRow $salesFunnel)
     {
-        return $salesFunnel->related('sales_funnels_subscription_types')->order('sorting ASC')->fetchAll();
+        return $salesFunnel->related('sales_funnels_payment_gateways')->order('sorting ASC')->fetchAll();
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Crm\SalesFunnelModule\Components;
+namespace Crm\SalesFunnelModule\Components\WindowPreview;
 
 interface WindowPreviewControlFactoryInterface
 {

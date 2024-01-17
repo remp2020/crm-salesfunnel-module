@@ -1,6 +1,6 @@
 <?php
 
-namespace Crm\SalesFunnelModule\Distribution;
+namespace Crm\SalesFunnelModule\Models\Distribution;
 
 use Crm\PaymentsModule\Repository\PaymentsRepository;
 use Crm\SalesFunnelModule\Repository\SalesFunnelsRepository;
