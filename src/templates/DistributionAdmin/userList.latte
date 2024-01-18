@@ -18,7 +18,7 @@
                     {$u->public_name}
                 </a>
                 <span n:if="$u->is_institution" class="label label-danger">{_sales_funnel.admin.distribution.institution}</span>
-                <span n:if="$u->role === \Crm\UsersModule\Repository\UsersRepository::ROLE_ADMIN" class="label label-warning">admin</span>
+                <span n:if="$u->role === \Crm\UsersModule\Repositories\UsersRepository::ROLE_ADMIN" class="label label-warning">admin</span>
                 {control simpleWidget 'admin.user.list.emailcolumn', $u}
             </td>
             <td class="text-muted">{$u->source}</td>

@@ -10,7 +10,7 @@ use Crm\SalesFunnelModule\Models\Distribution\PaymentsCountDistribution;
 use Crm\SalesFunnelModule\Models\Distribution\PaymentsSumDistribution;
 use Crm\SalesFunnelModule\Models\Distribution\SubscriptionDaysDistribution;
 use Crm\SalesFunnelModule\Repositories\SalesFunnelsRepository;
-use Crm\UsersModule\Repository\UsersRepository;
+use Crm\UsersModule\Repositories\UsersRepository;
 
 class DistributionAdminPresenter extends AdminPresenter
 {
