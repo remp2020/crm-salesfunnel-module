@@ -5,7 +5,7 @@ namespace Crm\SalesFunnelModule\Models\Distribution;
 use Crm\PaymentsModule\Repository\PaymentsRepository;
 use Crm\SalesFunnelModule\Repositories\SalesFunnelsConversionDistributionsRepository;
 use Crm\SalesFunnelModule\Repositories\SalesFunnelsRepository;
-use Crm\SubscriptionsModule\Repository\SubscriptionsRepository;
+use Crm\SubscriptionsModule\Repositories\SubscriptionsRepository;
 use Nette\Database\Explorer;
 use Nette\Database\Table\ActiveRow;
 use Nette\Utils\ArrayHash;

@@ -8,8 +8,8 @@ use Crm\PaymentsModule\Repository\PaymentGatewaysRepository;
 use Crm\SalesFunnelModule\Repositories\SalesFunnelsPaymentGatewaysRepository;
 use Crm\SalesFunnelModule\Repositories\SalesFunnelsRepository;
 use Crm\SalesFunnelModule\Repositories\SalesFunnelsSubscriptionTypesRepository;
-use Crm\SubscriptionsModule\Builder\SubscriptionTypeBuilder;
-use Crm\SubscriptionsModule\Repository\SubscriptionTypesRepository;
+use Crm\SubscriptionsModule\Models\Builder\SubscriptionTypeBuilder;
+use Crm\SubscriptionsModule\Repositories\SubscriptionTypesRepository;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class SalesFunnelsSeeder implements ISeeder

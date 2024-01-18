@@ -12,8 +12,8 @@ use Crm\PaymentsModule\Tests\PaymentsTestCase;
 use Crm\PaymentsModule\VariableSymbolInterface;
 use Crm\SalesFunnelModule\Repositories\SalesFunnelsRepository;
 use Crm\SalesFunnelModule\Scenarios\PaymentIsFromSalesFunnelCriteria;
-use Crm\SubscriptionsModule\Repository\SubscriptionTypesMetaRepository;
-use Crm\SubscriptionsModule\Repository\SubscriptionTypesRepository;
+use Crm\SubscriptionsModule\Repositories\SubscriptionTypesMetaRepository;
+use Crm\SubscriptionsModule\Repositories\SubscriptionTypesRepository;
 use Crm\UsersModule\Repository\AccessTokensRepository;
 use Crm\UsersModule\Repository\UsersRepository;
 
