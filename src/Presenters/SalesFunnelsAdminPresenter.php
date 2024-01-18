@@ -8,9 +8,9 @@ use Crm\ApplicationModule\Components\Graphs\GoogleLineGraphGroupControlFactoryIn
 use Crm\ApplicationModule\ExcelFactory;
 use Crm\ApplicationModule\Graphs\Criteria;
 use Crm\ApplicationModule\Graphs\GraphDataItem;
-use Crm\PaymentsModule\Components\LastPaymentsControlFactoryInterface;
-use Crm\PaymentsModule\Repository\PaymentGatewaysRepository;
-use Crm\PaymentsModule\Repository\PaymentsRepository;
+use Crm\PaymentsModule\Components\LastPayments\LastPaymentsControlFactoryInterface;
+use Crm\PaymentsModule\Repositories\PaymentGatewaysRepository;
+use Crm\PaymentsModule\Repositories\PaymentsRepository;
 use Crm\SalesFunnelModule\Components\WindowPreview\WindowPreviewControlFactoryInterface;
 use Crm\SalesFunnelModule\DI\Config;
 use Crm\SalesFunnelModule\Forms\SalesFunnelAdminFormFactory;

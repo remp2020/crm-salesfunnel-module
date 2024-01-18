@@ -2,7 +2,7 @@
 
 namespace Crm\SalesFunnelModule\Events;
 
-use Crm\PaymentsModule\PaymentItem\PaymentItemContainer;
+use Crm\PaymentsModule\Models\PaymentItem\PaymentItemContainer;
 use League\Event\AbstractEvent;
 
 /**

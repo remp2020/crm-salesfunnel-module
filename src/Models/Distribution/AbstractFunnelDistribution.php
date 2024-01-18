@@ -2,7 +2,7 @@
 
 namespace Crm\SalesFunnelModule\Models\Distribution;
 
-use Crm\PaymentsModule\Repository\PaymentsRepository;
+use Crm\PaymentsModule\Repositories\PaymentsRepository;
 use Crm\SalesFunnelModule\Repositories\SalesFunnelsConversionDistributionsRepository;
 use Crm\SalesFunnelModule\Repositories\SalesFunnelsRepository;
 use Crm\SubscriptionsModule\Repositories\SubscriptionsRepository;

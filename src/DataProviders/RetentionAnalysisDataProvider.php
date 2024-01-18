@@ -3,7 +3,7 @@
 namespace Crm\SalesFunnelModule\DataProviders;
 
 use Crm\ApplicationModule\DataProvider\DataProviderException;
-use Crm\PaymentsModule\DataProvider\RetentionAnalysisDataProviderInterface;
+use Crm\PaymentsModule\DataProviders\RetentionAnalysisDataProviderInterface;
 use Crm\SalesFunnelModule\Repositories\SalesFunnelsRepository;
 use Nette\Application\UI\Form;
 

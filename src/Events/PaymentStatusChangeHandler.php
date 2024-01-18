@@ -3,7 +3,7 @@
 namespace Crm\SalesFunnelModule\Events;
 
 use Crm\PaymentsModule\Events\PaymentChangeStatusEvent;
-use Crm\PaymentsModule\Repository\PaymentsRepository;
+use Crm\PaymentsModule\Repositories\PaymentsRepository;
 use Crm\SalesFunnelModule\Repositories\SalesFunnelsStatsRepository;
 use League\Event\AbstractListener;
 use League\Event\Emitter;

@@ -4,7 +4,7 @@ namespace Crm\SalesFunnelModule\Repositories;
 
 use Crm\ApplicationModule\Repository;
 use Crm\ApplicationModule\Repository\AuditLogRepository;
-use Crm\PaymentsModule\Repository\PaymentsRepository;
+use Crm\PaymentsModule\Repositories\PaymentsRepository;
 use Crm\SalesFunnelModule\Events\SalesFunnelCreatedEvent;
 use Crm\SalesFunnelModule\Events\SalesFunnelUpdatedEvent;
 use DateTime;

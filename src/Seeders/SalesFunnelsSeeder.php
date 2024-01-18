@@ -3,8 +3,8 @@
 namespace Crm\SalesFunnelModule\Seeders;
 
 use Crm\ApplicationModule\Seeders\ISeeder;
-use Crm\PaymentsModule\Gateways\BankTransfer;
-use Crm\PaymentsModule\Repository\PaymentGatewaysRepository;
+use Crm\PaymentsModule\Models\Gateways\BankTransfer;
+use Crm\PaymentsModule\Repositories\PaymentGatewaysRepository;
 use Crm\SalesFunnelModule\Repositories\SalesFunnelsPaymentGatewaysRepository;
 use Crm\SalesFunnelModule\Repositories\SalesFunnelsRepository;
 use Crm\SalesFunnelModule\Repositories\SalesFunnelsSubscriptionTypesRepository;

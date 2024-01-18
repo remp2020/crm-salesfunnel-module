@@ -4,7 +4,7 @@
 namespace Crm\SalesFunnelModule\Events;
 
 use Crm\PaymentsModule\Events\PaymentChangeStatusEvent;
-use Crm\PaymentsModule\Repository\PaymentsRepository;
+use Crm\PaymentsModule\Repositories\PaymentsRepository;
 use Crm\SalesFunnelModule\Models\Distribution\PaymentsCountDistribution;
 use Crm\SalesFunnelModule\Models\Distribution\PaymentsSumDistribution;
 use Crm\SalesFunnelModule\Models\Distribution\SubscriptionDaysDistribution;
