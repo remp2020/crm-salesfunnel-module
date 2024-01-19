@@ -2,8 +2,8 @@
 
 namespace Crm\SalesFunnelModule\Models;
 
-use Crm\ApplicationModule\RedisClientFactory;
-use Crm\ApplicationModule\RedisClientTrait;
+use Crm\ApplicationModule\Models\Redis\RedisClientFactory;
+use Crm\ApplicationModule\Models\Redis\RedisClientTrait;
 use Nette\Utils\Json;
 
 class SalesFunnelsCache

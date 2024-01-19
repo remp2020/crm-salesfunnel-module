@@ -2,7 +2,7 @@
 
 namespace Crm\SalesFunnelModule\Components\SalesFunnelUserListingWidget;
 
-use Crm\ApplicationModule\Widget\BaseLazyWidget;
+use Crm\ApplicationModule\Models\Widget\BaseLazyWidget;
 use Nette\Database\Table\ActiveRow;
 
 /**

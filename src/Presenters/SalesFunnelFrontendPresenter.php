@@ -2,11 +2,11 @@
 
 namespace Crm\SalesFunnelModule\Presenters;
 
-use Crm\ApplicationModule\DataProvider\DataProviderManager;
 use Crm\ApplicationModule\Events\AuthenticatedAccessRequiredEvent;
 use Crm\ApplicationModule\Hermes\HermesMessage;
+use Crm\ApplicationModule\Models\DataProvider\DataProviderManager;
+use Crm\ApplicationModule\Models\Request;
 use Crm\ApplicationModule\Presenters\FrontendPresenter;
-use Crm\ApplicationModule\Request;
 use Crm\PaymentsModule\Models\CannotProcessPayment;
 use Crm\PaymentsModule\Models\Gateways\ProcessResponse;
 use Crm\PaymentsModule\Models\PaymentItem\DonationPaymentItem;

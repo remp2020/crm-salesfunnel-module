@@ -2,8 +2,8 @@
 
 namespace Crm\SalesFunnelModule\Components\AmountDistributionWidget;
 
-use Crm\ApplicationModule\Widget\BaseLazyWidget;
-use Crm\ApplicationModule\Widget\LazyWidgetManager;
+use Crm\ApplicationModule\Models\Widget\BaseLazyWidget;
+use Crm\ApplicationModule\Models\Widget\LazyWidgetManager;
 use Crm\SalesFunnelModule\Models\Distribution\PaymentsSumDistribution;
 
 /**

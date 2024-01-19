@@ -2,7 +2,7 @@
 
 namespace Crm\SalesFunnelModule\DataProviders;
 
-use Crm\ApplicationModule\DataProvider\DataProviderException;
+use Crm\ApplicationModule\Models\DataProvider\DataProviderException;
 use Crm\PaymentsModule\DataProviders\AdminFilterFormDataProviderInterface;
 use Crm\SalesFunnelModule\Repositories\SalesFunnelsRepository;
 use Nette\Application\UI\Form;

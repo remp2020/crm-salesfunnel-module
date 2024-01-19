@@ -2,9 +2,9 @@
 
 namespace Crm\SalesFunnelModule\Components\NewSubscriptionWidget;
 
+use Crm\ApplicationModule\Models\Widget\BaseLazyWidget;
+use Crm\ApplicationModule\Models\Widget\LazyWidgetManager;
 use Crm\ApplicationModule\Presenters\FrontendPresenter;
-use Crm\ApplicationModule\Widget\BaseLazyWidget;
-use Crm\ApplicationModule\Widget\LazyWidgetManager;
 use Crm\SalesFunnelModule\Repositories\SalesFunnelsRepository;
 use Nette\Application\BadRequestException;
 

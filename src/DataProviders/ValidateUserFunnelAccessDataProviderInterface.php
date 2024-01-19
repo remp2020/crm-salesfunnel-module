@@ -2,8 +2,8 @@
 
 namespace Crm\SalesFunnelModule\DataProviders;
 
-use Crm\ApplicationModule\DataProvider\DataProviderException;
-use Crm\ApplicationModule\DataProvider\DataProviderInterface;
+use Crm\ApplicationModule\Models\DataProvider\DataProviderException;
+use Crm\ApplicationModule\Models\DataProvider\DataProviderInterface;
 use Nette\Database\Table\ActiveRow;
 
 interface ValidateUserFunnelAccessDataProviderInterface extends DataProviderInterface

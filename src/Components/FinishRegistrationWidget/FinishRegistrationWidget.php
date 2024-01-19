@@ -2,7 +2,7 @@
 
 namespace Crm\SalesFunnelModule\Components\FinishRegistrationWidget;
 
-use Crm\ApplicationModule\Widget\BaseLazyWidget;
+use Crm\ApplicationModule\Models\Widget\BaseLazyWidget;
 
 /**
  * Simple registration success page widget.

@@ -2,8 +2,8 @@
 
 namespace Crm\SalesFunnelModule\Components\SubscriptionTypesInSalesFunnelsWidget;
 
-use Crm\ApplicationModule\Widget\BaseLazyWidget;
-use Crm\ApplicationModule\Widget\LazyWidgetManager;
+use Crm\ApplicationModule\Models\Widget\BaseLazyWidget;
+use Crm\ApplicationModule\Models\Widget\LazyWidgetManager;
 use Crm\SalesFunnelModule\Repositories\SalesFunnelsRepository;
 
 /**

@@ -2,7 +2,7 @@
 
 namespace Crm\SalesFunnelModule\DataProviders;
 
-use Crm\ApplicationModule\DataProvider\DataProviderInterface;
+use Crm\ApplicationModule\Models\DataProvider\DataProviderInterface;
 
 interface SalesFunnelPaymentFormDataProviderInterface extends DataProviderInterface
 {

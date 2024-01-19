@@ -3,8 +3,8 @@
 namespace Crm\SalesFunnelModule\Scenarios;
 
 use Contributte\Translation\Translator;
-use Crm\ApplicationModule\Criteria\ScenarioParams\BooleanParam;
-use Crm\ApplicationModule\Criteria\ScenariosCriteriaInterface;
+use Crm\ApplicationModule\Models\Criteria\ScenarioParams\BooleanParam;
+use Crm\ApplicationModule\Models\Criteria\ScenariosCriteriaInterface;
 use Nette\Database\Table\ActiveRow;
 use Nette\Database\Table\Selection;
 

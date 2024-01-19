@@ -5,7 +5,7 @@ namespace Crm\SalesFunnelModule\Api;
 use Crm\ApiModule\Models\Api\ApiHandler;
 use Crm\ApiModule\Models\Params\InputParam;
 use Crm\ApiModule\Models\Params\ParamsProcessor;
-use Crm\ApplicationModule\Request;
+use Crm\ApplicationModule\Models\Request;
 use Crm\SalesFunnelModule\Events\SalesFunnelEvent;
 use Crm\SalesFunnelModule\Repositories\SalesFunnelsRepository;
 use League\Event\Emitter;
