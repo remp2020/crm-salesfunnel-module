@@ -7,6 +7,7 @@ use Crm\ApplicationModule\Models\Widget\LazyWidgetManager;
 use Crm\ApplicationModule\Presenters\FrontendPresenter;
 use Crm\SalesFunnelModule\Repositories\SalesFunnelsRepository;
 use Nette\Application\BadRequestException;
+use Nette\Application\LinkGenerator;
 
 /**
  * Widget that renders page with iframe containing sales funnels.
@@ -22,7 +23,8 @@ class NewSubscriptionWidget extends BaseLazyWidget
 
     public function __construct(
         SalesFunnelsRepository $salesFunnelsRepository,
-        LazyWidgetManager $lazyWidgetManager
+        LazyWidgetManager $lazyWidgetManager,
+        private LinkGenerator $linkGenerator,
     ) {
         parent::__construct($lazyWidgetManager);
 
@@ -45,28 +47,25 @@ class NewSubscriptionWidget extends BaseLazyWidget
         if (!$salesFunnel) {
             throw new BadRequestException('invalid sales funnel urlKey: ' . $funnel);
         }
-        $this->template->salesFunnel = $salesFunnel->url_key;
 
-        $referer = $this->presenter->getReferer();
+        $linkParams = $this->presenter->getRequest()?->getParameters() ?? [];
 
-        $this->template->referer = $referer;
-        $this->template->paymentGatewayId = null;
-        $this->template->subscriptionTypeId = null;
-        $this->template->rtmSource = $this->presenter->getParameter('rtm_source') ?? $this->presenter->getParameter('utm_source');
-        $this->template->rtmMedium = $this->presenter->getParameter('rtm_medium') ?? $this->presenter->getParameter('utm_medium');
-        $this->template->rtmCampaign = $this->presenter->getParameter('rtm_campaign') ?? $this->presenter->getParameter('utm_campaign');
-        $this->template->rtmContent = $this->presenter->getParameter('rtm_content') ?? $this->presenter->getParameter('utm_content');
-        $this->template->rtmVariant = $this->presenter->getParameter('rtm_variant') ?? $this->presenter->getParameter('banner_variant');
+        $linkParams['funnel'] = $salesFunnel->url_key;
+        $linkParams['referer'] = $this->presenter->getReferer();
+        $linkParams['payment_gateway_id'] = null;
+        $linkParams['subscription_type_id'] = null;
 
         $paymentGatewayId = $this->presenter->getParameter('payment_gateway_id');
         if (isset($paymentGatewayId)) {
-            $this->template->paymentGatewayId = (int) $paymentGatewayId;
+            $linkParams['payment_gateway_id'] = (int) $paymentGatewayId;
         }
 
         $subscriptionTypeId = $this->presenter->getParameter('subscription_type_id');
         if (isset($subscriptionTypeId)) {
-            $this->template->subscriptionTypeId = (int) $subscriptionTypeId;
+            $linkParams['subscription_type_id'] = (int) $subscriptionTypeId;
         }
+
+        $this->template->link = $this->linkGenerator->link('SalesFunnel:SalesFunnelFrontend:show', $linkParams);
 
         $this->template->setFile(__DIR__ . '/' . $this->templateName);
         $this->template->render();
