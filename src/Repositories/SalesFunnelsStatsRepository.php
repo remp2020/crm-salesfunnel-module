@@ -16,15 +16,22 @@ class SalesFunnelsStatsRepository extends Repository
 
     protected $tableName = 'sales_funnels_stats';
 
+    public static array $allowedTypes = [
+        self::TYPE_SHOW,
+        self::TYPE_ERROR,
+        self::TYPE_NO_ACCESS,
+        self::TYPE_OK,
+        self::TYPE_FORM,
+    ];
+
     public static function isAllowedType(string $type): bool
     {
-        return in_array($type, [
-            self::TYPE_SHOW,
-            self::TYPE_ERROR,
-            self::TYPE_NO_ACCESS,
-            self::TYPE_OK,
-            self::TYPE_FORM,
-        ], true);
+        return in_array($type, self::$allowedTypes, true);
+    }
+
+    public function addAllowedType(string $type): void
+    {
+        self::$allowedTypes[] = $type;
     }
 
     final public function add(
