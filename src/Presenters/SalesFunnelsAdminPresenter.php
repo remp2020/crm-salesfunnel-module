@@ -563,7 +563,7 @@ class SalesFunnelsAdminPresenter extends AdminPresenter
             ->setTableName('payments')
             ->setGroupBy('payment_items.name')
             ->setJoin(
-                "LEFT JOIN payment_items ON payment_id = payments.id"
+                "LEFT JOIN payment_items ON payment_id = payments.id AND payment_items.amount > 0 AND payment_items.count > 0"
             )
             ->setWhere("AND payments.status IN ('paid', 'prepaid') AND payments.sales_funnel_id=" . intval($this->params['id']))
             ->setSeries('payment_items.name')
