@@ -41,6 +41,15 @@ class SalesFunnelTagsRepository extends Repository
         $this->getTable()->where(['sales_funnel_id' => $salesFunnel->id])->delete();
     }
 
+    final public function salesFunnelHasTag(ActiveRow $salesFunnel, string $tag): bool
+    {
+        return $salesFunnel->related('sales_funnel_tags')
+            ->where([
+                'sales_funnel_id' => $salesFunnel->id,
+                'tag' => $tag
+            ])->count('*') > 0;
+    }
+
     final public function setTagsForSalesFunnel(ActiveRow $salesFunnel, array $tags): void
     {
         $this->database->transaction(function () use ($tags, $salesFunnel) {

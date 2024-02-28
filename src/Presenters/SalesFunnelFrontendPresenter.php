@@ -320,8 +320,7 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
                 'sales_funnel' => $funnel,
             ]);
             if (!$canAccessFunnel) {
-                $this->emitter->emit(new SalesFunnelEvent($funnel, $this->getUser(), SalesFunnelsStatsRepository::TYPE_NO_ACCESS, $ua));
-                $this->redirectOrSendJson('noAccess', $funnel->id);
+                $this->handleCantAccessFunnel($funnel, $ua);
             }
         }
     }
@@ -508,8 +507,7 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
                 'sales_funnel' => $funnel,
             ]);
             if (!$canAccessFunnel) {
-                $this->emitter->emit(new SalesFunnelEvent($funnel, $user, SalesFunnelsStatsRepository::TYPE_NO_ACCESS, $ua));
-                $this->redirectOrSendJson('noAccess', $funnel->id);
+                $this->handleCantAccessFunnel($funnel, $ua);
             }
         }
 
@@ -761,5 +759,15 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
     {
         return isset($this->request->query['preview']) &&
             $this->getUser()->isAllowed('SalesFunnel:SalesFunnelsAdmin', 'preview');
+    }
+
+    private function handleCantAccessFunnel(
+        ActiveRow $funnel,
+        string $userAgent,
+    ): void {
+        $this->emitter->emit(
+            new SalesFunnelEvent($funnel, $this->getUser(), SalesFunnelsStatsRepository::TYPE_NO_ACCESS, $userAgent)
+        );
+        $this->redirectOrSendJson('noAccess', $funnel->id);
     }
 }
