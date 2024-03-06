@@ -4,16 +4,16 @@ namespace Crm\SalesFunnelModule\DataProviders;
 
 use Crm\ApplicationModule\Models\DataProvider\DataProviderException;
 use Crm\PaymentsModule\DataProviders\RetentionAnalysisDataProviderInterface;
+use Crm\SalesFunnelModule\Repositories\SalesFunnelTagsRepository;
 use Crm\SalesFunnelModule\Repositories\SalesFunnelsRepository;
 use Nette\Application\UI\Form;
 
 class RetentionAnalysisDataProvider implements RetentionAnalysisDataProviderInterface
 {
-    private $salesFunnelsRepository;
-
-    public function __construct(SalesFunnelsRepository $salesFunnelsRepository)
-    {
-        $this->salesFunnelsRepository = $salesFunnelsRepository;
+    public function __construct(
+        private SalesFunnelsRepository $salesFunnelsRepository,
+        private SalesFunnelTagsRepository $salesFunnelTagsRepository,
+    ) {
     }
 
     /**
@@ -39,13 +39,18 @@ class RetentionAnalysisDataProvider implements RetentionAnalysisDataProviderInte
         foreach ($this->salesFunnelsRepository->getTable()->fetchAll() as $row) {
             $salesFunnels[$row->id] = "$row->name <small>({$row->url_key})</small>";
         }
+        $form->addMultiSelect('sales_funnel', 'sales_funnel.admin.dataprovider.retention_analysis.sales_funnel', $salesFunnels)
+            ->setDisabled($disable)
+            ->getControlPrototype()->addAttributes(['class' => 'select2']);
 
-        $form->addMultiSelect('sales_funnel', 'Funnel', $salesFunnels)
+        $salesFunnelTags = $this->salesFunnelTagsRepository->tagsSortedByOccurrences();
+        $form->addMultiSelect('sales_funnel_tag', 'sales_funnel.admin.dataprovider.retention_analysis.sales_funnel_tag', $salesFunnelTags)
             ->setDisabled($disable)
             ->getControlPrototype()->addAttributes(['class' => 'select2']);
 
         $form->setDefaults([
             'sales_funnel' => $inputParams['sales_funnel'] ?? [],
+            'sales_funnel_tag' => $inputParams['sales_funnel_tag'] ?? [],
         ]);
 
         return $form;
@@ -60,7 +65,18 @@ class RetentionAnalysisDataProvider implements RetentionAnalysisDataProviderInte
                 $placeholders[] = '?';
             }
 
-            $wheres[] = 'sales_funnel_id IN (' . implode(',', $placeholders) . ')';
+            $wheres[] = 'payments.sales_funnel_id IN (' . implode(',', $placeholders) . ')';
+        }
+
+        if (isset($inputParams['sales_funnel_tag'])) {
+            $placeholders = [];
+            foreach ((array) $inputParams['sales_funnel_tag'] as $salesFunnelTag) {
+                $whereParams[] = $salesFunnelTag;
+                $placeholders[] = '?';
+            }
+
+            $joins[] = "JOIN sales_funnel_tags ON payments.sales_funnel_id = sales_funnel_tags.sales_funnel_id";
+            $wheres[] = 'sales_funnel_tags.tag IN (' . implode(',', $placeholders) . ')';
         }
     }
 }

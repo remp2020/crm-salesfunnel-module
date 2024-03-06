@@ -177,6 +177,11 @@ admin:
             is_from_sales_funnel_label: 'Is from sales funnel'
             is_from_specific_sales_funnel_label: 'Is from specific sales funnel'
 
+    dataprovider:
+        retention_analysis:
+            sales_funnel: Sales funnel
+            sales_funnel_tag: Sales funnel tag
+
 subscription_types_in_sales_funnels:
     header: Available in sales funnels
     no_sales_funnels_message: "This subscription type isn't used by any sales funnel."
