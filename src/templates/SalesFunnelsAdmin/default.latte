@@ -34,13 +34,25 @@
       <tbody>
         <tr n:foreach="$funnels as $funnel" n:class="!$funnel->is_active ? inactive">
           <td>
-            <a n:href="show $funnel->id" class="segment_link">
-              {$funnel->name}
-            </a>
-            {control simpleWidget 'admin.sales_funnel.after_name', $funnel}
-            <span n:if="$funnel->url_key === $defaultSalesFunnelUrlKey" class="label label-success">{_'sales_funnel.config.default_sales_funnel_url_key.name'}</span>
-            <span n:if="$funnel->only_logged" class="label label-default">{_'sales_funnel.data.sales_funnels.fields.only_logged'}</span>
-            <span n:if="$funnel->only_not_logged" class="label label-default">{_'sales_funnel.data.sales_funnels.fields.only_not_logged'}</span>
+            <div>
+              <a n:href="show $funnel->id" class="segment_link">
+                {$funnel->name}
+              </a>
+              {control simpleWidget 'admin.sales_funnel.after_name', $funnel}
+              <span n:if="$funnel->url_key === $defaultSalesFunnelUrlKey" class="label label-success">{_'sales_funnel.config.default_sales_funnel_url_key.name'}</span>
+              <span n:if="$funnel->only_logged" class="label label-default">{_'sales_funnel.data.sales_funnels.fields.only_logged'}</span>
+              <span n:if="$funnel->only_not_logged" class="label label-default">{_'sales_funnel.data.sales_funnels.fields.only_not_logged'}</span>
+            </div>
+            <div n:if="$funnel->segment_id">
+              <small data-toggle="tooltip" data-original-title="{_sales_funnel.data.sales_funnels.fields.segment}, {_segment.fields.time|lower}">
+                <i class="fa fa-chart-pie"></i> <a n:href=":Segment:StoredSegments:show $funnel->segment_id">{$funnel->segment->name}</a>
+                {if $funnel->segment->cache_count_time}
+                  <span n:attr="style: $segmentSlowRecalculateThresholdInSeconds !== null && $funnel->segment->cache_count_time > $segmentSlowRecalculateThresholdInSeconds ? 'font-weight: bold; color: red'">
+                    ({$funnel->segment->cache_count_time}&nbsp;s)
+                  </span>
+                {/if}
+              </small>
+            </div>
           </td>
           <td><code>{$funnel->url_key}</code></td>
           <td>{$funnel->note|breaklines}</td>

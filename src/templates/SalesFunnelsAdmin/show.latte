@@ -44,6 +44,11 @@
         </li>
         <li n:if="$funnel->segment_id" class="list-group-item">
           <b>{_sales_funnel.data.sales_funnels.fields.segment}:</b> <a n:href=":Segment:StoredSegments:show $funnel->segment_id">{$funnel->segment->name}</a>
+          {if $funnel->segment->cache_count_time}
+            <div n:attr="style: $segmentSlowRecalculateThresholdInSeconds !== null && $funnel->segment->cache_count_time > $segmentSlowRecalculateThresholdInSeconds ? 'font-weight: bold; color: red'">
+              {_segment.fields.time}: {$funnel->segment->cache_count_time}&nbsp;s
+            </div>
+          {/if}
         </li>
       </ul>
      </div>

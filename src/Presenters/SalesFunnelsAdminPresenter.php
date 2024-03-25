@@ -20,6 +20,7 @@ use Crm\SalesFunnelModule\Repositories\SalesFunnelsPaymentGatewaysRepository;
 use Crm\SalesFunnelModule\Repositories\SalesFunnelsRepository;
 use Crm\SalesFunnelModule\Repositories\SalesFunnelsStatsRepository;
 use Crm\SalesFunnelModule\Repositories\SalesFunnelsSubscriptionTypesRepository;
+use Crm\SegmentModule\Models\Config\SegmentSlowRecalculateThresholdFactory;
 use Crm\SubscriptionsModule\Models\Subscription\SubscriptionTypeHelper;
 use Crm\SubscriptionsModule\Repositories\SubscriptionTypesRepository;
 use Nette\Application\Responses\CallbackResponse;
@@ -45,7 +46,8 @@ class SalesFunnelsAdminPresenter extends AdminPresenter
         private ExcelFactory $excelFactory,
         private SubscriptionTypeHelper $subscriptionTypeHelper,
         private Config $config,
-        private SalesFunnelsCache $salesFunnelsCache
+        private SalesFunnelsCache $salesFunnelsCache,
+        private SegmentSlowRecalculateThresholdFactory $segmentSlowRecalculateThresholdFactory,
     ) {
         parent::__construct();
     }
@@ -57,6 +59,7 @@ class SalesFunnelsAdminPresenter extends AdminPresenter
     {
         $this->template->funnels = $this->salesFunnelsRepository->all();
         $this->template->defaultSalesFunnelUrlKey = $this->applicationConfig->get('default_sales_funnel_url_key');
+        $this->template->segmentSlowRecalculateThresholdInSeconds = $this->segmentSlowRecalculateThresholdFactory->build()->thresholdInSeconds;
     }
 
     /**
@@ -84,6 +87,7 @@ class SalesFunnelsAdminPresenter extends AdminPresenter
         $this->template->subscriptionTypesPaymentsMap = $this->salesFunnelsRepository->getSalesFunnelDistribution($funnel);
         $this->template->meta = $this->salesFunnelsMetaRepository->all($funnel);
         $this->template->defaultSalesFunnelUrlKey = $this->applicationConfig->get('default_sales_funnel_url_key');
+        $this->template->segmentSlowRecalculateThresholdInSeconds = $this->segmentSlowRecalculateThresholdFactory->build()->thresholdInSeconds;
     }
 
     /**
