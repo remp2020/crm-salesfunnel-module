@@ -24,7 +24,8 @@ class SalesFunnelsRepository extends Repository
         private Emitter $emitter,
         private SalesFunnelsSubscriptionTypesRepository $salesFunnelsSubscriptionTypesRepository,
         private SalesFunnelsPaymentGatewaysRepository $salesFunnelsPaymentGatewaysRepository,
-        private SalesFunnelsMetaRepository $salesFunnelsMetaRepository
+        private SalesFunnelsMetaRepository $salesFunnelsMetaRepository,
+        private SalesFunnelTagsRepository $salesFunnelTagsRepository,
     ) {
         parent::__construct($database);
         $this->auditLogRepository = $auditLogRepository;
@@ -236,9 +237,12 @@ class SalesFunnelsRepository extends Repository
             $this->salesFunnelsSubscriptionTypesRepository->add($newFunnel, $subscriptionType->subscription_type);
         }
 
-        $funnelPurchaseLimit = $this->salesFunnelsMetaRepository->get($funnel, 'funnel_purchase_limit');
-        if ($funnelPurchaseLimit) {
-            $this->salesFunnelsMetaRepository->add($newFunnel, 'funnel_purchase_limit', $funnelPurchaseLimit);
+        foreach ($funnel->related('sales_funnel_tags') as $funnelTag) {
+            $this->salesFunnelTagsRepository->add($newFunnel, $funnelTag->tag);
+        }
+
+        foreach ($funnel->related('sales_funnels_meta') as $meta) {
+            $this->salesFunnelsMetaRepository->add($newFunnel, $meta->key, $meta->value);
         }
 
         return $newFunnel;
