@@ -33,6 +33,7 @@ use Crm\SubscriptionsModule\Repositories\SubscriptionTypesRepository;
 use Crm\UsersModule\Forms\SignInFormFactory;
 use Crm\UsersModule\Models\Auth\InvalidEmailException;
 use Crm\UsersModule\Models\Auth\UserManager;
+use Crm\UsersModule\Models\User\UnclaimedUser;
 use Crm\UsersModule\Repositories\AddressesRepository;
 use Nette\Application\BadRequestException;
 use Nette\Application\Responses\TextResponse;
@@ -64,7 +65,8 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
         private ContentAccessRepository $contentAccessRepository,
         private SignInFormFactory $signInFormFactory,
         private DataProviderManager $dataProviderManager,
-        private SubscriptionTypeHelper $subscriptionTypeHelper
+        private SubscriptionTypeHelper $subscriptionTypeHelper,
+        private UnclaimedUser $unclaimedUser,
     ) {
         parent::__construct();
     }
@@ -383,7 +385,7 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
         }
     }
 
-    private function user($email, $password, ActiveRow $funnel, $source, $referer, bool $needAuth = true): ActiveRow
+    private function user($email, $password, ActiveRow $funnel, $source, $referer): ActiveRow
     {
         $ua = Request::getUserAgent();
 
@@ -393,7 +395,16 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
 
         $user = $this->userManager->loadUserByEmail($email);
         if ($user) {
-            if ($needAuth) {
+            if ($this->unclaimedUser->isUnclaimedUser($user)) {
+                $user = $this->unclaimedUser->makeUnclaimedUserRegistered(
+                    user: $user,
+                    source: $source,
+                    referer: $referer,
+                );
+                $this->usersRepository->update($user, [
+                    'sales_funnel_id' => $funnel->id,
+                ]);
+            } else {
                 $this->getUser()->getAuthenticator()->authenticate(['username' => $email, 'password' => $password]);
             }
         } else {
@@ -431,10 +442,6 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
         $email = filter_input(INPUT_POST, 'email');
         $password = filter_input(INPUT_POST, 'password');
         $locale = filter_input(INPUT_POST, 'locale');
-        $needAuth = true;
-        if (isset($_POST['auth']) && ($_POST['auth'] == '0' || $_POST['auth'] == 'false')) {
-            $needAuth = false;
-        }
 
         if ($locale && !in_array($locale, $this->translator->getAvailableLocales(), true)) {
             $locale = null; // accept only valid locales
@@ -462,7 +469,7 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
         $user = null;
         try {
             $userError = null;
-            $user = $this->user($email, $password, $funnel, $source, $referer, $needAuth);
+            $user = $this->user($email, $password, $funnel, $source, $referer);
 
             if ($locale && $user->locale !== $locale) {
                 $this->usersRepository->update($user, ['locale' => $locale]);
