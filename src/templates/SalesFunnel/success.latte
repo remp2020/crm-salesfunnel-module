@@ -32,7 +32,9 @@
 
     <div n:if="$subscription && $subscription->user->created_at > \Nette\Utils\DateTime::from('-1 hour')" class="col-md-12">
         <p>
-            {_sales_funnel.frontend.success_page.pass_sent, ['email' => $subscription->user->email]|noescape}
+            {_sales_funnel.frontend.success_page.pass_sent, [
+                'email' => $subscription->user->email,
+            ]}
             {control snippet 'success-message'}
         </p>
     </div>
