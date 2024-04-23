@@ -4,22 +4,17 @@ namespace Crm\SalesFunnelModule\Events;
 
 use Crm\SalesFunnelModule\Repositories\SalesFunnelsRepository;
 use Crm\SalesFunnelModule\Repositories\SalesFunnelsStatsRepository;
-use DeviceDetector\DeviceDetector;
+use Crm\UsersModule\Models\DeviceDetector;
 use League\Event\AbstractListener;
 use League\Event\EventInterface;
 
 class SalesFunnelHandler extends AbstractListener
 {
-    private $salesFunnelsRepository;
-
-    private $salesFunnelsStatsRepository;
-
     public function __construct(
-        SalesFunnelsRepository $salesFunnelsRepository,
-        SalesFunnelsStatsRepository $salesFunnelsStatsRepository
+        private SalesFunnelsRepository $salesFunnelsRepository,
+        private SalesFunnelsStatsRepository $salesFunnelsStatsRepository,
+        private DeviceDetector $deviceDetector,
     ) {
-        $this->salesFunnelsRepository = $salesFunnelsRepository;
-        $this->salesFunnelsStatsRepository = $salesFunnelsStatsRepository;
     }
 
     public function handle(EventInterface $event)
@@ -28,12 +23,21 @@ class SalesFunnelHandler extends AbstractListener
             throw new \Exception('invalid type of event received: ' . get_class($event));
         }
 
+        $deviceType = null;
         if ($event->getUserAgent() !== null) {
-            $deviceDetector = new DeviceDetector($event->getUserAgent());
-            $deviceDetector->parse();
+            $this->deviceDetector->setUserAgent($event->getUserAgent());
+            $this->deviceDetector->parse();
 
-            if ($deviceDetector->isBot()) {
-                // Do not track bot visits
+            if ($this->deviceDetector->isTablet()) {
+                $deviceType = 'tablet';
+            } elseif ($this->deviceDetector->isMobile()) {
+                $deviceType = 'mobile';
+            } else {
+                $deviceType = 'desktop';
+            }
+
+            if ($this->deviceDetector->isBot()) {
+                 // Do not track bot visits
                 return;
             }
         }
@@ -55,6 +59,6 @@ class SalesFunnelHandler extends AbstractListener
         if ($event->getType() === SalesFunnelsStatsRepository::TYPE_ERROR) {
             $this->salesFunnelsRepository->incrementErrors($salesFunnel);
         }
-        $this->salesFunnelsStatsRepository->add($salesFunnel, $event->getType(), $event->getDeviceType());
+        $this->salesFunnelsStatsRepository->add($salesFunnel, $event->getType(), $deviceType);
     }
 }
