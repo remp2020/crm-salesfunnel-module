@@ -41,6 +41,7 @@ use Nette\Security\AuthenticationException;
 use Nette\Utils\DateTime;
 use Nette\Utils\Json;
 use Tomaj\Hermes\Emitter;
+use Twig\Extension\SandboxExtension;
 
 class SalesFunnelFrontendPresenter extends FrontendPresenter
 {
@@ -62,7 +63,8 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
         private ContentAccessRepository $contentAccessRepository,
         private SignInFormFactory $signInFormFactory,
         private DataProviderManager $dataProviderManager,
-        private SubscriptionTypeHelper $subscriptionTypeHelper
+        private SubscriptionTypeHelper $subscriptionTypeHelper,
+        private SandboxExtension $sandboxExtension,
     ) {
         parent::__construct();
     }
@@ -154,6 +156,7 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
             'funnel_template' => $body,
         ]);
         $twig = new \Twig\Environment($loader);
+        $twig->addExtension($this->sandboxExtension);
 
         if ($preview === 'no-user' && $this->isValidPreview()) {
             $isLoggedIn = false;
