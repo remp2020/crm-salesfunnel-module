@@ -61,3 +61,8 @@ services:
 	paymentCompleteRedirect:
 		setup:
 			- registerRedirectResolver(Crm\SalesFunnelModule\SalesFunnelPaymentCompleteRedirectResolver(), 100)
+
+	salesFunnelTwigSandbox: Twig\Extension\SandboxExtension(
+		policy: Crm\SalesFunnelModule\Models\TwigSecurityPolicy()
+		sandboxed: true
+	)
