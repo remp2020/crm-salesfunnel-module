@@ -326,7 +326,7 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
                 'sales_funnel' => $funnel,
             ]);
             if (!$canAccessFunnel) {
-                $this->handleCantAccessFunnel($funnel, $ua);
+                $this->cantAccessFunnel($funnel, $ua);
             }
         }
     }
@@ -518,7 +518,7 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
                 'sales_funnel' => $funnel,
             ]);
             if (!$canAccessFunnel) {
-                $this->handleCantAccessFunnel($funnel, $ua);
+                $this->cantAccessFunnel($funnel, $ua);
             }
         }
 
@@ -772,7 +772,7 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
             $this->getUser()->isAllowed('SalesFunnel:SalesFunnelsAdmin', 'preview');
     }
 
-    private function handleCantAccessFunnel(
+    private function cantAccessFunnel(
         ActiveRow $funnel,
         string $userAgent,
     ): void {
