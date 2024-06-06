@@ -75,7 +75,7 @@ frontend:
         message: "Vaše platba byla zrušena. Toto okno můžete zavřít nebo pokračovat na nabídku předplatného."
         back: "Zpět na nabídku"
     not_settled_page:
-        title: Platba zúčtována
+        title: Platba nezúčtována
         message: "Platba byla realizována během technické přestávky banky provozující platební bránu a nelze potvrdit její stav. Platba bude potvrzena, jakmile nám ji potvrdí banka."
     invalid_email:
         title: Zadaný email není platný
