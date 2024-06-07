@@ -154,9 +154,11 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
 
         $addresses = [];
         $body = $body ?? $salesFunnel->body;
+        $headEnd = $this->applicationConfig->get('header_block') . "\n\n" . $this->applicationConfig->get('sales_funnel_header_block') . "\n\n" . $salesFunnel->head_script;
 
         $loader = new ArrayLoader([
             'funnel_template' => $body,
+            'head_template' => $headEnd,
         ]);
 
         $twig = new Environment($loader);
@@ -169,8 +171,6 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
         if ($isLoggedIn) {
             $addresses = $this->addressesRepository->addresses($this->usersRepository->find($this->getUser()->id), 'print');
         }
-
-        $headEnd = $this->applicationConfig->get('header_block') . "\n\n" . $this->applicationConfig->get('sales_funnel_header_block') . "\n\n" . $salesFunnel->head_script;
 
         $contentAccess = [];
         foreach ($subscriptionTypes as $index => $subscriptionType) {
@@ -214,6 +214,8 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
             $params['email'] = $this->getUser()->getIdentity()->email;
             $params['user_id'] = $this->getUser()->getIdentity()->getId();
         }
+
+        $params['headEnd'] = $twig->render('head_template', $params);
         $template = $twig->render('funnel_template', $params);
 
         $ua = Request::getUserAgent();
