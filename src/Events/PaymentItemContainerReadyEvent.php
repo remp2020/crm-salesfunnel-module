@@ -13,14 +13,10 @@ use League\Event\AbstractEvent;
  */
 class PaymentItemContainerReadyEvent extends AbstractEvent
 {
-    private $paymentData;
-
-    private $paymentItemContainer;
-
-    public function __construct(PaymentItemContainer &$paymentItemContainer, ?array $paymentData = null)
-    {
-        $this->paymentItemContainer = $paymentItemContainer;
-        $this->paymentData = $paymentData;
+    public function __construct(
+        private PaymentItemContainer $paymentItemContainer,
+        private ?array $paymentData = null
+    ) {
     }
 
     public function getPaymentItemContainer(): PaymentItemContainer
