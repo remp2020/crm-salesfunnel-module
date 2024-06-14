@@ -9,6 +9,7 @@ use Crm\ApplicationModule\Models\Exports\ExcelFactory;
 use Crm\ApplicationModule\Models\Graphs\Criteria;
 use Crm\ApplicationModule\Models\Graphs\GraphDataItem;
 use Crm\PaymentsModule\Components\LastPayments\LastPaymentsControlFactoryInterface;
+use Crm\PaymentsModule\Forms\Controls\SubscriptionTypesSelectItemsBuilder;
 use Crm\PaymentsModule\Repositories\PaymentGatewaysRepository;
 use Crm\PaymentsModule\Repositories\PaymentsRepository;
 use Crm\SalesFunnelModule\Components\WindowPreview\WindowPreviewControlFactoryInterface;
@@ -21,7 +22,6 @@ use Crm\SalesFunnelModule\Repositories\SalesFunnelsRepository;
 use Crm\SalesFunnelModule\Repositories\SalesFunnelsStatsRepository;
 use Crm\SalesFunnelModule\Repositories\SalesFunnelsSubscriptionTypesRepository;
 use Crm\SegmentModule\Models\Config\SegmentSlowRecalculateThresholdFactory;
-use Crm\SubscriptionsModule\Models\Subscription\SubscriptionTypeHelper;
 use Crm\SubscriptionsModule\Repositories\SubscriptionTypesRepository;
 use Nette\Application\Responses\CallbackResponse;
 use Nette\Application\UI\Form;
@@ -34,20 +34,20 @@ use Tomaj\Form\Renderer\BootstrapRenderer;
 class SalesFunnelsAdminPresenter extends AdminPresenter
 {
     public function __construct(
-        private SalesFunnelsRepository $salesFunnelsRepository,
-        private SalesFunnelAdminFormFactory $salesFunnelAdminFormFactory,
-        private SalesFunnelsMetaRepository $salesFunnelsMetaRepository,
-        private SalesFunnelsStatsRepository $salesFunnelsStatsRepository,
-        private PaymentGatewaysRepository $paymentGatewaysRepository,
-        private PaymentsRepository $paymentsRepository,
-        private SubscriptionTypesRepository $subscriptionTypesRepository,
-        private SalesFunnelsSubscriptionTypesRepository $salesFunnelsSubscriptionTypesRepository,
-        private SalesFunnelsPaymentGatewaysRepository $salesFunnelsPaymentGatewaysRepository,
-        private ExcelFactory $excelFactory,
-        private SubscriptionTypeHelper $subscriptionTypeHelper,
-        private Config $config,
-        private SalesFunnelsCache $salesFunnelsCache,
-        private SegmentSlowRecalculateThresholdFactory $segmentSlowRecalculateThresholdFactory,
+        private readonly SalesFunnelsRepository $salesFunnelsRepository,
+        private readonly SalesFunnelAdminFormFactory $salesFunnelAdminFormFactory,
+        private readonly SalesFunnelsMetaRepository $salesFunnelsMetaRepository,
+        private readonly SalesFunnelsStatsRepository $salesFunnelsStatsRepository,
+        private readonly PaymentGatewaysRepository $paymentGatewaysRepository,
+        private readonly PaymentsRepository $paymentsRepository,
+        private readonly SubscriptionTypesRepository $subscriptionTypesRepository,
+        private readonly SalesFunnelsSubscriptionTypesRepository $salesFunnelsSubscriptionTypesRepository,
+        private readonly SalesFunnelsPaymentGatewaysRepository $salesFunnelsPaymentGatewaysRepository,
+        private readonly ExcelFactory $excelFactory,
+        private readonly Config $config,
+        private readonly SalesFunnelsCache $salesFunnelsCache,
+        private readonly SegmentSlowRecalculateThresholdFactory $segmentSlowRecalculateThresholdFactory,
+        private readonly SubscriptionTypesSelectItemsBuilder $subscriptionTypesSelectItemsBuilder,
     ) {
         parent::__construct();
     }
@@ -266,9 +266,12 @@ class SalesFunnelsAdminPresenter extends AdminPresenter
         }
 
         // zmen nazvy
-        $subscriptionTypes = $this->subscriptionTypeHelper->getPairs($this->subscriptionTypesRepository->all()->where($where), true);
-        $subscriptionType = $form->addSelect('subscription_type_id', 'subscriptions.data.subscription_types.fields.name', $subscriptionTypes)
-            ->setRequired('subscriptions.data.subscription_types.required.name');
+        $subscriptionTypes = $this->subscriptionTypesRepository->all()->where($where)->fetchAll();
+        $subscriptionType = $form->addSelect(
+            'subscription_type_id',
+            'subscriptions.data.subscription_types.fields.name',
+            $this->subscriptionTypesSelectItemsBuilder->buildWithDescription($subscriptionTypes)
+        )->setRequired('subscriptions.data.subscription_types.required.name');
         $subscriptionType->getControlPrototype()->addAttributes(['class' => 'select2']);
 
         $form->addSubmit('send', 'system.save')
