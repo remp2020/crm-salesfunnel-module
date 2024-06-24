@@ -11,6 +11,7 @@ use Nette\Application\Attributes\Persistent;
 use Nette\Application\BadRequestException;
 use Nette\DI\Attributes\Inject;
 use Nette\Database\Table\ActiveRow;
+use Nette\Http\IResponse;
 
 class SalesFunnelPresenter extends FrontendPresenter implements PaymentAwareInterface
 {
@@ -60,6 +61,11 @@ class SalesFunnelPresenter extends FrontendPresenter implements PaymentAwareInte
 
     public function renderSuccess()
     {
+        $user = $this->getUser();
+        if (!$user->isLoggedIn()) {
+            throw new BadRequestException('User is not logged in', httpCode: IResponse::S404_NotFound);
+        }
+
         if (!isset($this->variableSymbol)) {
             $this->paymentLogsRepository->add('ERROR', 'No VS provided in GET', $this->request->getUrl());
             $this->redirect('SalesFunnel:Error');
@@ -74,6 +80,11 @@ class SalesFunnelPresenter extends FrontendPresenter implements PaymentAwareInte
             );
             $this->redirect('SalesFunnel:Error');
         }
+
+        if ($user->getId() !== $payment->user_id) {
+            throw new BadRequestException("User hasn't access to the payment.", httpCode: IResponse::S404_NotFound);
+        }
+
         if (!in_array($payment->status, [PaymentsRepository::STATUS_PAID, PaymentsRepository::STATUS_PREPAID], true)) {
             $this->paymentLogsRepository->add(
                 'ERROR',

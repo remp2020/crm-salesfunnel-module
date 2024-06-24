@@ -422,6 +422,8 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
             $this->usersRepository->update($user, [
                 'sales_funnel_id' => $funnel->id,
             ]);
+
+            $this->getUser()->login(['user' => $user, 'autoLogin' => true]);
         }
 
         return $user;
