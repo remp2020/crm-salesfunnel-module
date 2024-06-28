@@ -83,7 +83,8 @@ frontend:
         title: Could not login with entered credentials
     disabled_auto_login:
         title: Disabled auto-login after payment because of ADMIN user
-
+    address_country_conflict:
+        title: Error creating payment to address
 admin:
     sales_funnels:
         default:

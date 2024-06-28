@@ -9,6 +9,9 @@ use Crm\ApplicationModule\Models\Request;
 use Crm\ApplicationModule\Presenters\FrontendPresenter;
 use Crm\PaymentsModule\Models\CannotProcessPayment;
 use Crm\PaymentsModule\Models\Gateways\ProcessResponse;
+use Crm\PaymentsModule\Models\GeoIp\GeoIpException;
+use Crm\PaymentsModule\Models\OneStopShop\OneStopShop;
+use Crm\PaymentsModule\Models\OneStopShop\OneStopShopCountryConflictException;
 use Crm\PaymentsModule\Models\PaymentItem\DonationPaymentItem;
 use Crm\PaymentsModule\Models\PaymentItem\PaymentItemContainer;
 use Crm\PaymentsModule\Models\PaymentProcessor;
@@ -35,6 +38,7 @@ use Crm\UsersModule\Models\Auth\InvalidEmailException;
 use Crm\UsersModule\Models\Auth\UserManager;
 use Crm\UsersModule\Models\User\UnclaimedUser;
 use Crm\UsersModule\Repositories\AddressesRepository;
+use Crm\UsersModule\Repositories\CountriesRepository;
 use Nette\Application\BadRequestException;
 use Nette\Application\Responses\TextResponse;
 use Nette\Database\Table\ActiveRow;
@@ -69,6 +73,8 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
         private SubscriptionTypeHelper $subscriptionTypeHelper,
         private UnclaimedUser $unclaimedUser,
         private SandboxExtension $sandboxExtension,
+        private OneStopShop $oneStopShop,
+        private CountriesRepository $countriesRepository,
     ) {
         parent::__construct();
     }
@@ -554,6 +560,20 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
             $this->getHttpRequest()->getPost()
         ));
 
+        $resolvedCountry = null;
+        try {
+            $resolvedCountry = $this->oneStopShop->resolveCountry(
+                $user,
+                filter_input(INPUT_POST, 'payment_country'),
+                $address,
+                $paymentItemContainer
+            );
+        } catch (OneStopShopCountryConflictException|GeoIpException $e) {
+            $this->redirectOrSendJson('SalesFunnel:countryConflict');
+        }
+
+        $paymentCountry = $this->countriesRepository->findByIsoCode($resolvedCountry?->countryCode);
+
         // prepare payment meta
         $metaData['newsletters_subscribe'] = (bool)filter_input(INPUT_POST, 'newsletters_subscribe');
 
@@ -575,21 +595,16 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
         $trackerParams = array_merge([], ...$trackerParams);
 
         $payment = $this->paymentsRepository->add(
-            $subscriptionType,
-            $paymentGateway,
-            $user,
-            $paymentItemContainer,
-            $referer,
-            null,
-            null,
-            null,
-            null,
-            $additionalAmount,
-            $additionalType,
-            null,
-            $address,
-            false,
-            array_merge($metaData, $trackerParams)
+            subscriptionType: $subscriptionType,
+            paymentGateway: $paymentGateway,
+            user: $user,
+            paymentItemContainer: $paymentItemContainer,
+            referer: $referer,
+            additionalAmount: $additionalAmount,
+            additionalType: $additionalType,
+            address: $address,
+            metaData: array_merge($metaData, $trackerParams),
+            paymentCountry: $paymentCountry
         );
 
         $this->paymentsRepository->update($payment, ['sales_funnel_id' => $funnel->id]);

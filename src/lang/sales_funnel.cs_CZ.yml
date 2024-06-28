@@ -83,7 +83,8 @@ frontend:
         title: Se zadaným heslem se nepodařilo přihlásit
     disabled_auto_login:
         title: Zakázáno automatické přihlášení po zaplacení kvůli ADMIN uživateli
-
+    address_country_conflict:
+        title: Chyba při zakládání platby na adresu
 admin:
     sales_funnels:
         default:
