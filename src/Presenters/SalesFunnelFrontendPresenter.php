@@ -604,7 +604,8 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
             additionalType: $additionalType,
             address: $address,
             metaData: array_merge($metaData, $trackerParams),
-            paymentCountry: $paymentCountry
+            paymentCountry: $paymentCountry,
+            paymentCountryResolutionReason: $resolvedCountry?->getReasonValue(),
         );
 
         $this->paymentsRepository->update($payment, ['sales_funnel_id' => $funnel->id]);
