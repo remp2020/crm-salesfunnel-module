@@ -46,6 +46,7 @@ use Nette\Security\AuthenticationException;
 use Nette\Utils\DateTime;
 use Nette\Utils\Json;
 use Tomaj\Hermes\Emitter;
+use Tracy\Debugger;
 use Twig\Environment;
 use Twig\Extension\SandboxExtension;
 use Twig\Loader\ArrayLoader;
@@ -563,12 +564,14 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
         $resolvedCountry = null;
         try {
             $resolvedCountry = $this->oneStopShop->resolveCountry(
-                $user,
-                filter_input(INPUT_POST, 'payment_country'),
-                $address,
-                $paymentItemContainer
+                user: $user,
+                selectedCountryCode: filter_input(INPUT_POST, 'payment_country'),
+                paymentAddress: $address,
+                paymentItemContainer: $paymentItemContainer,
+                formParams: $this->request->post,
             );
         } catch (OneStopShopCountryConflictException|GeoIpException $e) {
+            Debugger::log('OneStopShop error: ' . $e->getMessage(), Debugger::WARNING);
             $this->redirectOrSendJson('SalesFunnel:countryConflict');
         }
 
