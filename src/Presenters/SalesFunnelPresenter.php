@@ -7,7 +7,6 @@ use Crm\PaymentsModule\Models\PaymentAwareInterface;
 use Crm\PaymentsModule\Repositories\PaymentLogsRepository;
 use Crm\PaymentsModule\Repositories\PaymentsRepository;
 use Crm\SalesFunnelModule\Repositories\SalesFunnelsRepository;
-use Crm\UsersModule\Repositories\UserActionsLogRepository;
 use Nette\Application\Attributes\Persistent;
 use Nette\Application\BadRequestException;
 use Nette\DI\Attributes\Inject;
@@ -24,9 +23,6 @@ class SalesFunnelPresenter extends FrontendPresenter implements PaymentAwareInte
 
     #[Inject]
     public SalesFunnelsRepository $salesFunnelsRepository;
-
-    #[Inject]
-    public UserActionsLogRepository $userActionsLogRepository;
 
     #[Persistent]
     public $variableSymbol;
@@ -104,13 +100,6 @@ class SalesFunnelPresenter extends FrontendPresenter implements PaymentAwareInte
 
         // removing session created in SalesFunnelFrontendPresenter
         $this->getSession('sales_funnel')->remove();
-    }
-
-    public function renderCountryConflict()
-    {
-        if ($this->getUser()->isLoggedIn()) {
-            $this->userActionsLogRepository->add($this->getUser()->getId(), 'funnel.one_stop_shop.conflict');
-        }
     }
 
     public function getPayment(): ?ActiveRow

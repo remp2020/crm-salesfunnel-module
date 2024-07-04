@@ -39,6 +39,7 @@ use Crm\UsersModule\Models\Auth\UserManager;
 use Crm\UsersModule\Models\User\UnclaimedUser;
 use Crm\UsersModule\Repositories\AddressesRepository;
 use Crm\UsersModule\Repositories\CountriesRepository;
+use Crm\UsersModule\Repositories\UserActionsLogRepository;
 use Nette\Application\BadRequestException;
 use Nette\Application\Responses\TextResponse;
 use Nette\Database\Table\ActiveRow;
@@ -76,6 +77,7 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
         private SandboxExtension $sandboxExtension,
         private OneStopShop $oneStopShop,
         private CountriesRepository $countriesRepository,
+        private UserActionsLogRepository $userActionsLogRepository,
     ) {
         parent::__construct();
     }
@@ -571,7 +573,8 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
                 formParams: $this->request->post,
             );
         } catch (OneStopShopCountryConflictException|GeoIpException $e) {
-            Debugger::log('OneStopShop error: ' . $e->getMessage(), Debugger::WARNING);
+            Debugger::log('Sales funnel - OSS conflict: ' . $e->getMessage(), Debugger::WARNING);
+            $this->userActionsLogRepository->add($user->id, 'funnel.one_stop_shop.conflict', ['exception' => $e->getMessage()]);
             $this->redirectOrSendJson('SalesFunnel:countryConflict');
         }
 
