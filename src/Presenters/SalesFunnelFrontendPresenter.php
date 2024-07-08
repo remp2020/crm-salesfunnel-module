@@ -7,6 +7,7 @@ use Crm\ApplicationModule\Hermes\HermesMessage;
 use Crm\ApplicationModule\Models\DataProvider\DataProviderManager;
 use Crm\ApplicationModule\Models\Request;
 use Crm\ApplicationModule\Presenters\FrontendPresenter;
+use Crm\ApplicationModule\Twig\Extensions\ContributteTranslationExtension;
 use Crm\PaymentsModule\Models\CannotProcessPayment;
 use Crm\PaymentsModule\Models\Gateways\ProcessResponse;
 use Crm\PaymentsModule\Models\GeoIp\GeoIpException;
@@ -171,6 +172,7 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
         ]);
 
         $twig = new Environment($loader);
+        $twig->addExtension(new ContributteTranslationExtension($this->translator));
         $twig->addExtension($this->sandboxExtension);
 
         if ($preview === 'no-user' && $this->isValidPreview()) {

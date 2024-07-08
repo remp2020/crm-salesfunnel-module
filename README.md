@@ -106,6 +106,13 @@ If not provided, HTTP referer is used instead.
 You can use/ignore any of these variables. They're provided to give your template information about user for you
 to decide what user should see.
 
+Twig also provides a translation filter `trans` which can be used to translate strings within the template or encapsulate duplicated texts or messages across the funnels:
+
+```twig
+<label>{{ 'internal.salesfunnel.gateway.cardpay.label'|trans }}</label>
+{# This will work if you're using an Internal module with the existing translation key 'internal.salesfunnel.gateway.cardpay.label' in your translations #}
+```
+
 The final output of sales funnel should be POST request to `/sales-funnel/sales-funnel-frontend/submit`-  either via
 HTML form or via AJAX request. The POST params should contain:
 
