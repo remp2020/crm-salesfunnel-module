@@ -90,6 +90,7 @@ admin:
         default:
             title: Platební okna
             new: Nové platební okno
+            inactive: Neaktivní platební okna
         edit:
             title: Úprava platebního okna
             back: zpět na platební okno

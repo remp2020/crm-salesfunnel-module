@@ -28,6 +28,7 @@ services:
 	- Crm\SalesFunnelModule\Components\DaysFromLastSubscriptionDistributionWidget\DaysFromLastSubscriptionDistributionWidget
 	- Crm\SalesFunnelModule\Components\DaysFromLastSubscriptionDistributionWidget\DaysFromLastSubscriptionDistributionWidgetFactory
 	- Crm\SalesFunnelModule\Components\SalesFunnelUserListingWidget\SalesFunnelUserListingWidget
+	- Crm\SalesFunnelModule\Components\SalesFunnelsListingWidget\SalesFunnelsListingWidget
 	- Crm\SalesFunnelModule\DataProviders\RetentionAnalysisDataProvider
 	- Crm\SalesFunnelModule\DataProviders\PaymentsAdminFilterFormDataProvider
 	- Crm\SalesFunnelModule\Scenarios\PaymentIsFromSalesFunnelCriteria

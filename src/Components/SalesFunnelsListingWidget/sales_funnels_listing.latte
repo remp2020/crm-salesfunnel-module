@@ -1,0 +1,57 @@
+<table class="table table-striped table-hover table-bordered">
+  <thead>
+  <tr>
+    <th>{_'sales_funnel.data.sales_funnels.fields.name'}</th>
+    <th>{_'sales_funnel.data.sales_funnels.fields.url_key'}</th>
+    <th>{_'sales_funnel.data.sales_funnels.fields.note'}</th>
+    <th>{_'sales_funnel.data.sales_funnels.fields.total_conversions'}</th>
+    <th>{_'sales_funnel.data.sales_funnels.fields.last_conversion'}</th>
+    <th>{_'sales_funnel.data.sales_funnels.fields.created_at'}</th>
+    <th>{_'sales_funnel.data.sales_funnels.fields.tags'}</th>
+    <th>{_'system.actions'}</th>
+  </tr>
+  </thead>
+  <tbody>
+    <tr n:foreach="$funnels as $funnel" n:class="!$funnel->is_active ? inactive">
+      <td>
+        <div>
+          <a href="{plink SalesFunnelsAdmin:show $funnel->id}" class="segment_link">
+            {$funnel->name}
+          </a>
+          {control simpleWidget 'admin.sales_funnel.after_name', $funnel}
+          <span n:if="$funnel->url_key === $defaultSalesFunnelUrlKey" class="label label-success">{_'sales_funnel.config.default_sales_funnel_url_key.name'}</span>
+          <span n:if="$funnel->only_logged" class="label label-default">{_'sales_funnel.data.sales_funnels.fields.only_logged'}</span>
+          <span n:if="$funnel->only_not_logged" class="label label-default">{_'sales_funnel.data.sales_funnels.fields.only_not_logged'}</span>
+        </div>
+        <div n:if="$funnel->segment_id">
+          <small data-toggle="tooltip" data-original-title="{_sales_funnel.data.sales_funnels.fields.segment}, {_segment.fields.time|lower}">
+            <i class="fa fa-chart-pie"></i>
+            <a href="{plink :Segment:StoredSegments:show $funnel->segment_id}">{$funnel->segment->name}</a>
+            {if $funnel->segment->cache_count_time}
+              <span n:attr="style: $segmentSlowRecalculateThresholdInSeconds !== null && $funnel->segment->cache_count_time > $segmentSlowRecalculateThresholdInSeconds ? 'font-weight: bold; color: red'">
+                ({$funnel->segment->cache_count_time}&nbsp;s)
+              </span>
+            {/if}
+          </small>
+        </div>
+      </td>
+      <td><code>{$funnel->url_key}</code></td>
+      <td>{$funnel->note|breaklines}</td>
+      <td>{$funnel->total_conversions}</td>
+      <td class="text-muted">{$funnel->last_conversion}</td>
+      <td class="text-muted">{$funnel->created_at}</td>
+      <td>
+        {foreach $funnel->related('sales_funnel_tags') as $tag}
+          <span class="label label-default">{$tag->tag}</span>
+        {/foreach}
+      </td>
+      <td>
+        <p class="text-nowrap">
+          <a href="{plink SalesFunnelsAdmin:show $funnel->id}" class="btn btn-sm btn-info" title="{_'system.show'}"><i class="fa fa-eye"></i> </a>
+          <a href="{plink SalesFunnelsAdmin:edit $funnel->id}" class="btn btn-sm btn-primary" title="{_'system.edit'}"><i class="fa fa-edit"></i> </a>
+          <a href="#" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#copyModal" data-sales-funnel-id="{$funnel->id}" title="{_'sales_funnel.admin.sales_funnels.copy.title'}"><i class="fa fa-copy"></i> </a>
+        </p>
+      </td>
+    </tr>
+  </tbody>
+</table>

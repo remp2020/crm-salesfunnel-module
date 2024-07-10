@@ -28,6 +28,7 @@ use Crm\SalesFunnelModule\Components\FinishRegistrationWidget\FinishRegistration
 use Crm\SalesFunnelModule\Components\NewSubscriptionWidget\NewSubscriptionWidget;
 use Crm\SalesFunnelModule\Components\PaymentDistributionWidget\PaymentDistributionWidget;
 use Crm\SalesFunnelModule\Components\SalesFunnelUserListingWidget\SalesFunnelUserListingWidget;
+use Crm\SalesFunnelModule\Components\SalesFunnelsListingWidget\SalesFunnelsListingWidget;
 use Crm\SalesFunnelModule\Components\SubscriptionTypesInSalesFunnelsWidget\SubscriptionTypesInSalesFunnelsWidget;
 use Crm\SalesFunnelModule\DI\Config;
 use Crm\SalesFunnelModule\DataProviders\PaymentsAdminFilterFormDataProvider;
@@ -200,6 +201,11 @@ class SalesFunnelModule extends CrmModule
         $widgetManager->registerWidget(
             'payments.admin.payment_source_listing',
             SalesFunnelUserListingWidget::class
+        );
+
+        $widgetManager->registerWidget(
+            'sales_funnels.admin.listing',
+            SalesFunnelsListingWidget::class
         );
     }
 

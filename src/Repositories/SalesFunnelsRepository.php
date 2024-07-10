@@ -88,6 +88,11 @@ class SalesFunnelsRepository extends Repository
         return $this->all()->where(['is_active' => true]);
     }
 
+    final public function findByActive(bool $active): Selection
+    {
+        return $this->all()->where(['is_active' => $active]);
+    }
+
     final public function findByUrlKey($urlKey)
     {
         return $this->getTable()->where('url_key', $urlKey)->fetch();

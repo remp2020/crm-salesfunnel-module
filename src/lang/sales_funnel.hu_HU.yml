@@ -85,6 +85,7 @@ admin:
         default:
             title: Értékesítési csatorna
             new: Új értékesítési csatorna
+            inactive: Inaktív értékesítési csatorna
         edit:
             title: Értékesítési csatorna szerkesztése
             back: vissza az értékesítési csatornához

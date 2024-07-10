@@ -90,6 +90,7 @@ admin:
         default:
             title: Sales funnels
             new: New sales funnel
+            inactive: Inactive sales funnels
         edit:
             title: Edit sales funnel
             back: back to sales funnel

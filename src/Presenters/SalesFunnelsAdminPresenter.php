@@ -57,9 +57,8 @@ class SalesFunnelsAdminPresenter extends AdminPresenter
      */
     public function renderDefault()
     {
-        $this->template->funnels = $this->salesFunnelsRepository->all();
-        $this->template->defaultSalesFunnelUrlKey = $this->applicationConfig->get('default_sales_funnel_url_key');
-        $this->template->segmentSlowRecalculateThresholdInSeconds = $this->segmentSlowRecalculateThresholdFactory->build()->thresholdInSeconds;
+        $this->template->funnels = $this->salesFunnelsRepository->active();
+        $this->template->inactiveFunnels = $this->salesFunnelsRepository->findByActive(false);
     }
 
     /**
