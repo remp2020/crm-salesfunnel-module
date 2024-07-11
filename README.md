@@ -208,6 +208,49 @@ And initialize listener in `ExampleModule\ExampleModule.php`
 
 Newly created payment by SalesFunnel will now contain specific donation if sales funnel received this field.
 
+## Sales funnel twig variables and snippets
+
+When using sales funnels you can also pass custom variables or use snippets feature provided by ApplicationModule `Crm\ApplicationModule\Repositories\SnippetsRepository`.
+
+For this feature to work you need to register custom data provider which implements `SalesFunnelVariablesDataProviderInterface` in `sales_funnel.dataprovider.twig_variables` data provider path.
+
+registration:
+```php
+$dataProviderManager->registerDataProvider(
+    'sales_funnel.dataprovider.twig_variables',
+    $this->getInstance(SalesFunnelTwigVariablesDataProvider::class)
+);
+```
+
+data provider example:
+```php
+final class SalesFunnelTwigVariablesDataProvider implements SalesFunnelVariablesDataProviderInterface
+{
+    // add ability to load snippets, check docblock for further info
+    use SalesFunnelTwigSnippetLoaderTrait;
+
+    public function provide(array $params): array
+    {
+        if (!isset($params[self::PARAM_SALES_FUNNEL])) {
+            throw new DataProviderException('missing [' . self::PARAM_SALES_FUNNEL . '] within data provider params');
+        }
+        
+        $salesFunnel = $params[self::PARAM_SALES_FUNNEL];
+
+        $returnParams = [];
+        
+        // adding custom twig variable
+        $returnParams['your_custom_twig_variable'] = 'your_custom_twig_variable';
+        
+        // load snippets (feature provided by ApplicationModule)
+        $snippetsToLoad = ['header', 'footer'];
+        $returnParams += $this->loadSnippets($salesFunnel, $loadSnippets);
+        
+        return $returnParams;
+    }
+}
+```
+
 ## Components
 
 **AmountDistributionWidget**
