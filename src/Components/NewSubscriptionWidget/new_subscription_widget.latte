@@ -53,13 +53,9 @@
 
 <script type="text/javascript" src="{$basePath}/layouts/default/js/iframeResizer.min.js"></script>
 <script>
-	// Keep iframe scrolling only if it's an iOS device. This is the only way how to preserve natural scrolling with
-	// momentum keeping on iOS. Rest of the devices should remain untouched.
-	if (!CSS.supports("-webkit-overflow-scrolling: touch")) {
-		$(window).on('load', function() {
-			iFrameResize({ log: false, heightCalculationMethod: 'max' }, '#outside');
-		});
-	}
+	$(window).on('load', function() {
+		iFrameResize({ log: false, heightCalculationMethod: 'max' }, '#outside');
+	});
 
 	window.ScrollToTop = function(){
 		$('html,body', window.document).animate({
