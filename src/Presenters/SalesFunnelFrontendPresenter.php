@@ -39,7 +39,6 @@ use Crm\UsersModule\Models\Auth\InvalidEmailException;
 use Crm\UsersModule\Models\Auth\UserManager;
 use Crm\UsersModule\Models\User\UnclaimedUser;
 use Crm\UsersModule\Repositories\AddressesRepository;
-use Crm\UsersModule\Repositories\CountriesRepository;
 use Crm\UsersModule\Repositories\UserActionsLogRepository;
 use Nette\Application\BadRequestException;
 use Nette\Application\Responses\TextResponse;
@@ -77,7 +76,6 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
         private UnclaimedUser $unclaimedUser,
         private SandboxExtension $sandboxExtension,
         private OneStopShop $oneStopShop,
-        private CountriesRepository $countriesRepository,
         private UserActionsLogRepository $userActionsLogRepository,
     ) {
         parent::__construct();
@@ -580,8 +578,6 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
             $this->redirectOrSendJson('SalesFunnel:countryConflict');
         }
 
-        $paymentCountry = $this->countriesRepository->findByIsoCode($resolvedCountry?->countryCode);
-
         // prepare payment meta
         $metaData['newsletters_subscribe'] = (bool)filter_input(INPUT_POST, 'newsletters_subscribe');
 
@@ -612,7 +608,7 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
             additionalType: $additionalType,
             address: $address,
             metaData: array_merge($metaData, $trackerParams),
-            paymentCountry: $paymentCountry,
+            paymentCountry: $resolvedCountry?->country,
             paymentCountryResolutionReason: $resolvedCountry?->getReasonValue(),
         );
 
