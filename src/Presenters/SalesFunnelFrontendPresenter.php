@@ -10,7 +10,6 @@ use Crm\ApplicationModule\Presenters\FrontendPresenter;
 use Crm\ApplicationModule\Twig\Extensions\ContributteTranslationExtension;
 use Crm\PaymentsModule\Models\CannotProcessPayment;
 use Crm\PaymentsModule\Models\Gateways\ProcessResponse;
-use Crm\PaymentsModule\Models\GeoIp\GeoIpException;
 use Crm\PaymentsModule\Models\OneStopShop\OneStopShop;
 use Crm\PaymentsModule\Models\OneStopShop\OneStopShopCountryConflictException;
 use Crm\PaymentsModule\Models\PaymentItem\DonationPaymentItem;
@@ -572,7 +571,7 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
                 paymentItemContainer: $paymentItemContainer,
                 formParams: $this->request->post,
             );
-        } catch (OneStopShopCountryConflictException|GeoIpException $e) {
+        } catch (OneStopShopCountryConflictException $e) {
             Debugger::log('Sales funnel - OSS conflict: ' . $e->getMessage(), Debugger::WARNING);
             $this->userActionsLogRepository->add($user->id, 'funnel.one_stop_shop.conflict', ['exception' => $e->getMessage()]);
             $this->redirectOrSendJson('SalesFunnel:countryConflict');
