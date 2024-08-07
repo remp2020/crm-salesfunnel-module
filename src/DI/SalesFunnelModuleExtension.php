@@ -27,10 +27,6 @@ class SalesFunnelModuleExtension extends CompilerExtension implements Translatio
         $this->compiler->loadDefinitionsFromConfig(
             $this->loadFromFile(__DIR__.'/../config/config.neon')['services']
         );
-
-        // configure API client
-        $builder->getDefinitionByType(Config::class)
-            ->addSetup('setFunnelRoutes', [$this->config[self::PARAM_FUNNEL_ROUTES]]);
     }
 
     public function beforeCompile()
@@ -39,6 +35,10 @@ class SalesFunnelModuleExtension extends CompilerExtension implements Translatio
         // load presenters from extension to Nette
         $builder->getDefinition($builder->getByType(IPresenterFactory::class))
             ->addSetup('setMapping', [['SalesFunnel' => 'Crm\SalesFunnelModule\Presenters\*Presenter']]);
+
+        // configure API client
+        $builder->getDefinitionByType(Config::class)
+            ->addSetup('setFunnelRoutes', [$this->config[self::PARAM_FUNNEL_ROUTES]]);
     }
 
     /**
