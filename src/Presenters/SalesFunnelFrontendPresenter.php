@@ -572,7 +572,7 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
                 formParams: $this->request->post,
             );
         } catch (OneStopShopCountryConflictException $e) {
-            Debugger::log('Sales funnel - OSS conflict: ' . $e->getMessage(), Debugger::WARNING);
+            Debugger::log('Sales funnel - OSS conflict: ' . $e->getMessage() . '. User will be redirected to resolution screen.', Debugger::WARNING);
             $this->userActionsLogRepository->add($user->id, 'funnel.one_stop_shop.conflict', ['exception' => $e->getMessage()]);
             $this->redirectOrSendJson('SalesFunnel:countryConflict');
         }
