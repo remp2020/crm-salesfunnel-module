@@ -2,10 +2,10 @@
 
 namespace Crm\SalesFunnelModule\Events;
 
-use Crm\ApplicationModule\Models\Database\ActiveRow;
 use Crm\PaymentsModule\Models\PaymentItem\PaymentItemContainer;
 use Crm\UsersModule\Events\UserEventInterface;
 use League\Event\AbstractEvent;
+use Nette\Database\Table\ActiveRow;
 
 /**
  * PaymentItemContainerReadyEvent is emitted after PaymentItemContainer was initialized
