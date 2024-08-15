@@ -2,7 +2,9 @@
 
 namespace Crm\SalesFunnelModule\Events;
 
+use Crm\ApplicationModule\Models\Database\ActiveRow;
 use Crm\PaymentsModule\Models\PaymentItem\PaymentItemContainer;
+use Crm\UsersModule\Events\UserEventInterface;
 use League\Event\AbstractEvent;
 
 /**
@@ -11,11 +13,12 @@ use League\Event\AbstractEvent;
  * PaymentItemContainer should be initialized and filled with base payment items.
  * All handlers can add, update or remove PaymentItems before payment is created.
  */
-class PaymentItemContainerReadyEvent extends AbstractEvent
+class PaymentItemContainerReadyEvent extends AbstractEvent implements UserEventInterface
 {
     public function __construct(
         private PaymentItemContainer $paymentItemContainer,
-        private ?array $paymentData = null
+        private ActiveRow $user,
+        private ?array $paymentData = null,
     ) {
     }
 
@@ -27,5 +30,10 @@ class PaymentItemContainerReadyEvent extends AbstractEvent
     public function getPaymentData(): ?array
     {
         return $this->paymentData;
+    }
+
+    public function getUser(): ActiveRow
+    {
+        return $this->user;
     }
 }

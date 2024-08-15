@@ -559,7 +559,8 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
         // let modules add own items to PaymentItemContainer before payment is created
         $this->emitter->emit(new PaymentItemContainerReadyEvent(
             $paymentItemContainer,
-            $this->getHttpRequest()->getPost()
+            $user,
+            $this->getHttpRequest()->getPost(),
         ));
 
         $resolvedCountry = null;
