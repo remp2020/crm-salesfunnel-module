@@ -92,6 +92,10 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
         }
     }
 
+    /**
+     * Will be DEPRECATED in 4.0 - No longer supported way of rendering sales funnels
+     * @see crm-salesfunnel-module/README.md#iframe-deprecation-in-sales-funnels
+     */
     public function renderDefault($funnel)
     {
         $salesFunnel = $this->salesFunnelsRepository->findByUrlKey($funnel);

@@ -210,6 +210,8 @@ Newly created payment by SalesFunnel will now contain specific donation if sales
 
 ## Sales funnel twig variables and snippets
 
+### Registration
+
 When using sales funnels you can also pass custom variables or use snippets feature provided by ApplicationModule `Crm\ApplicationModule\Repositories\SnippetsRepository`.
 
 For this feature to work you need to register custom data provider which implements `SalesFunnelVariablesDataProviderInterface` in `sales_funnel.dataprovider.twig_variables` data provider path.
@@ -243,13 +245,78 @@ final class SalesFunnelTwigVariablesDataProvider implements SalesFunnelVariables
         $returnParams['your_custom_twig_variable'] = 'your_custom_twig_variable';
         
         // load snippets (feature provided by ApplicationModule)
-        $snippetsToLoad = ['header', 'footer'];
+        $snippetsToLoad = ['header', 'footer', 'sales-funnel-common-header'];
         $returnParams += $this->loadSnippets($salesFunnel, $loadSnippets);
         
         return $returnParams;
     }
 }
 ```
+
+### Usage within sales funnels
+
+Snippet's name is changed to camel case with prefix snippet. So `sales-funnel-common-header` becomes:
+
+```twig
+  {{ snippetSalesFunnelCommonHeader|raw }}
+```
+
+Variables are accessible as provided. So `your_custom_twig_variable` will be:
+
+```twig
+{% if your_custom_twig_variable %}
+  <h1>{{ your_custom_twig_variable }}</h1>
+{% endif %}
+```
+
+## Iframe deprecation in sales funnels
+
+### Deprecation
+
+Because of modernization and multiple problems with using iframes as wrapper for sales funnels (eg. scrolling & focus issues on iOS devices), we stopped using iframe to render sales funnels.
+
+Methods / routes that are now marked deprecated:
+
+- `Crm\SubscriptionsModule\Presenters\SubscriptionsPresenter#renderNew()`
+  - Serves URLs http://crm.press/subscriptions/subscriptions/new
+- `Crm\SalesFunnelModule\Presenters\SalesFunnelFrontendPresenter#renderDefault()`
+  - Serves URLs http://crm.press/sales-funnel/sales-funnel-frontend/?funnel=url_key
+
+⚠️ **They will be removed (or refactored) in CRM version 4.0.**
+
+### Solution
+
+This will be default solution 
+If you are using `Subscriptions:Subscriptions:new` as default route, we recommend to update your config `Default route` (see Application category at https://crm.press/admin/config-admin/) to `SalesFunnel:SalesFunnel:newPopup`. This method loads and renders default sales funnel from config `Default sales funnel` (see Sales Funnels category) directly without using iframes.
+
+You can register routes for your sales funnels directly in your custom module. For example:
+
+```php
+use Crm\SalesFunnelModule\DI\Config;
+use Crm\SalesFunnelModule\Models\SalesFunnelsCache;
+
+class DemoModule extends CrmModule
+{
+    // ...
+
+    public function registerRoutes(RouteList $router)
+    {
+        // to avoid iframes for all sales funnels of Demo instance
+        if ($this->config->getFunnelRoutes()) {
+            foreach ($this->salesFunnelsCache->all() as $salesFunnel) {
+                $router->prepend(new Route(
+                    "<funnel {$salesFunnel->url_key}>",
+                    'SalesFunnel:SalesFunnelFrontend:show'
+                ));
+            }
+        }
+    }
+
+    // ...
+}
+```
+
+For commonly used parts of sales funnel such as header, footer etc., you can use [snippets feature](#sales-funnel-twig-variables-and-snippets) provided by `ApplicationModule`.
 
 ## Components
 
