@@ -542,7 +542,7 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
             $this->redirectOrSendJson('limitReached', $funnel->id);
         }
 
-        $addressId = filter_input(INPUT_POST, 'address_id');
+        $addressId = (int) filter_input(INPUT_POST, 'address_id');
         if ($addressId) {
             $address = $this->addressesRepository->find($addressId);
             if ($address->user_id != $user->id) {
