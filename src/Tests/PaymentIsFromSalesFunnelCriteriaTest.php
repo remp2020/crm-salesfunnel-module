@@ -7,6 +7,7 @@ use Crm\PaymentsModule\Repositories\PaymentGatewaysRepository;
 use Crm\PaymentsModule\Repositories\PaymentItemMetaRepository;
 use Crm\PaymentsModule\Repositories\PaymentItemsRepository;
 use Crm\PaymentsModule\Repositories\PaymentMetaRepository;
+use Crm\PaymentsModule\Repositories\PaymentMethodsRepository;
 use Crm\PaymentsModule\Repositories\PaymentsRepository;
 use Crm\PaymentsModule\Repositories\RecurrentPaymentsRepository;
 use Crm\PaymentsModule\Tests\PaymentsTestCase;
@@ -31,6 +32,7 @@ class PaymentIsFromSalesFunnelCriteriaTest extends PaymentsTestCase
             PaymentItemsRepository::class,
             PaymentItemMetaRepository::class,
             PaymentGatewaysRepository::class,
+            PaymentMethodsRepository::class,
             RecurrentPaymentsRepository::class,
             SubscriptionTypesRepository::class,
             SubscriptionTypesMetaRepository::class,
