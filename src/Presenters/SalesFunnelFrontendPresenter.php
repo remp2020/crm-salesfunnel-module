@@ -423,7 +423,8 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
                     'sales_funnel_id' => $funnel->id,
                 ]);
             } else {
-                $this->getUser()->getAuthenticator()->authenticate(['username' => $email, 'password' => $password]);
+                $this->getUser()->setExpiration('14 days', false);
+                $this->getUser()->login(['username' => $email, 'password' => $password]);
             }
         } else {
             $user = $this->userManager->addNewUser($email, true, $source, $referer, true, null, false);
