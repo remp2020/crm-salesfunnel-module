@@ -10,15 +10,15 @@ use Twig\Sandbox\SecurityPolicyInterface;
  */
 class TwigSecurityPolicy implements SecurityPolicyInterface
 {
-    public function checkSecurity($tags, $filters, $functions)
+    public function checkSecurity($tags, $filters, $functions): void
     {
     }
 
-    public function checkMethodAllowed($obj, $method)
+    public function checkMethodAllowed($obj, $method): void
     {
     }
 
-    public function checkPropertyAllowed($obj, $property)
+    public function checkPropertyAllowed($obj, $property): void
     {
     }
 }
