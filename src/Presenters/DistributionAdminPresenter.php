@@ -10,7 +10,6 @@ use Crm\SalesFunnelModule\Models\Distribution\PaymentsCountDistribution;
 use Crm\SalesFunnelModule\Models\Distribution\PaymentsSumDistribution;
 use Crm\SalesFunnelModule\Models\Distribution\SubscriptionDaysDistribution;
 use Crm\SalesFunnelModule\Repositories\SalesFunnelsRepository;
-use Crm\UsersModule\Repositories\UsersRepository;
 
 class DistributionAdminPresenter extends AdminPresenter
 {
@@ -22,21 +21,17 @@ class DistributionAdminPresenter extends AdminPresenter
 
     private SubscriptionDaysDistribution $subscriptionDaysDistribution;
 
-    private UsersRepository $usersRepository;
-
     public function __construct(
         PaymentsCountDistribution $paymentsCountDistribution,
         PaymentsSumDistribution $paymentsSumDistribution,
         SalesFunnelsRepository $salesFunnelsRepository,
         SubscriptionDaysDistribution $subscriptionDaysDistribution,
-        UsersRepository $usersRepository
     ) {
         parent::__construct();
         $this->paymentsSumDistribution = $paymentsSumDistribution;
         $this->salesFunnelsRepository = $salesFunnelsRepository;
         $this->paymentsCountDistribution = $paymentsCountDistribution;
         $this->subscriptionDaysDistribution = $subscriptionDaysDistribution;
-        $this->usersRepository = $usersRepository;
     }
 
     /**
