@@ -52,7 +52,7 @@ class SalesFunnelTagsRepository extends Repository
 
     final public function setTagsForSalesFunnel(ActiveRow $salesFunnel, array $tags): void
     {
-        $this->database->transaction(function () use ($tags, $salesFunnel) {
+        $this->getTransaction()->wrap(function () use ($tags, $salesFunnel) {
             $this->removeTagsForSalesFunnel($salesFunnel);
             foreach ($tags as $tag) {
                 $this->insert([
