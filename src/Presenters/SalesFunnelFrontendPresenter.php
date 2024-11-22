@@ -310,10 +310,7 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
         }
 
         if ($funnel->only_logged && !$this->getUser()->isLoggedIn()) {
-            $this->redirectOrSendJson('signIn', [
-                'referer' => $this->getParameter('referer'),
-                'funnel' => $this->getParameter('funnel'),
-            ]);
+            $this->onlyLoggedIn();
         }
 
         if ($funnel->only_not_logged && $this->getUser()->isLoggedIn()) {
