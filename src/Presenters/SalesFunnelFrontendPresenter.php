@@ -569,7 +569,7 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
         try {
             $resolvedCountry = $this->oneStopShop->resolveCountry(
                 user: $user,
-                selectedCountryCode: filter_input(INPUT_POST, 'payment_country'),
+                selectedCountryCode: $this->request->getPost('payment_country'),
                 paymentAddress: $address,
                 paymentItemContainer: $paymentItemContainer,
                 formParams: $this->request->post,
@@ -589,6 +589,11 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
             }
         }
 
+        // custom subscription start time
+        if ($this->request->getPost('subscription_starts_at')) {
+            $subscriptionStartAt = DateTime::from($this->request->getPost('subscription_starts_at'));
+        }
+
         $trackerParams = [];
         /** @var TrackerDataProviderInterface[] $providers */
         $providers = $this->dataProviderManager->getProviders(
@@ -606,6 +611,7 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
             user: $user,
             paymentItemContainer: $paymentItemContainer,
             referer: $referer,
+            subscriptionStartAt: $subscriptionStartAt ?? null,
             additionalAmount: $additionalAmount,
             additionalType: $additionalType,
             address: $address,
