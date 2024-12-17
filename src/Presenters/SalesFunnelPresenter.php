@@ -3,6 +3,7 @@
 namespace Crm\SalesFunnelModule\Presenters;
 
 use Crm\ApplicationModule\Presenters\FrontendPresenter;
+use Crm\PaymentsModule\Models\Payment\PaymentStatusEnum;
 use Crm\PaymentsModule\Models\PaymentAwareInterface;
 use Crm\PaymentsModule\Repositories\PaymentLogsRepository;
 use Crm\PaymentsModule\Repositories\PaymentsRepository;
@@ -85,7 +86,7 @@ class SalesFunnelPresenter extends FrontendPresenter implements PaymentAwareInte
             throw new BadRequestException("User hasn't access to the payment.", httpCode: IResponse::S404_NotFound);
         }
 
-        if (!in_array($payment->status, [PaymentsRepository::STATUS_PAID, PaymentsRepository::STATUS_PREPAID], true)) {
+        if (!in_array($payment->status, [PaymentStatusEnum::Paid->value, PaymentStatusEnum::Prepaid->value, PaymentStatusEnum::Authorized->value], true)) {
             $this->paymentLogsRepository->add(
                 'ERROR',
                 "Payment is not paid '{$this->variableSymbol}'",

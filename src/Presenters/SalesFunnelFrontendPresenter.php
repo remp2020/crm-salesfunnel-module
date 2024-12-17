@@ -9,7 +9,9 @@ use Crm\ApplicationModule\Models\Request;
 use Crm\ApplicationModule\Presenters\FrontendPresenter;
 use Crm\ApplicationModule\Twig\Extensions\ContributteTranslationExtension;
 use Crm\PaymentsModule\Models\CannotProcessPayment;
+use Crm\PaymentsModule\Models\GatewayFactory;
 use Crm\PaymentsModule\Models\Gateways\ProcessResponse;
+use Crm\PaymentsModule\Models\Gateways\RecurrentAuthorizationInterface;
 use Crm\PaymentsModule\Models\OneStopShop\OneStopShop;
 use Crm\PaymentsModule\Models\OneStopShop\OneStopShopCountryConflictException;
 use Crm\PaymentsModule\Models\PaymentItem\DonationPaymentItem;
@@ -76,6 +78,7 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
         private SandboxExtension $sandboxExtension,
         private OneStopShop $oneStopShop,
         private UserActionsLogRepository $userActionsLogRepository,
+        private GatewayFactory $gatewayFactory,
     ) {
         parent::__construct();
     }
@@ -564,6 +567,10 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
             $user,
             $this->getHttpRequest()->getPost(),
         ));
+        $gateway = $this->gatewayFactory->getGateway($paymentGateway->code);
+        if ($gateway instanceof RecurrentAuthorizationInterface) {
+            $paymentItemContainer->setZeroPriceAllowed();
+        }
 
         $resolvedCountry = null;
         try {
