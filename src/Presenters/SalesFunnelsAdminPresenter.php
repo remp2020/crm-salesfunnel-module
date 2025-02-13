@@ -8,6 +8,7 @@ use Crm\ApplicationModule\Components\Graphs\GoogleLineGraphGroup\GoogleLineGraph
 use Crm\ApplicationModule\Models\Exports\ExcelFactory;
 use Crm\ApplicationModule\Models\Graphs\Criteria;
 use Crm\ApplicationModule\Models\Graphs\GraphDataItem;
+use Crm\ApplicationModule\UI\Form;
 use Crm\PaymentsModule\Components\LastPayments\LastPaymentsControlFactoryInterface;
 use Crm\PaymentsModule\Forms\Controls\SubscriptionTypesSelectItemsBuilder;
 use Crm\PaymentsModule\Repositories\PaymentGatewaysRepository;
@@ -24,7 +25,6 @@ use Crm\SalesFunnelModule\Repositories\SalesFunnelsSubscriptionTypesRepository;
 use Crm\SegmentModule\Models\Config\SegmentSlowRecalculateThresholdFactory;
 use Crm\SubscriptionsModule\Repositories\SubscriptionTypesRepository;
 use Nette\Application\Responses\CallbackResponse;
-use Nette\Application\UI\Form;
 use Nette\Database\Table\ActiveRow;
 use Nette\Forms\Controls\TextInput;
 use Nette\Utils\DateTime;

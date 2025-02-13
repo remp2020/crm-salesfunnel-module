@@ -3,10 +3,10 @@
 namespace Crm\SalesFunnelModule\DataProviders;
 
 use Crm\ApplicationModule\Models\DataProvider\DataProviderException;
+use Crm\ApplicationModule\UI\Form;
 use Crm\PaymentsModule\DataProviders\RetentionAnalysisDataProviderInterface;
 use Crm\SalesFunnelModule\Repositories\SalesFunnelTagsRepository;
 use Crm\SalesFunnelModule\Repositories\SalesFunnelsRepository;
-use Nette\Application\UI\Form;
 
 class RetentionAnalysisDataProvider implements RetentionAnalysisDataProviderInterface
 {

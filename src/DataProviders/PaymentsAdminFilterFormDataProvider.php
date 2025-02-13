@@ -3,9 +3,9 @@
 namespace Crm\SalesFunnelModule\DataProviders;
 
 use Crm\ApplicationModule\Models\DataProvider\DataProviderException;
+use Crm\ApplicationModule\UI\Form;
 use Crm\PaymentsModule\DataProviders\AdminFilterFormDataProviderInterface;
 use Crm\SalesFunnelModule\Repositories\SalesFunnelsRepository;
-use Nette\Application\UI\Form;
 use Nette\Database\Table\Selection;
 
 class PaymentsAdminFilterFormDataProvider implements AdminFilterFormDataProviderInterface

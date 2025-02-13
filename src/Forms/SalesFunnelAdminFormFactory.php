@@ -3,11 +3,11 @@
 namespace Crm\SalesFunnelModule\Forms;
 
 use Contributte\Translation\Translator;
+use Crm\ApplicationModule\UI\Form;
 use Crm\SalesFunnelModule\Repositories\SalesFunnelTagsRepository;
 use Crm\SalesFunnelModule\Repositories\SalesFunnelsMetaRepository;
 use Crm\SalesFunnelModule\Repositories\SalesFunnelsRepository;
 use Crm\SegmentModule\Repositories\SegmentsRepository;
-use Nette\Application\UI\Form;
 use Nette\Database\Table\ActiveRow;
 use Nette\Forms\Controls\TextInput;
 use Nette\Utils\DateTime;
