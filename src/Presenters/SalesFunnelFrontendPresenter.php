@@ -152,7 +152,7 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
         $preview = $this->request->query['preview'] ?? null;
 
         if ($preview === null && $salesFunnel->redirect_funnel) {
-            $this->redirect('default', array_merge(['funnel' => $salesFunnel->redirect_funnel->url_key], $_GET));
+            $this->redirect('show', array_merge(['funnel' => $salesFunnel->redirect_funnel->url_key], $_GET));
         }
 
         $this->validateFunnel($salesFunnel);
