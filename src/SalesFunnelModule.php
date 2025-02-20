@@ -138,7 +138,7 @@ class SalesFunnelModule extends CrmModule
     {
         if ($this->config->getFunnelRoutes()) {
             foreach ($this->salesFunnelsCache->all() as $salesFunnel) {
-                $router->addRoute("<funnel {$salesFunnel->url_key}>", 'SalesFunnel:SalesFunnelFrontend:default');
+                $router->addRoute("<funnel {$salesFunnel->url_key}>", 'SalesFunnel:SalesFunnelFrontend:show');
             }
         }
 
