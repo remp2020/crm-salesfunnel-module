@@ -4,7 +4,6 @@ namespace Crm\SalesFunnelModule\Api;
 
 use Crm\ApiModule\Models\Api\ApiHandler;
 use Crm\ApiModule\Models\Params\InputParam;
-use Crm\ApiModule\Models\Params\ParamsProcessor;
 use Crm\PaymentsModule\Repositories\PaymentsRepository;
 use Crm\SalesFunnelModule\Repositories\SalesFunnelsMetaRepository;
 use Crm\SalesFunnelModule\Repositories\SalesFunnelsRepository;
@@ -50,9 +49,6 @@ class ListPaymentsPublicMetaHandler extends ApiHandler
 
     public function handle(array $params): ResponseInterface
     {
-        $paramsProcessor = new ParamsProcessor($this->params());
-        $params = $paramsProcessor->getValues();
-
         if (!$params['sales_funnel_url_key']) {
             $response = new JsonApiResponse(Response::S404_NOT_FOUND, [
                 'status' => 'error',

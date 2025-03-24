@@ -4,7 +4,6 @@ namespace Crm\SalesFunnelModule\Api;
 
 use Crm\ApiModule\Models\Api\ApiHandler;
 use Crm\ApiModule\Models\Params\InputParam;
-use Crm\ApiModule\Models\Params\ParamsProcessor;
 use Crm\ApplicationModule\Models\Request;
 use Crm\SalesFunnelModule\Events\SalesFunnelEvent;
 use Crm\SalesFunnelModule\Repositories\SalesFunnelsRepository;
@@ -36,9 +35,6 @@ class TrackStatsHandler extends ApiHandler
 
     public function handle(array $params): ResponseInterface
     {
-        $paramsProcessor = new ParamsProcessor($this->params());
-        $params = $paramsProcessor->getValues();
-
         $funnel = $this->salesFunnelsRepository->findByUrlKey($params['url_key']);
         if (!$funnel) {
             $response = new JsonApiResponse(Response::S404_NOT_FOUND, [
