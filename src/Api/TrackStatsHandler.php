@@ -3,12 +3,12 @@
 namespace Crm\SalesFunnelModule\Api;
 
 use Crm\ApiModule\Models\Api\ApiHandler;
-use Crm\ApiModule\Models\Params\InputParam;
 use Crm\ApplicationModule\Models\Request;
 use Crm\SalesFunnelModule\Events\SalesFunnelEvent;
 use Crm\SalesFunnelModule\Repositories\SalesFunnelsRepository;
 use League\Event\Emitter;
 use Nette\Http\Response;
+use Tomaj\NetteApi\Params\PostInputParam;
 use Tomaj\NetteApi\Response\JsonApiResponse;
 use Tomaj\NetteApi\Response\ResponseInterface;
 
@@ -27,9 +27,9 @@ class TrackStatsHandler extends ApiHandler
     public function params(): array
     {
         return [
-            new InputParam(InputParam::TYPE_POST, 'url_key', InputParam::REQUIRED),
-            new InputParam(InputParam::TYPE_POST, 'type', InputParam::REQUIRED),
-            new InputParam(InputParam::TYPE_POST, 'user_agent', InputParam::OPTIONAL),
+            (new PostInputParam('url_key'))->setRequired(),
+            (new PostInputParam('type'))->setRequired(),
+            new PostInputParam('user_agent'),
         ];
     }
 
