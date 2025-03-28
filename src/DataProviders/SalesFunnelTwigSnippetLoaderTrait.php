@@ -7,6 +7,9 @@ use Crm\ApplicationModule\Twig\Extensions\ContributteTranslationExtension;
 use Nette\Database\Table\ActiveRow;
 use Nette\Security\User;
 use Twig\Environment;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 use Twig\Loader\ArrayLoader;
 
 /**
@@ -25,9 +28,9 @@ trait SalesFunnelTwigSnippetLoaderTrait
      *      snippet identifier `one-stop`shop` as `snippetOneStopShop`
      *
      * @return array
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     protected function loadSnippets(ActiveRow $salesFunnel, array $snippets): array
     {
