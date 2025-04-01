@@ -4,7 +4,7 @@
 namespace Crm\SalesFunnelModule\Events;
 
 use Crm\PaymentsModule\Events\PaymentChangeStatusEvent;
-use Crm\PaymentsModule\Repositories\PaymentsRepository;
+use Crm\PaymentsModule\Models\Payment\PaymentStatusEnum;
 use Crm\SalesFunnelModule\Models\Distribution\PaymentsCountDistribution;
 use Crm\SalesFunnelModule\Models\Distribution\PaymentsSumDistribution;
 use Crm\SalesFunnelModule\Models\Distribution\SubscriptionDaysDistribution;
@@ -34,7 +34,7 @@ class CalculateSalesFunnelConversionDistributionEventHandler extends AbstractLis
         if ($event instanceof PaymentChangeStatusEvent) {
             // calculate single user distribution after the payment
             $payment = $event->getPayment();
-            if ($payment->status !== PaymentsRepository::STATUS_PAID) {
+            if ($payment->status !== PaymentStatusEnum::Paid->value) {
                 return;
             }
             if (!$payment->sales_funnel) {

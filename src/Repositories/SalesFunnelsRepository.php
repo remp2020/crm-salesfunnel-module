@@ -4,7 +4,7 @@ namespace Crm\SalesFunnelModule\Repositories;
 
 use Crm\ApplicationModule\Models\Database\Repository;
 use Crm\ApplicationModule\Repositories\AuditLogRepository;
-use Crm\PaymentsModule\Repositories\PaymentsRepository;
+use Crm\PaymentsModule\Models\Payment\PaymentStatusEnum;
 use Crm\SalesFunnelModule\Events\SalesFunnelCreatedEvent;
 use Crm\SalesFunnelModule\Events\SalesFunnelUpdatedEvent;
 use DateTime;
@@ -152,7 +152,7 @@ class SalesFunnelsRepository extends Repository
     final public function totalPaidAmount(ActiveRow $funnel)
     {
         return $this->getTable()
-            ->where(':payments.status = ?', PaymentsRepository::STATUS_PAID)
+            ->where(':payments.status = ?', PaymentStatusEnum::Paid->value)
             ->where(':payments.sales_funnel_id = ?', $funnel->id)
             ->sum(':payments.amount') ?? 0;
     }
@@ -167,7 +167,7 @@ class SalesFunnelsRepository extends Repository
         return $this->getTable()->where([
             'sales_funnels.id' => $salesFunnelId,
             ':payments.user_id' => $userId,
-        ])->where(':payments.status = ?', PaymentsRepository::STATUS_PAID);
+        ])->where(':payments.status = ?', PaymentStatusEnum::Paid->value);
     }
 
     /**
@@ -190,7 +190,7 @@ class SalesFunnelsRepository extends Repository
             ->select(':payments.subscription_type_id, COUNT(*) AS count')
             ->where([
                 'sales_funnels.id' => $funnel->id,
-                ':payments.status' => PaymentsRepository::STATUS_PAID,
+                ':payments.status' => PaymentStatusEnum::Paid->value,
             ])
             ->group(':payments.subscription_type_id')
             ->fetchPairs('subscription_type_id', 'count');

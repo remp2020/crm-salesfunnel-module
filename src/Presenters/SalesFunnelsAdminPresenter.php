@@ -11,6 +11,7 @@ use Crm\ApplicationModule\Models\Graphs\GraphDataItem;
 use Crm\ApplicationModule\UI\Form;
 use Crm\PaymentsModule\Components\LastPayments\LastPaymentsControlFactoryInterface;
 use Crm\PaymentsModule\Forms\Controls\SubscriptionTypesSelectItemsBuilder;
+use Crm\PaymentsModule\Models\Payment\PaymentStatusEnum;
 use Crm\PaymentsModule\Repositories\PaymentGatewaysRepository;
 use Crm\PaymentsModule\Repositories\PaymentsRepository;
 use Crm\SalesFunnelModule\Components\WindowPreview\WindowPreviewControlFactoryInterface;
@@ -348,7 +349,7 @@ class SalesFunnelsAdminPresenter extends AdminPresenter
         $paidPayments = $this->paymentsRepository->getTable()
             ->where([
                 'payments.sales_funnel_id' => $funnel->id,
-                'payments.status' => PaymentsRepository::STATUS_PAID,
+                'payments.status' => PaymentStatusEnum::Paid->value,
             ]);
         $rows = [];
 

@@ -3,7 +3,7 @@
 namespace Crm\SalesFunnelModule\Events;
 
 use Crm\PaymentsModule\Events\PaymentChangeStatusEvent;
-use Crm\PaymentsModule\Repositories\PaymentsRepository;
+use Crm\PaymentsModule\Models\Payment\PaymentStatusEnum;
 use Crm\SalesFunnelModule\Repositories\SalesFunnelsStatsRepository;
 use League\Event\AbstractListener;
 use League\Event\Emitter;
@@ -31,7 +31,7 @@ class PaymentStatusChangeHandler extends AbstractListener
             return;
         }
 
-        if (in_array($payment->status, [PaymentsRepository::STATUS_PAID, PaymentsRepository::STATUS_PREPAID], true)) {
+        if (in_array($payment->status, [PaymentStatusEnum::Paid->value, PaymentStatusEnum::Prepaid->value], true)) {
             $salesFunnel = $payment->sales_funnel;
             $this->emitter->emit(new SalesFunnelEvent($salesFunnel, $payment->user, SalesFunnelsStatsRepository::TYPE_OK, $payment->user_agent));
         }

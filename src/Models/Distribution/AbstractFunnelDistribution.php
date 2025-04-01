@@ -2,6 +2,7 @@
 
 namespace Crm\SalesFunnelModule\Models\Distribution;
 
+use Crm\PaymentsModule\Models\Payment\PaymentStatusEnum;
 use Crm\PaymentsModule\Repositories\PaymentsRepository;
 use Crm\SalesFunnelModule\Repositories\SalesFunnelsConversionDistributionsRepository;
 use Crm\SalesFunnelModule\Repositories\SalesFunnelsRepository;
@@ -14,7 +15,7 @@ abstract class AbstractFunnelDistribution
 {
     public const TYPE = 'abstract-distribution';
 
-    protected $paidStatuses = [PaymentsRepository::STATUS_PAID, PaymentsRepository::STATUS_PREPAID];
+    protected $paidStatuses = [PaymentStatusEnum::Paid->value, PaymentStatusEnum::Prepaid->value];
 
     protected $database;
 

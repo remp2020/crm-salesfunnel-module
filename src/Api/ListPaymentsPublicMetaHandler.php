@@ -3,6 +3,7 @@
 namespace Crm\SalesFunnelModule\Api;
 
 use Crm\ApiModule\Models\Api\ApiHandler;
+use Crm\PaymentsModule\Models\Payment\PaymentStatusEnum;
 use Crm\PaymentsModule\Repositories\PaymentsRepository;
 use Crm\SalesFunnelModule\Repositories\SalesFunnelsMetaRepository;
 use Crm\SalesFunnelModule\Repositories\SalesFunnelsRepository;
@@ -71,7 +72,7 @@ class ListPaymentsPublicMetaHandler extends ApiHandler
         }
 
         $payments = $this->paymentsRepository->findBySalesFunnelUrlKey($params['sales_funnel_url_key'])
-            ->where('payments.status = ?', PaymentsRepository::STATUS_PAID)
+            ->where('payments.status = ?', PaymentStatusEnum::Paid->value)
             ->order('payments.created_at ASC');
 
         $data = [];
