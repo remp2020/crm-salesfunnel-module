@@ -94,7 +94,12 @@ class SalesFunnelAdminFormFactory
         $form->addCheckbox('only_logged', 'sales_funnel.data.sales_funnels.fields.only_logged');
         $form->addCheckbox('only_not_logged', 'sales_funnel.data.sales_funnels.fields.only_not_logged');
 
-        $form->addSelect('segment_id', 'sales_funnel.data.sales_funnels.fields.segment', $this->segmentsRepository->all()->fetchPairs('id', 'name'))->setPrompt('--');
+        $form->addSelect('segment_id', 'sales_funnel.data.sales_funnels.fields.segment', $this->segmentsRepository->all()->fetchPairs('id', 'name'))
+            ->setPrompt('--')
+            ->getControlPrototype()->addAttributes([
+                'class' => 'select2',
+                'tags' => 'true',
+            ]);
 
         $form->addText('start_at', 'sales_funnel.data.sales_funnels.fields.start_at')
             ->setHtmlAttribute('placeholder', 'sales_funnel.data.sales_funnels.placeholder.start_at');
