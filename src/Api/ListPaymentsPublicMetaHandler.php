@@ -35,7 +35,7 @@ class ListPaymentsPublicMetaHandler extends ApiHandler
     {
         return [
             (new PostInputParam('sales_funnel_url_key'))->setRequired(),
-            new PostInputParam('meta_keys')
+            (new PostInputParam('meta_keys'))->setMulti(),
         ];
     }
 
