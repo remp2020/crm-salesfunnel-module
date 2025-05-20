@@ -15,7 +15,7 @@ class SalesFunnelEvent extends AbstractEvent
         private ActiveRow $salesFunnel,
         $user,
         private $type,
-        private $userAgent = null
+        private $userAgent = null,
     ) {
 
 

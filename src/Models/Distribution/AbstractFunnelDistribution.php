@@ -36,7 +36,7 @@ abstract class AbstractFunnelDistribution
         PaymentsRepository $paymentsRepository,
         SubscriptionsRepository $subscriptionsRepository,
         SalesFunnelsConversionDistributionsRepository $salesFunnelsConversionDistributionsRepository,
-        SalesFunnelsRepository $salesFunnelsRepository
+        SalesFunnelsRepository $salesFunnelsRepository,
     ) {
         $this->database = $database;
         $this->subscriptionsRepository = $subscriptionsRepository;

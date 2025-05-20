@@ -77,7 +77,7 @@ class SalesFunnelPresenter extends FrontendPresenter implements PaymentAwareInte
             $this->paymentLogsRepository->add(
                 'ERROR',
                 "Cannot find payment with VS='{$this->variableSymbol}'",
-                $this->request->getUrl()
+                $this->request->getUrl(),
             );
             $this->redirect('SalesFunnel:Error');
         }
@@ -91,7 +91,7 @@ class SalesFunnelPresenter extends FrontendPresenter implements PaymentAwareInte
                 'ERROR',
                 "Payment is not paid '{$this->variableSymbol}'",
                 $this->request->getUrl(),
-                $payment->id
+                $payment->id,
             );
             $this->redirect('SalesFunnel:Error');
         }

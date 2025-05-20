@@ -39,7 +39,7 @@ class SalesFunnelsStatsRepository extends Repository
         $type,
         $deviceType,
         DateTime $date = null,
-        $value = 1
+        $value = 1,
     ) {
         if ($date == null) {
             $date = DateTime::from(strtotime('today 00:00'));
@@ -62,7 +62,7 @@ class SalesFunnelsStatsRepository extends Repository
             $type,
             $deviceType,
             $value,
-            $value
+            $value,
         );
     }
 }

@@ -19,7 +19,7 @@ class CalculateSalesFunnelsConversionDistributionsCommand extends Command
 
     public function __construct(
         Emitter $emitter,
-        SalesFunnelsRepository $salesFunnelsRepository
+        SalesFunnelsRepository $salesFunnelsRepository,
     ) {
         parent::__construct();
         $this->emitter = $emitter;
@@ -34,12 +34,12 @@ class CalculateSalesFunnelsConversionDistributionsCommand extends Command
                 'all',
                 null,
                 InputOption::VALUE_NONE,
-                'Calculate the distribution for all sales funnels, even inactive.'
+                'Calculate the distribution for all sales funnels, even inactive.',
             )
             ->addArgument(
                 'sales_funnel_url',
                 InputArgument::OPTIONAL,
-                'Url key for sales funnel to calculate distributions. Don\'t fill to calculate for active sales funnels.'
+                'Url key for sales funnel to calculate distributions. Don\'t fill to calculate for active sales funnels.',
             );
     }
 

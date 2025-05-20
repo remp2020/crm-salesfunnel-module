@@ -22,7 +22,7 @@ class CalculateSalesFunnelConversionDistributionEventHandler extends AbstractLis
     public function __construct(
         PaymentsCountDistribution $paymentsCountDistribution,
         PaymentsSumDistribution $paymentsSumDistribution,
-        SubscriptionDaysDistribution $subscriptionDaysDistribution
+        SubscriptionDaysDistribution $subscriptionDaysDistribution,
     ) {
         $this->subscriptionDaysDistribution = $subscriptionDaysDistribution;
         $this->paymentsCountDistribution = $paymentsCountDistribution;

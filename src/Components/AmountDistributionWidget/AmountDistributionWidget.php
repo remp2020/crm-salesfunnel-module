@@ -22,7 +22,7 @@ class AmountDistributionWidget extends BaseLazyWidget
 
     public function __construct(
         LazyWidgetManager $lazyWidgetManager,
-        PaymentsSumDistribution $paymentsSumDistribution
+        PaymentsSumDistribution $paymentsSumDistribution,
     ) {
         parent::__construct($lazyWidgetManager);
 

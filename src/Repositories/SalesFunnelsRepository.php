@@ -47,7 +47,7 @@ class SalesFunnelsRepository extends Repository
         $errorHtml = null,
         $redirectFunnelId = null,
         $limitPerUser = null,
-        $note = null
+        $note = null,
     ) {
         try {
             $result = $this->insert([
@@ -210,7 +210,7 @@ class SalesFunnelsRepository extends Repository
     final public function getAllSalesFunnelPurchases($salesFunnelId)
     {
         return $this->getTable()->where([
-            ':payments.sales_funnel_id' => $salesFunnelId
+            ':payments.sales_funnel_id' => $salesFunnelId,
         ])->where(':payments.paid_at IS NOT NULL');
     }
 
@@ -231,7 +231,7 @@ class SalesFunnelsRepository extends Repository
             $funnel->no_access_html,
             $funnel->error_html,
             $funnel->redirect_funnel_id,
-            $funnel->limit_per_user
+            $funnel->limit_per_user,
         );
 
         foreach ($funnel->related('sales_funnels_payment_gateways') as $paymentGateway) {

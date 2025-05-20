@@ -19,7 +19,7 @@ class PaymentIsFromSpecificSalesFunnelCriteria implements ScenariosCriteriaInter
 
     public function __construct(
         Translator $translator,
-        SalesFunnelsRepository $salesFunnelsRepository
+        SalesFunnelsRepository $salesFunnelsRepository,
     ) {
         $this->translator = $translator;
         $this->salesFunnelsRepository = $salesFunnelsRepository;

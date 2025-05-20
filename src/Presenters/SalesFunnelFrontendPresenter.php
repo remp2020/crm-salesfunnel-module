@@ -124,11 +124,11 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
         /** @var SalesFunnelVariablesDataProviderInterface[] $providers */
         $providers = $this->dataProviderManager->getProviders(
             'sales_funnel.dataprovider.template_variables',
-            SalesFunnelVariablesDataProviderInterface::class
+            SalesFunnelVariablesDataProviderInterface::class,
         );
         foreach ($providers as $provider) {
             foreach ($provider->provide([
-                SalesFunnelVariablesDataProviderInterface::PARAM_SALES_FUNNEL => $salesFunnel
+                SalesFunnelVariablesDataProviderInterface::PARAM_SALES_FUNNEL => $salesFunnel,
             ]) as $name => $value) {
                 $this->template->$name = $value;
             }
@@ -215,11 +215,11 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
         /** @var SalesFunnelVariablesDataProviderInterface[] $providers */
         $providers = $this->dataProviderManager->getProviders(
             'sales_funnel.dataprovider.twig_variables',
-            SalesFunnelVariablesDataProviderInterface::class
+            SalesFunnelVariablesDataProviderInterface::class,
         );
         foreach ($providers as $provider) {
             foreach ($provider->provide([
-                SalesFunnelVariablesDataProviderInterface::PARAM_SALES_FUNNEL => $salesFunnel
+                SalesFunnelVariablesDataProviderInterface::PARAM_SALES_FUNNEL => $salesFunnel,
             ]) as $name => $value) {
                 $params[$name] = $value;
             }
@@ -514,7 +514,7 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
                     'additional_type' => $additionalType,
                     'subscription_type' => filter_input(INPUT_POST, 'subscription_type'),
                 ]),
-                $userError
+                $userError,
             );
         }
 
@@ -605,7 +605,7 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
         /** @var TrackerDataProviderInterface[] $providers */
         $providers = $this->dataProviderManager->getProviders(
             'sales_funnel.dataprovider.tracker',
-            TrackerDataProviderInterface::class
+            TrackerDataProviderInterface::class,
         );
         foreach ($providers as $provider) {
             $trackerParams[] = $provider->provide();
@@ -644,8 +644,8 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
         $this->hermesEmitter->emit(
             new HermesMessage(
                 'sales-funnel',
-                array_merge($eventParams, $trackerParams)
-            )
+                array_merge($eventParams, $trackerParams),
+            ),
         );
 
         if ($this->recurrentPaymentsRepository->hasStoredCard($user, $payment->payment_gateway)) {
@@ -761,7 +761,7 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
         if ($funnel->limit_per_user && $userId) {
             $salesFunnelUserCount = $this->salesFunnelsRepository->getAllUserSalesFunnelPurchases(
                 $userId,
-                $funnel->id
+                $funnel->id,
             )->count(':payments.id');
             if ($salesFunnelUserCount >= $funnel->limit_per_user) {
                 $this->redirectOrSendJson('limitReached', $funnel->id);
@@ -801,7 +801,7 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
 
         $this->sendJson([
             'status' => 'error',
-            'url' => $this->link($destination, $args)
+            'url' => $this->link($destination, $args),
         ]);
     }
 
@@ -816,7 +816,7 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
         string $userAgent,
     ): void {
         $this->emitter->emit(
-            new SalesFunnelEvent($funnel, $this->getUser(), SalesFunnelsStatsRepository::TYPE_NO_ACCESS, $userAgent)
+            new SalesFunnelEvent($funnel, $this->getUser(), SalesFunnelsStatsRepository::TYPE_NO_ACCESS, $userAgent),
         );
         $this->redirectOrSendJson('noAccess', $funnel->id);
     }

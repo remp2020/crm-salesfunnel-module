@@ -54,7 +54,7 @@ class PaymentIsFromSalesFunnelCriteriaTest extends PaymentsTestCase
         [$userRow, $payment, $salesFunnel] = $this->prepareData();
 
         $this->paymentsRepository->update($payment, [
-            'sales_funnel_id' => $salesFunnel->id
+            'sales_funnel_id' => $salesFunnel->id,
         ]);
 
         $paymentSelection = $this->getPaymentSelection();
@@ -62,7 +62,7 @@ class PaymentIsFromSalesFunnelCriteriaTest extends PaymentsTestCase
         $paymentIsFromSalesFunnelCriteria = $this->inject(PaymentIsFromSalesFunnelCriteria::class);
         $values = (object)['selection' => true];
         $paymentIsFromSalesFunnelCriteria->addConditions($paymentSelection, [
-            PaymentIsFromSalesFunnelCriteria::KEY => $values
+            PaymentIsFromSalesFunnelCriteria::KEY => $values,
         ], $userRow);
 
         $this->assertNotNull($paymentSelection->fetch());
@@ -77,7 +77,7 @@ class PaymentIsFromSalesFunnelCriteriaTest extends PaymentsTestCase
         $paymentIsFromSalesFunnelCriteria = $this->inject(PaymentIsFromSalesFunnelCriteria::class);
         $values = (object)['selection' => true];
         $paymentIsFromSalesFunnelCriteria->addConditions($paymentSelection, [
-            PaymentIsFromSalesFunnelCriteria::KEY => $values
+            PaymentIsFromSalesFunnelCriteria::KEY => $values,
         ], $userRow);
 
         $this->assertNull($paymentSelection->fetch());
@@ -88,7 +88,7 @@ class PaymentIsFromSalesFunnelCriteriaTest extends PaymentsTestCase
         [$userRow, $payment, $salesFunnel] = $this->prepareData();
 
         $this->paymentsRepository->update($payment, [
-            'sales_funnel_id' => $salesFunnel->id
+            'sales_funnel_id' => $salesFunnel->id,
         ]);
 
         $paymentSelection = $this->getPaymentSelection();
@@ -96,7 +96,7 @@ class PaymentIsFromSalesFunnelCriteriaTest extends PaymentsTestCase
         $paymentIsFromSalesFunnelCriteria = $this->inject(PaymentIsFromSalesFunnelCriteria::class);
         $values = (object)['selection' => false];
         $paymentIsFromSalesFunnelCriteria->addConditions($paymentSelection, [
-            PaymentIsFromSalesFunnelCriteria::KEY => $values
+            PaymentIsFromSalesFunnelCriteria::KEY => $values,
         ], $userRow);
 
         $this->assertNull($paymentSelection->fetch());
@@ -111,7 +111,7 @@ class PaymentIsFromSalesFunnelCriteriaTest extends PaymentsTestCase
         $paymentIsFromSalesFunnelCriteria = $this->inject(PaymentIsFromSalesFunnelCriteria::class);
         $values = (object)['selection' => false];
         $paymentIsFromSalesFunnelCriteria->addConditions($paymentSelection, [
-            PaymentIsFromSalesFunnelCriteria::KEY => $values
+            PaymentIsFromSalesFunnelCriteria::KEY => $values,
         ], $userRow);
 
         $this->assertNotNull($paymentSelection->fetch());

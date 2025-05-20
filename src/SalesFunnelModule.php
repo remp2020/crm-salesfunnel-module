@@ -64,7 +64,7 @@ class SalesFunnelModule extends CrmModule
         Translator $translator,
         SalesFunnelsCache $salesFunnelsCache,
         SalesFunnelsRepository $salesFunnelsRepository,
-        Config $config
+        Config $config,
     ) {
         parent::__construct($container, $translator);
         $this->salesFunnelsCache = $salesFunnelsCache;
@@ -78,7 +78,7 @@ class SalesFunnelModule extends CrmModule
             $this->translator->translate('sales_funnel.menu.sales_funnels'),
             ':SalesFunnel:SalesFunnelsAdmin:default',
             'fa fa-globe',
-            489
+            489,
         );
 
         $menuContainer->attachMenuItem($mainMenu);
@@ -89,29 +89,29 @@ class SalesFunnelModule extends CrmModule
         $emitter->addListener(
             PaymentChangeStatusEvent::class,
             PaymentStatusChangeHandler::class,
-            700
+            700,
         );
         $emitter->addListener(
             PaymentChangeStatusEvent::class,
             CalculateSalesFunnelConversionDistributionEventHandler::class,
-            800
+            800,
         );
         $emitter->addListener(
             SalesFunnelEvent::class,
-            SalesFunnelHandler::class
+            SalesFunnelHandler::class,
         );
         $emitter->addListener(
             SalesFunnelCreatedEvent::class,
-            SalesFunnelChangedEventsHandler::class
+            SalesFunnelChangedEventsHandler::class,
         );
         $emitter->addListener(
             SalesFunnelUpdatedEvent::class,
-            SalesFunnelChangedEventsHandler::class
+            SalesFunnelChangedEventsHandler::class,
         );
 
         $emitter->addListener(
             CalculateSalesFunnelConversionDistributionEvent::class,
-            CalculateSalesFunnelConversionDistributionEventHandler::class
+            CalculateSalesFunnelConversionDistributionEventHandler::class,
         );
     }
 
@@ -121,16 +121,16 @@ class SalesFunnelModule extends CrmModule
             new ApiRoute(
                 new ApiIdentifier('1', 'sales-funnel', 'track'),
                 TrackStatsHandler::class,
-                NoAuthorization::class
-            )
+                NoAuthorization::class,
+            ),
         );
 
         $apiRoutersContainer->attachRouter(
             new ApiRoute(
                 new ApiIdentifier('1', 'sales-funnel', 'list-payments-public-meta'),
                 ListPaymentsPublicMetaHandler::class,
-                NoAuthorization::class
-            )
+                NoAuthorization::class,
+            ),
         );
     }
 
@@ -163,7 +163,7 @@ class SalesFunnelModule extends CrmModule
     {
         $layoutManager->registerLayout(
             'sales_funnel_plain',
-            realpath(__DIR__ . '/templates/@frontend_layout_plain.latte')
+            realpath(__DIR__ . '/templates/@frontend_layout_plain.latte'),
         );
     }
 
@@ -172,40 +172,40 @@ class SalesFunnelModule extends CrmModule
         $widgetManager->registerWidget(
             'subscriptions.new',
             NewSubscriptionWidget::class,
-            100
+            100,
         );
         $widgetManager->registerWidget(
             'subscription_types_admin.show.right',
             SubscriptionTypesInSalesFunnelsWidget::class,
-            200
+            200,
         );
 
         $widgetManager->registerWidget(
             'frontend.payment.success.finish_registration',
             FinishRegistrationWidget::class,
-            200
+            200,
         );
 
         $widgetManager->registerWidget(
             'sales_funnels.admin.show.distribution',
-            AmountDistributionWidget::class
+            AmountDistributionWidget::class,
         );
         $widgetManager->registerWidget(
             'sales_funnels.admin.show.distribution',
-            PaymentDistributionWidget::class
+            PaymentDistributionWidget::class,
         );
         $widgetManager->registerWidget(
             'sales_funnels.admin.show.distribution',
-            DaysFromLastSubscriptionDistributionWidget::class
+            DaysFromLastSubscriptionDistributionWidget::class,
         );
         $widgetManager->registerWidget(
             'payments.admin.payment_source_listing',
-            SalesFunnelUserListingWidget::class
+            SalesFunnelUserListingWidget::class,
         );
 
         $widgetManager->registerWidget(
             'sales_funnels.admin.listing',
-            SalesFunnelsListingWidget::class
+            SalesFunnelsListingWidget::class,
         );
     }
 
@@ -220,12 +220,12 @@ class SalesFunnelModule extends CrmModule
     {
         $dataProviderManager->registerDataProvider(
             'payments.dataprovider.payments_filter_form',
-            $this->getInstance(PaymentsAdminFilterFormDataProvider::class)
+            $this->getInstance(PaymentsAdminFilterFormDataProvider::class),
         );
 
         $dataProviderManager->registerDataProvider(
             'payments.dataprovider.retention_analysis',
-            $this->getInstance(RetentionAnalysisDataProvider::class)
+            $this->getInstance(RetentionAnalysisDataProvider::class),
         );
     }
 

@@ -22,7 +22,7 @@ class WindowPreview extends BaseLazyWidget
 
     public function __construct(
         LazyWidgetManager $lazyWidgetManager,
-        SalesFunnelsRepository $salesFunnelsRepository
+        SalesFunnelsRepository $salesFunnelsRepository,
     ) {
         parent::__construct($lazyWidgetManager);
         $this->salesFunnelsRepository = $salesFunnelsRepository;

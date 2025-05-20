@@ -25,7 +25,7 @@ class SalesFunnelsConversionDistributionsRepository extends Repository
     {
         return $this->getTable()->where([
             'sales_funnels_conversion_distributions.sales_funnel_id' => $salesFunnelId,
-            'sales_funnels_conversion_distributions.type' => $type
+            'sales_funnels_conversion_distributions.type' => $type,
         ]);
     }
 

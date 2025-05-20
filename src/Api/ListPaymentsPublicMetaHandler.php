@@ -24,7 +24,7 @@ class ListPaymentsPublicMetaHandler extends ApiHandler
     public function __construct(
         PaymentsRepository $paymentsRepository,
         SalesFunnelsRepository $salesFunnelsRepository,
-        SalesFunnelsMetaRepository $salesFunnelsMetaRepository
+        SalesFunnelsMetaRepository $salesFunnelsMetaRepository,
     ) {
         $this->paymentsRepository = $paymentsRepository;
         $this->salesFunnelsRepository = $salesFunnelsRepository;
@@ -46,7 +46,7 @@ class ListPaymentsPublicMetaHandler extends ApiHandler
             $response = new JsonApiResponse(Response::S404_NOT_FOUND, [
                 'status' => 'error',
                 'message' => 'No valid sales funnel url key',
-                'code' => 'url_key_missing'
+                'code' => 'url_key_missing',
             ]);
             return $response;
         }
@@ -56,7 +56,7 @@ class ListPaymentsPublicMetaHandler extends ApiHandler
             $response = new JsonApiResponse(Response::S404_NOT_FOUND, [
                 'status' => 'error',
                 'message' => 'Sales funnel does not exists.',
-                'code' => 'not_existing_sales_funnel'
+                'code' => 'not_existing_sales_funnel',
             ]);
             return $response;
         }
@@ -66,7 +66,7 @@ class ListPaymentsPublicMetaHandler extends ApiHandler
             $response = new JsonApiResponse(Response::S403_FORBIDDEN, [
                 'status' => 'error',
                 'message' => 'Sales funnel does not allow listing payments.',
-                'code' => 'not_allowed'
+                'code' => 'not_allowed',
             ]);
             return $response;
         }
@@ -94,7 +94,7 @@ class ListPaymentsPublicMetaHandler extends ApiHandler
 
         $response = new JsonApiResponse(Response::S200_OK, [
             'status' => 'ok',
-            'data' => $data
+            'data' => $data,
         ]);
 
         return $response;

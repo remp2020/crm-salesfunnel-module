@@ -22,7 +22,7 @@ class DaysFromLastSubscriptionDistributionWidget extends BaseLazyWidget
 
     public function __construct(
         LazyWidgetManager $lazyWidgetManager,
-        SubscriptionDaysDistribution $subscriptionDaysDistribution
+        SubscriptionDaysDistribution $subscriptionDaysDistribution,
     ) {
         parent::__construct($lazyWidgetManager);
 

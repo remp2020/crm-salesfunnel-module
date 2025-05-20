@@ -14,7 +14,7 @@ class SalesFunnelTagsRepository extends Repository
     {
         $this->insert([
             'sales_funnel_id' => $salesFunnel->id,
-            'tag' => $tagName
+            'tag' => $tagName,
         ]);
     }
 
@@ -46,7 +46,7 @@ class SalesFunnelTagsRepository extends Repository
         return $salesFunnel->related('sales_funnel_tags')
             ->where([
                 'sales_funnel_id' => $salesFunnel->id,
-                'tag' => $tag
+                'tag' => $tag,
             ])->count('*') > 0;
     }
 
@@ -57,7 +57,7 @@ class SalesFunnelTagsRepository extends Repository
             foreach ($tags as $tag) {
                 $this->insert([
                     'sales_funnel_id' => $salesFunnel->id,
-                    'tag' => $tag
+                    'tag' => $tag,
                 ]);
             }
         });

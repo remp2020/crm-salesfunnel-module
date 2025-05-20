@@ -15,7 +15,7 @@ class PaymentStatusChangeHandler extends AbstractListener
     private $emitter;
 
     public function __construct(
-        Emitter $emitter
+        Emitter $emitter,
     ) {
         $this->emitter = $emitter;
     }

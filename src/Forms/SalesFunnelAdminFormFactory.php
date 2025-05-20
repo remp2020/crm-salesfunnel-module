@@ -24,7 +24,7 @@ class SalesFunnelAdminFormFactory
         private SalesFunnelsMetaRepository $salesFunnelsMetaRepository,
         private SalesFunnelTagsRepository $salesFunnelTagsRepository,
         private SegmentsRepository $segmentsRepository,
-        private Translator $translator
+        private Translator $translator,
     ) {
     }
 
@@ -40,7 +40,7 @@ class SalesFunnelAdminFormFactory
                 $activeFunnels[(string) $funnel->redirect_funnel->id] = sprintf(
                     "%s <small>%s</small>",
                     $funnel->redirect_funnel->name,
-                    $funnel->redirect_funnel->url_key
+                    $funnel->redirect_funnel->url_key,
                 );
             }
 
@@ -199,7 +199,7 @@ class SalesFunnelAdminFormFactory
         }
 
         $meta = [
-            'funnel_purchase_limit' => $values['funnel_purchase_limit'] ?? null
+            'funnel_purchase_limit' => $values['funnel_purchase_limit'] ?? null,
         ];
         unset($values['funnel_purchase_limit']);
 
@@ -235,7 +235,7 @@ class SalesFunnelAdminFormFactory
                 $values->error_html,
                 $values->redirect_funnel_id,
                 $values->limit_per_user,
-                $values->note
+                $values->note,
             );
 
             $tags = $form->getComponent('tags')->getRawValue();

@@ -167,7 +167,7 @@ class SalesFunnelsAdminPresenter extends AdminPresenter
         $form->onSuccess[] = function ($form, $values) use ($funnel) {
             $this->salesFunnelsPaymentGatewaysRepository->add(
                 $funnel,
-                $this->paymentGatewaysRepository->find($values->payment_gateway_id)
+                $this->paymentGatewaysRepository->find($values->payment_gateway_id),
             );
             if ($this->isAjax()) {
                 $this->redrawControl('paymentGatewayForm');
@@ -240,10 +240,10 @@ class SalesFunnelsAdminPresenter extends AdminPresenter
                 $swapSorting = $swap->sorting;
                 $pairSorting = $pair->sorting;
                 $this->salesFunnelsPaymentGatewaysRepository->update($pair, [
-                    'sorting' => $swapSorting
+                    'sorting' => $swapSorting,
                 ]);
                 $this->salesFunnelsPaymentGatewaysRepository->update($swap, [
-                    'sorting' => $pairSorting
+                    'sorting' => $pairSorting,
                 ]);
                 break;
             }
@@ -270,7 +270,7 @@ class SalesFunnelsAdminPresenter extends AdminPresenter
         $subscriptionType = $form->addSelect(
             'subscription_type_id',
             'subscriptions.data.subscription_types.fields.name',
-            $this->subscriptionTypesSelectItemsBuilder->buildWithDescription($subscriptionTypes)
+            $this->subscriptionTypesSelectItemsBuilder->buildWithDescription($subscriptionTypes),
         )->setRequired('subscriptions.data.subscription_types.required.name');
         $subscriptionType->getControlPrototype()->addAttributes(['class' => 'select2']);
 
@@ -282,7 +282,7 @@ class SalesFunnelsAdminPresenter extends AdminPresenter
         $form->onSuccess[] = function ($form, $values) use ($funnel) {
             $this->salesFunnelsSubscriptionTypesRepository->add(
                 $funnel,
-                $this->subscriptionTypesRepository->find($values->subscription_type_id)
+                $this->subscriptionTypesRepository->find($values->subscription_type_id),
             );
             if ($this->isAjax()) {
                 $this->redrawControl('subscriptionTypesForm');
@@ -365,7 +365,7 @@ class SalesFunnelsAdminPresenter extends AdminPresenter
                 $rows[] =[
                     $row->email,
                     $row->paid_at,
-                    $row->amount
+                    $row->amount,
                 ];
                 $lastId = $row->id;
             }
@@ -415,10 +415,10 @@ class SalesFunnelsAdminPresenter extends AdminPresenter
                 $swapSorting = $swap->sorting;
                 $pairSorting = $pair->sorting;
                 $this->salesFunnelsSubscriptionTypesRepository->update($pair, [
-                    'sorting' => $swapSorting
+                    'sorting' => $swapSorting,
                 ]);
                 $this->salesFunnelsSubscriptionTypesRepository->update($swap, [
-                    'sorting' => $pairSorting
+                    'sorting' => $pairSorting,
                 ]);
                 break;
             }
@@ -570,7 +570,7 @@ class SalesFunnelsAdminPresenter extends AdminPresenter
             ->setTableName('payments')
             ->setGroupBy('payment_items.name')
             ->setJoin(
-                "LEFT JOIN payment_items ON payment_id = payments.id AND payment_items.amount > 0 AND payment_items.count > 0"
+                "LEFT JOIN payment_items ON payment_id = payments.id AND payment_items.amount > 0 AND payment_items.count > 0",
             )
             ->setWhere("AND payments.status IN ('paid', 'prepaid') AND payments.sales_funnel_id=" . intval($this->params['id']))
             ->setSeries('payment_items.name')

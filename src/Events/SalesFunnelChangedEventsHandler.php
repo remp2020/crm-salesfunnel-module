@@ -14,7 +14,7 @@ class SalesFunnelChangedEventsHandler extends AbstractListener
 
     public function __construct(
         Config $config,
-        SalesFunnelsCache $salesFunnelsCache
+        SalesFunnelsCache $salesFunnelsCache,
     ) {
         $this->config = $config;
         $this->salesFunnelsCache = $salesFunnelsCache;
