@@ -204,7 +204,6 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
             'contentAccess' => $contentAccess,
             'addresses' => $addresses,
             'meta' => $this->salesFunnelsMetaRepository->all($salesFunnel),
-            'jsDomain' => $this->getJavascriptDomain(),
             'actualUserSubscription' => $this->actualUserSubscription,
             'referer' => isset($referer) ? urlencode($referer) : null,
             'values' => $values ? Json::decode($values, Json::FORCE_ARRAY) : null,
