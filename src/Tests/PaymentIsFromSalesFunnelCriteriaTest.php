@@ -3,6 +3,7 @@
 namespace Crm\SalesFunnelModule\Tests;
 
 use Crm\PaymentsModule\Models\VariableSymbolInterface;
+use Crm\PaymentsModule\Repositories\PaymentCardsRepository;
 use Crm\PaymentsModule\Repositories\PaymentGatewaysRepository;
 use Crm\PaymentsModule\Repositories\PaymentItemMetaRepository;
 use Crm\PaymentsModule\Repositories\PaymentItemsRepository;
@@ -32,6 +33,7 @@ class PaymentIsFromSalesFunnelCriteriaTest extends PaymentsTestCase
             PaymentItemsRepository::class,
             PaymentItemMetaRepository::class,
             PaymentGatewaysRepository::class,
+            PaymentCardsRepository::class,
             PaymentMethodsRepository::class,
             RecurrentPaymentsRepository::class,
             SubscriptionTypesRepository::class,
