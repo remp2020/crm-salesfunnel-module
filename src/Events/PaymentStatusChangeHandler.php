@@ -31,7 +31,7 @@ class PaymentStatusChangeHandler extends AbstractListener
             return;
         }
 
-        if (in_array($payment->status, [PaymentStatusEnum::Paid->value, PaymentStatusEnum::Prepaid->value], true)) {
+        if (in_array($payment->status, [PaymentStatusEnum::Paid->value, PaymentStatusEnum::Prepaid->value, PaymentStatusEnum::Authorized], true)) {
             $salesFunnel = $payment->sales_funnel;
             $this->emitter->emit(new SalesFunnelEvent($salesFunnel, $payment->user, SalesFunnelsStatsRepository::TYPE_OK, $payment->user_agent));
         }
