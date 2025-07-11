@@ -26,7 +26,7 @@ class SubscriptionTypesInSalesFunnelsWidget extends BaseLazyWidget
         $this->salesFunnelsRepository = $salesFunnelsRepository;
     }
 
-    public function header($id = '')
+    public function header()
     {
         return 'Subscription Types in Sales Funnels';
     }
