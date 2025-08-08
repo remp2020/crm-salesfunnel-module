@@ -171,7 +171,8 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
         $headEnd = $this->applicationConfig->get('header_block') . "\n\n" . $this->applicationConfig->get('sales_funnel_header_block') . "\n\n" . $salesFunnel->head_script;
 
         $loader = new ArrayLoader([
-            'funnel_template' => $body,
+//            'funnel_template' => $body,
+            'funnel_template' => file_get_contents(__DIR__ . '/../../../../app/modules/DenniknModule/Seeders/sales_funnels/firmy-2024-11.twig'),
             'head_template' => $headEnd,
         ]);
 
