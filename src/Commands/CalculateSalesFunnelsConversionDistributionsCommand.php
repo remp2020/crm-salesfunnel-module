@@ -43,7 +43,7 @@ class CalculateSalesFunnelsConversionDistributionsCommand extends Command
             );
     }
 
-    public function execute(InputInterface $input, OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output): int
     {
         $output->writeln('');
         $output->writeln('<info>***** Sales funnels conversion distributions  *****</info>');
