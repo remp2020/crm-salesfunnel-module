@@ -34,27 +34,35 @@ trait SalesFunnelTwigSnippetLoaderTrait
      */
     protected function loadSnippets(ActiveRow $salesFunnel, array $snippets): array
     {
+        if (!count($snippets)) {
+            return [];
+        }
+
         $user = $this->user->isLoggedIn() ? $this->usersRepository->find($this->user->getId()) : null;
         $oneStopShopData = $this->oneStopShop->getFrontendData();
 
-        $result = [];
-        foreach ($snippets as $identifier) {
-            $snippetNameInFunnel = 'snippet' . self::dashesToCamelCase($identifier);
+        $snippetRows = $this->snippetsRepository->all()
+            ->where('identifier IN (?)', $snippets)
+            ->fetchAll();
 
-            $snippet = $this->snippetsRepository->loadByIdentifier($identifier);
-            if ($snippet) {
-                $loader = new ArrayLoader([
-                    'snippet' => $snippet->html,
-                ]);
-                $twig = new Environment($loader);
-                $twig->addExtension(new ContributteTranslationExtension($this->translator));
-                $template = $twig->render('snippet', [
-                    'user' => $user,
-                    'funnel' => $salesFunnel,
-                    'oneStopShop' => $oneStopShopData,
-                ]);
-                $result[$snippetNameInFunnel] = $template;
+        $result = [];
+        foreach ($snippetRows as $snippet) {
+            $snippetNameInFunnel = 'snippet' . self::dashesToCamelCase($snippet->identifier);
+            if (!$snippet) {
+                continue;
             }
+
+            $loader = new ArrayLoader([
+                'snippet' => $snippet->html,
+            ]);
+            $twig = new Environment($loader);
+            $twig->addExtension(new ContributteTranslationExtension($this->translator));
+            $template = $twig->render('snippet', [
+                'user' => $user,
+                'funnel' => $salesFunnel,
+                'oneStopShop' => $oneStopShopData,
+            ]);
+            $result[$snippetNameInFunnel] = $template;
         }
 
         return $result;
