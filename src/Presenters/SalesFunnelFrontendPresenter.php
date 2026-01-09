@@ -189,7 +189,11 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
 
         $contentAccess = [];
         foreach ($subscriptionTypes as $index => $subscriptionType) {
-            $contentAccess[$subscriptionType['code']] = $this->contentAccessRepository->allForSubscriptionType($subscriptionType)->fetchPairs('name', 'name');
+            $contentAccess[$subscriptionType['code']] = $this->contentAccessRepository->pairsForSubscriptionType(
+                subscriptionType: $subscriptionType,
+                key: 'name',
+                value: 'name',
+            );
 
             // casting to array for backwards compatibility and easier Twig access
             $subscriptionTypes[$index] = $subscriptionType->toArray();
