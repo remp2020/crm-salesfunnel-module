@@ -2,8 +2,11 @@
 
 namespace Crm\SalesFunnelModule\DataProviders;
 
+use Contributte\Translation\Translator;
 use Crm\ApplicationModule\Repositories\SnippetsRepository;
 use Crm\ApplicationModule\Twig\Extensions\ContributteTranslationExtension;
+use Crm\PaymentsModule\Models\OneStopShop\OneStopShop;
+use Crm\UsersModule\Repositories\UsersRepository;
 use Nette\Database\Table\ActiveRow;
 use Nette\Security\User;
 use Twig\Environment;
@@ -15,6 +18,9 @@ use Twig\Loader\ArrayLoader;
 /**
  * @property SnippetsRepository $snippetsRepository
  * @property User $user
+ * @property UsersRepository $usersRepository
+ * @property OneStopShop $oneStopShop
+ * @property Translator $translator
  */
 trait SalesFunnelTwigSnippetLoaderTrait
 {
