@@ -18,6 +18,10 @@ class SalesFunnelsRepository extends Repository
 {
     protected $tableName = 'sales_funnels';
 
+    protected $auditLogExcluded = [
+        'updated_at',
+    ];
+
     public function __construct(
         Explorer $database,
         AuditLogRepository $auditLogRepository,
