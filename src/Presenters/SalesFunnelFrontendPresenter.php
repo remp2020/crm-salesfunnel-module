@@ -4,6 +4,7 @@ namespace Crm\SalesFunnelModule\Presenters;
 
 use Crm\ApplicationModule\Events\AuthenticatedAccessRequiredEvent;
 use Crm\ApplicationModule\Hermes\HermesMessage;
+use Crm\ApplicationModule\Models\Authenticator\LoginCredentials;
 use Crm\ApplicationModule\Models\DataProvider\DataProviderManager;
 use Crm\ApplicationModule\Models\Request;
 use Crm\ApplicationModule\Presenters\FrontendPresenter;
@@ -427,7 +428,7 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
                 ]);
             } else {
                 $this->getUser()->setExpiration('14 days', false);
-                $this->getUser()->login(['username' => $email, 'password' => $password]);
+                $this->getUser()->login(new LoginCredentials(['username' => $email, 'password' => $password]));
             }
         } else {
             $user = $this->userManager->addNewUser($email, true, $source, $referer, true, null, false);
@@ -439,7 +440,7 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
                 'sales_funnel_id' => $funnel->id,
             ]);
 
-            $this->getUser()->login(['user' => $user, 'autoLogin' => true]);
+            $this->getUser()->login(new LoginCredentials(['user' => $user, 'autoLogin' => true]));
         }
 
         return $user;
