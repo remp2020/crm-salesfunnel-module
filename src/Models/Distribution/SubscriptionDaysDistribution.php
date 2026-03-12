@@ -56,7 +56,7 @@ SQL;
             ->prepareRow($salesFunnel->id, $distributionRow->user_id, self::TYPE, $distributionRow->value);
     }
 
-    public function getDistributionList(int $funnelId, float $fromLevel, float $toLevel = null): array
+    public function getDistributionList(int $funnelId, float $fromLevel, ?float $toLevel = null): array
     {
         $select = $this->salesFunnelsConversionDistributionsRepository
             ->salesFunnelTypeDistributions($funnelId, self::TYPE);

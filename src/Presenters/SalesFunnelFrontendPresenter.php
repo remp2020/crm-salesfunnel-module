@@ -287,7 +287,7 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
         return $subscriptionTypes;
     }
 
-    private function validateFunnel(ActiveRow $funnel = null)
+    private function validateFunnel(?ActiveRow $funnel = null)
     {
         if ($this->isValidPreview()) {
             return;

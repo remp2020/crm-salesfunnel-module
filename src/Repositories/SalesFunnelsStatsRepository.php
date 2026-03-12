@@ -38,7 +38,7 @@ class SalesFunnelsStatsRepository extends Repository
         ActiveRow $salesFunnel,
         $type,
         $deviceType,
-        DateTime $date = null,
+        ?DateTime $date = null,
         $value = 1,
     ) {
         if ($date == null) {
