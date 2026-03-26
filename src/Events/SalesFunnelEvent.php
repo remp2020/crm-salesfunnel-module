@@ -2,7 +2,6 @@
 
 namespace Crm\SalesFunnelModule\Events;
 
-use DeviceDetector\DeviceDetector;
 use League\Event\AbstractEvent;
 use Nette\Database\Table\ActiveRow;
 use Nette\Security\User;
@@ -44,28 +43,5 @@ class SalesFunnelEvent extends AbstractEvent
     public function getUserAgent()
     {
         return $this->userAgent;
-    }
-
-    /*
-     * @deprecated use getUserAgent and parse device type (using DeviceDetector)
-     * when processing the event
-     */
-    public function getDeviceType()
-    {
-        if ($this->userAgent) {
-            $deviceDetector = new DeviceDetector($this->userAgent);
-            $deviceDetector->parse();
-
-            // Check for tablet first since it's a subset of mobile
-            if ($deviceDetector->isTablet()) {
-                return 'tablet';
-            }
-            if ($deviceDetector->isMobile()) {
-                return 'mobile';
-            }
-            return 'desktop';
-        }
-
-        return null;
     }
 }
