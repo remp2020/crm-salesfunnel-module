@@ -32,6 +32,7 @@ class SalesFunnelAdminFormFactory
     {
         $defaults = [];
         $activeFunnels = [];
+        $funnel = null;
 
         if (isset($id)) {
             $funnel = $this->salesFunnelsRepository->find($id);
