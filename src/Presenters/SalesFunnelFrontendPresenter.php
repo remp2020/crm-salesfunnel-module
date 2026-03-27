@@ -417,7 +417,7 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
     {
         $ua = Request::getUserAgent();
 
-        if ($this->getUser() && $this->getUser()->isLoggedIn()) {
+        if ($this->getUser()->isLoggedIn()) {
             return $this->userManager->loadUser($this->user);
         }
 
