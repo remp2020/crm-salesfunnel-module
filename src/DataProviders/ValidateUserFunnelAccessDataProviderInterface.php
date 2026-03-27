@@ -9,7 +9,7 @@ use Nette\Database\Table\ActiveRow;
 interface ValidateUserFunnelAccessDataProviderInterface extends DataProviderInterface
 {
     /**
-     * @param array{sales_funnel: ActiveRow, user: ActiveRow} $params
+     * @param array{sales_funnel: ActiveRow, user?: ActiveRow} $params
      * @return bool
      * @throws DataProviderException
      */
