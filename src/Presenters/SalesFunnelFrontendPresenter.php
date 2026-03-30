@@ -367,12 +367,15 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
     {
         $ua = Request::getUserAgent();
 
-        if (!$subscriptionType || !$funnel->related('sales_funnels_subscription_types')->where(['subscription_type_id' => $subscriptionType->id])) {
+        if (!$subscriptionType || !$subscriptionType->active) {
             $this->emitter->emit(new SalesFunnelEvent($funnel, $this->getUser(), SalesFunnelsStatsRepository::TYPE_ERROR, $ua));
             $this->redirectOrSendJson('invalid');
         }
 
-        if (!$subscriptionType->active) {
+        $salesFunnelHasSubscriptionType = $funnel->related('sales_funnels_subscription_types')
+                ->where(['subscription_type_id' => $subscriptionType->id])
+                ->count('*') > 0;
+        if (!$salesFunnelHasSubscriptionType) {
             $this->emitter->emit(new SalesFunnelEvent($funnel, $this->getUser(), SalesFunnelsStatsRepository::TYPE_ERROR, $ua));
             $this->redirectOrSendJson('invalid');
         }
@@ -389,12 +392,15 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
     {
         $ua = Request::getUserAgent();
 
-        if (!$paymentGateway || !$funnel->related('sales_funnels_payment_gateways')->where(['payment_gateway_id' => $paymentGateway->id])) {
+        if (!$paymentGateway || !$paymentGateway->visible) {
             $this->emitter->emit(new SalesFunnelEvent($funnel, $this->getUser(), SalesFunnelsStatsRepository::TYPE_ERROR, $ua));
             $this->redirectOrSendJson('invalid');
         }
 
-        if (!$paymentGateway->visible) {
+        $salesFunnelHasPaymentGateway = $funnel->related('sales_funnels_payment_gateways')
+            ->where(['payment_gateway_id' => $paymentGateway->id])
+            ->count('*');
+        if (!$salesFunnelHasPaymentGateway) {
             $this->emitter->emit(new SalesFunnelEvent($funnel, $this->getUser(), SalesFunnelsStatsRepository::TYPE_ERROR, $ua));
             $this->redirectOrSendJson('invalid');
         }
