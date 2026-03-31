@@ -178,6 +178,7 @@ admin:
         criteria:
             is_from_sales_funnel_label: 'Je z platebního okna'
             is_from_specific_sales_funnel_label: 'Je z konkrétního platebního okna'
+            payment_is_from_tag_sales_funnel_label: 'Je z platebního okna s tagem'
 
     dataprovider:
         retention_analysis:

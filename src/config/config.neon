@@ -33,6 +33,7 @@ services:
 	- Crm\SalesFunnelModule\DataProviders\PaymentsAdminFilterFormDataProvider
 	- Crm\SalesFunnelModule\Scenarios\PaymentIsFromSalesFunnelCriteria
 	- Crm\SalesFunnelModule\Scenarios\PaymentIsFromSpecificSalesFunnelCriteria
+	- Crm\SalesFunnelModule\Scenarios\PaymentIsFromTagSalesFunnelCriteria
 
 	paymentsCountDistribution:
 		factory: Crm\SalesFunnelModule\Models\Distribution\PaymentsCountDistribution

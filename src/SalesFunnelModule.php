@@ -45,6 +45,7 @@ use Crm\SalesFunnelModule\Models\SalesFunnelsCache;
 use Crm\SalesFunnelModule\Repositories\SalesFunnelsRepository;
 use Crm\SalesFunnelModule\Scenarios\PaymentIsFromSalesFunnelCriteria;
 use Crm\SalesFunnelModule\Scenarios\PaymentIsFromSpecificSalesFunnelCriteria;
+use Crm\SalesFunnelModule\Scenarios\PaymentIsFromTagSalesFunnelCriteria;
 use Crm\SalesFunnelModule\Seeders\ConfigsSeeder;
 use Crm\SalesFunnelModule\Seeders\SalesFunnelsSeeder;
 use Nette\Application\Routers\RouteList;
@@ -239,6 +240,7 @@ class SalesFunnelModule extends CrmModule
     {
         $scenariosCriteriaStorage->register('payment', PaymentIsFromSalesFunnelCriteria::KEY, $this->getInstance(PaymentIsFromSalesFunnelCriteria::class));
         $scenariosCriteriaStorage->register('payment', PaymentIsFromSpecificSalesFunnelCriteria::KEY, $this->getInstance(PaymentIsFromSpecificSalesFunnelCriteria::class));
+        $scenariosCriteriaStorage->register('payment', PaymentIsFromTagSalesFunnelCriteria::KEY, $this->getInstance(PaymentIsFromTagSalesFunnelCriteria::class));
     }
 
     public function registerCommands(CommandsContainerInterface $commandsContainer)

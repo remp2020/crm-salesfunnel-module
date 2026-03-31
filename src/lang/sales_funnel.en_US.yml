@@ -178,6 +178,7 @@ admin:
         criteria:
             is_from_sales_funnel_label: 'Is from sales funnel'
             is_from_specific_sales_funnel_label: 'Is from specific sales funnel'
+            payment_is_from_tag_sales_funnel_label: 'Is from sales funnel with tag'
 
     dataprovider:
         retention_analysis:
