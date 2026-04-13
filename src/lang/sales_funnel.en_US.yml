@@ -35,6 +35,7 @@ data:
             only_not_logged: Only not logged
             segment: Segment
             tags: Tags
+            copied_from_funnel_id: Copied from
         validation:
             minimum:
                 limit_per_user: Minimum value %1$d

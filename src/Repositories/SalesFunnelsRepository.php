@@ -52,6 +52,7 @@ class SalesFunnelsRepository extends Repository
         $redirectFunnelId = null,
         $limitPerUser = null,
         $note = null,
+        ?int $copiedFromFunnelId = null,
     ) {
         try {
             $result = $this->insert([
@@ -73,6 +74,7 @@ class SalesFunnelsRepository extends Repository
                 'redirect_funnel_id' => $redirectFunnelId,
                 'limit_per_user' => $limitPerUser,
                 'note' => $note,
+                'copied_from_funnel_id' => $copiedFromFunnelId,
             ]);
         } catch (UniqueConstraintViolationException $e) {
             throw new SalesFunnelAlreadyExistsException('Sales funnel already exists: '. $urlKey);
@@ -221,21 +223,22 @@ class SalesFunnelsRepository extends Repository
     final public function duplicate(ActiveRow $funnel, string $name, string $urlKey): ActiveRow
     {
         $newFunnel = $this->add(
-            $name,
-            $urlKey,
-            $funnel->body,
-            $funnel->head_meta,
-            $funnel->head_script,
-            $funnel->start_at,
-            $funnel->end_at,
-            $funnel->is_active,
-            $funnel->only_logged,
-            $funnel->only_not_logged,
-            $funnel->segment,
-            $funnel->no_access_html,
-            $funnel->error_html,
-            $funnel->redirect_funnel_id,
-            $funnel->limit_per_user,
+            name: $name,
+            urlKey: $urlKey,
+            body: $funnel->body,
+            headMeta: $funnel->head_meta,
+            headScript: $funnel->head_script,
+            startAt: $funnel->start_at,
+            endAt: $funnel->end_at,
+            isActive: $funnel->is_active,
+            onlyLogged: $funnel->only_logged,
+            onlyNotLogged: $funnel->only_not_logged,
+            segment: $funnel->segment,
+            noAccessHtml: $funnel->no_access_html,
+            errorHtml: $funnel->error_html,
+            redirectFunnelId: $funnel->redirect_funnel_id,
+            limitPerUser: $funnel->limit_per_user,
+            copiedFromFunnelId: $funnel->id,
         );
 
         foreach ($funnel->related('sales_funnels_payment_gateways') as $paymentGateway) {

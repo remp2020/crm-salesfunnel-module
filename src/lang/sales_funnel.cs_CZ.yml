@@ -35,6 +35,7 @@ data:
             only_not_logged: Pouze nepřihlášení
             segment: Segment
             tags: Tagy
+            copied_from_funnel_id: Zkopírované z
         validation:
             minimum:
                 limit_per_user: Minimální hodnota %1$d
