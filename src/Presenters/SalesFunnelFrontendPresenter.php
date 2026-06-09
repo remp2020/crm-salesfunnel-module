@@ -20,10 +20,10 @@ use Crm\PaymentsModule\Models\PaymentItem\PaymentItemContainer;
 use Crm\PaymentsModule\Models\PaymentProcessor;
 use Crm\PaymentsModule\Repositories\PaymentGatewaysRepository;
 use Crm\PaymentsModule\Repositories\PaymentsRepository;
-use Crm\PaymentsModule\Repositories\RecurrentPaymentsRepository;
 use Crm\SalesFunnelModule\DataProviders\SalesFunnelPaymentFormDataProviderInterface;
 use Crm\SalesFunnelModule\DataProviders\SalesFunnelVariablesDataProviderInterface;
 use Crm\SalesFunnelModule\DataProviders\TrackerDataProviderInterface;
+use Crm\SalesFunnelModule\DataProviders\UserStoredCardDataProviderInterface;
 use Crm\SalesFunnelModule\DataProviders\ValidateUserFunnelAccessDataProviderInterface;
 use Crm\SalesFunnelModule\Events\PaymentItemContainerReadyEvent;
 use Crm\SalesFunnelModule\Events\SalesFunnelEvent;
@@ -70,7 +70,6 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
         private Emitter $hermesEmitter,
         private AddressesRepository $addressesRepository,
         private UserManager $userManager,
-        private RecurrentPaymentsRepository $recurrentPaymentsRepository,
         private ContentAccessRepository $contentAccessRepository,
         private SignInFormFactory $signInFormFactory,
         private DataProviderManager $dataProviderManager,
@@ -658,7 +657,7 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
             ),
         );
 
-        if ($this->recurrentPaymentsRepository->hasStoredCard($user, $payment->payment_gateway)) {
+        if ($this->canUserUseStoredCard($user, $payment)) {
             $this->redirectOrSendJson(':Payments:Recurrent:selectCard', $payment->id);
         }
 
@@ -829,5 +828,18 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
             new SalesFunnelEvent($funnel, $this->getUser(), SalesFunnelsStatsRepository::TYPE_NO_ACCESS, $userAgent),
         );
         $this->redirectOrSendJson('noAccess', $funnel->id);
+    }
+
+    private function canUserUseStoredCard(ActiveRow $user, ActiveRow $payment): bool
+    {
+        /** @var UserStoredCardDataProviderInterface[] $providers */
+        $providers = $this->dataProviderManager->getProviders('sales_funnel.dataprovider.payment_select_card');
+        foreach ($providers as $provider) {
+            if ($provider->canUserUseStoredCard($payment, $user) === false) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }
