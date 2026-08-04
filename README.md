@@ -28,6 +28,13 @@ sales_funnel:
 
 Sales funnel will be still accessible through long route _(e.g. `http://crm.press/sales-funnel/sales-funnel-frontend/show?funnel=sample`)_.
 
+The _Limit per user_ funnel setting can be restricted to a period, so only payments made within the last N days before the purchase are counted. The day presets offered in the period selectbox of the funnel form can be changed in the configuration file.
+
+```neon
+sales_funnel:
+	limit_per_user_for_period_options: [31, 93, 183, 365]
+```
+
 ### Scheduled commands
 
 Please add following commands to your scheduler:

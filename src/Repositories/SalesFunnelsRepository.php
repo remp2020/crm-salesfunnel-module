@@ -53,6 +53,7 @@ class SalesFunnelsRepository extends Repository
         $limitPerUser = null,
         $note = null,
         ?int $copiedFromFunnelId = null,
+        ?int $limitPerUserForPeriod = null,
     ) {
         try {
             $result = $this->insert([
@@ -73,6 +74,7 @@ class SalesFunnelsRepository extends Repository
                 'segment_id' => $segment ? $segment->id : null,
                 'redirect_funnel_id' => $redirectFunnelId,
                 'limit_per_user' => $limitPerUser,
+                'limit_per_user_for_period' => $limitPerUserForPeriod,
                 'note' => $note,
                 'copied_from_funnel_id' => $copiedFromFunnelId,
             ]);
@@ -168,12 +170,18 @@ class SalesFunnelsRepository extends Repository
         return $this->getTable()->where([':sales_funnels_subscription_types.subscription_type_id' => $subscriptionType->id]);
     }
 
-    final public function getAllUserSalesFunnelPurchases($userId, $salesFunnelId)
+    final public function getAllUserSalesFunnelPurchases($userId, $salesFunnelId, ?DateTime $paidFrom = null)
     {
-        return $this->getTable()->where([
+        $selection = $this->getTable()->where([
             'sales_funnels.id' => $salesFunnelId,
             ':payments.user_id' => $userId,
         ])->where(':payments.status = ?', PaymentStatusEnum::Paid->value);
+
+        if ($paidFrom !== null) {
+            $selection->where(':payments.paid_at >= ?', $paidFrom);
+        }
+
+        return $selection;
     }
 
     /**
@@ -239,6 +247,7 @@ class SalesFunnelsRepository extends Repository
             redirectFunnelId: $funnel->redirect_funnel_id,
             limitPerUser: $funnel->limit_per_user,
             copiedFromFunnelId: $funnel->id,
+            limitPerUserForPeriod: $funnel->limit_per_user_for_period,
         );
 
         foreach ($funnel->related('sales_funnels_payment_gateways') as $paymentGateway) {

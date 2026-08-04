@@ -768,9 +768,14 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
     private function validateFunnelLimitPerUserCount(ActiveRow $funnel, $userId)
     {
         if ($funnel->limit_per_user && $userId) {
+            $paidFrom = null;
+            if ($funnel->limit_per_user_for_period !== null) {
+                $paidFrom = DateTime::from("-{$funnel->limit_per_user_for_period} days");
+            }
             $salesFunnelUserCount = $this->salesFunnelsRepository->getAllUserSalesFunnelPurchases(
                 $userId,
                 $funnel->id,
+                $paidFrom,
             )->count(':payments.id');
             if ($salesFunnelUserCount >= $funnel->limit_per_user) {
                 $this->redirectOrSendJson('limitReached', $funnel->id);

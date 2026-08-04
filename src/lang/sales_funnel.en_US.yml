@@ -14,6 +14,7 @@ data:
             start_at: Valid from
             end_at: Valid to
             limit_per_user: Max. number of purchases per user
+            limit_per_user_for_period: Period for max. number of purchases
             funnel_purchase_limit: Max. number of purchases
             body: Funnel HTML content
             no_access_html: Funnel no access html
@@ -47,8 +48,13 @@ data:
             start_at: for example 14.2.2016
             end_at: for example 14.2.2016
             body: any html
+        prompt:
+            limit_per_user_for_period: Whole period
         description:
             redirect_funnel_id: "If filled, user will be redirected to the target sales funnel instead of seeing 'offer not available' message."
+            limit_per_user_for_period: "Number of days back for which paid payments are counted when checking the limit. Whole period counts all payments ever made by the user."
+        period_options:
+            days: '%count% days'
 
 frontend:
     error:
@@ -98,6 +104,8 @@ admin:
         show:
             back: back to sales funnels
             basic_informations: Basic information
+            limit_per_user_for_period: within the last %count% days
+            limit_per_user_whole_period: whole period
             stats: Funnel stats
             users: Users
             meta: Meta info

@@ -4,6 +4,7 @@ namespace Crm\SalesFunnelModule\Forms;
 
 use Contributte\Translation\Translator;
 use Crm\ApplicationModule\UI\Form;
+use Crm\SalesFunnelModule\DI\Config;
 use Crm\SalesFunnelModule\Repositories\SalesFunnelTagsRepository;
 use Crm\SalesFunnelModule\Repositories\SalesFunnelsMetaRepository;
 use Crm\SalesFunnelModule\Repositories\SalesFunnelsRepository;
@@ -25,6 +26,7 @@ class SalesFunnelAdminFormFactory
         private SalesFunnelTagsRepository $salesFunnelTagsRepository,
         private SegmentsRepository $segmentsRepository,
         private Translator $translator,
+        private Config $config,
     ) {
     }
 
@@ -108,14 +110,41 @@ class SalesFunnelAdminFormFactory
         $form->addText('end_at', 'sales_funnel.data.sales_funnels.fields.end_at')
             ->setHtmlAttribute('placeholder', 'sales_funnel.data.sales_funnels.placeholder.end_at');
 
-        $form->addInteger('limit_per_user', 'sales_funnel.data.sales_funnels.fields.limit_per_user')
-            ->addCondition(Form::FILLED)
+        $limitPerUser = $form->addInteger('limit_per_user', 'sales_funnel.data.sales_funnels.fields.limit_per_user');
+        $limitPerUser->addCondition(Form::FILLED)
             ->addRule(Form::MIN, 'sales_funnel.data.sales_funnels.validation.minimum.limit_per_user', 1);
+
+        $periodDays = $this->config->getLimitPerUserForPeriodOptions();
+        if ($funnel?->limit_per_user_for_period !== null
+            && !in_array($funnel->limit_per_user_for_period, $periodDays, true)
+        ) {
+            $periodDays[] = $funnel->limit_per_user_for_period;
+            sort($periodDays);
+        }
+        $periodOptions = [];
+        foreach ($periodDays as $days) {
+            $periodOptions[$days] = $this->translator->translate(
+                'sales_funnel.data.sales_funnels.period_options.days',
+                ['count' => $days],
+            );
+        }
+
+        $form->addSelect(
+            'limit_per_user_for_period',
+            'sales_funnel.data.sales_funnels.fields.limit_per_user_for_period',
+            $periodOptions,
+        )
+            ->setPrompt('sales_funnel.data.sales_funnels.prompt.limit_per_user_for_period')
+            ->setOption('id', 'limit-per-user-for-period')
+            ->setOption('description', 'sales_funnel.data.sales_funnels.description.limit_per_user_for_period');
+
+        $limitPerUser->addCondition(Form::Min, 1)
+            ->toggle('limit-per-user-for-period');
 
         $form->addInteger('funnel_purchase_limit', 'sales_funnel.data.sales_funnels.fields.funnel_purchase_limit')
             ->setNullable()
-            ->addCondition(Form::FILLED)
-            ->addRule(Form::MIN, 'sales_funnel.data.sales_funnels.validation.minimum.funnel_purchase_limit', 1);
+            ->addCondition(Form::Filled)
+            ->addRule(Form::Min, 'sales_funnel.data.sales_funnels.validation.minimum.funnel_purchase_limit', 1);
 
         $sortedByOccurrences = $this->salesFunnelTagsRepository
             ->tagsSortedByOccurrences();
@@ -204,6 +233,11 @@ class SalesFunnelAdminFormFactory
         ];
         unset($values['funnel_purchase_limit']);
 
+        // the period select stays submitted even when hidden by the limit_per_user toggle
+        if (empty($values['limit_per_user'])) {
+            $values['limit_per_user_for_period'] = null;
+        }
+
         if ($values['is_active'] || empty($values['redirect_funnel_id'])) {
             $values['redirect_funnel_id'] = null;
         }
@@ -221,22 +255,23 @@ class SalesFunnelAdminFormFactory
             $this->onUpdate->__invoke($row);
         } else {
             $row = $this->salesFunnelsRepository->add(
-                $values->name,
-                $values->url_key,
-                $values->body,
-                $values['head_meta'] ?? null,
-                $values['head_script'] ?? null,
-                $startAt,
-                $endAt,
-                $values->is_active,
-                $values->only_logged,
-                $values->only_not_logged,
-                $segment,
-                $values->no_access_html,
-                $values->error_html,
-                $values->redirect_funnel_id,
-                $values->limit_per_user,
-                $values->note,
+                name: $values->name,
+                urlKey: $values->url_key,
+                body: $values->body,
+                headMeta: $values['head_meta'] ?? null,
+                headScript: $values['head_script'] ?? null,
+                startAt: $startAt,
+                endAt: $endAt,
+                isActive: $values->is_active,
+                onlyLogged: $values->only_logged,
+                onlyNotLogged: $values->only_not_logged,
+                segment: $segment,
+                noAccessHtml: $values->no_access_html,
+                errorHtml: $values->error_html,
+                redirectFunnelId: $values->redirect_funnel_id,
+                limitPerUser: $values->limit_per_user,
+                note: $values->note,
+                limitPerUserForPeriod: $values->limit_per_user_for_period,
             );
 
             $tags = $form->getComponent('tags')->getRawValue();

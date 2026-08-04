@@ -14,6 +14,7 @@ data:
             start_at: Platný od
             end_at: Platný do
             limit_per_user: Maximální počet nákupů na uživatele
+            limit_per_user_for_period: Období pro maximální počet nákupů
             funnel_purchase_limit: Maximální počet nákupů
             body: HTML obsah
             no_access_html: HTML stránka pro nedovolený přístup
@@ -47,8 +48,13 @@ data:
             start_at: například 14.2. 2019
             end_at: například 14.2.2019
             body: libovolné html
+        prompt:
+            limit_per_user_for_period: Celé období
         description:
             redirect_funnel_id: "Pokud je přesměrování vyplněno, uživatel bude přesměrován na cílové okno a neuvidí obrazovku informující o nedostupnosti nabídky."
+            limit_per_user_for_period: "Počet dní zpětně, za které se počítají zaplacené platby při kontrole limitu. Celé období zohledňuje všechny dosavadní platby uživatele."
+        period_options:
+            days: '%count% dní'
 
 frontend:
     error:
@@ -98,6 +104,8 @@ admin:
         show:
             back: zpět na seznam oken
             basic_informations: Základní informace
+            limit_per_user_for_period: za posledních %count% dní
+            limit_per_user_whole_period: za celé období
             stats: Statistiky
             users: Uživatelé s platbou
             meta: Meta info
