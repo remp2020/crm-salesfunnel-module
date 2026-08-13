@@ -92,6 +92,7 @@ admin:
         show:
             back: vissza a csatornák listájához
             basic_informations: Általános információk
+            copy_url: URL másolása
             stats: Csatornastatisztikák
             users: Felhasználók
             meta: Metaadatok

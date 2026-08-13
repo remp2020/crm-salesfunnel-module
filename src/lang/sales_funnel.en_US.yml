@@ -104,6 +104,7 @@ admin:
         show:
             back: back to sales funnels
             basic_informations: Basic information
+            copy_url: Copy URL
             limit_per_user_for_period: within the last %count% days
             limit_per_user_whole_period: whole period
             stats: Funnel stats

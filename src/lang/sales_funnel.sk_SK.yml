@@ -104,6 +104,7 @@ admin:
         show:
             back: späť na zoznam okien
             basic_informations: Základné informácie
+            copy_url: Kopírovať URL
             limit_per_user_for_period: za posledných %count% dní
             limit_per_user_whole_period: za celé obdobie
             stats: Štatistiky
