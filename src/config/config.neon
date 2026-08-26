@@ -59,6 +59,7 @@ services:
 	- Crm\SalesFunnelModule\Seeders\ConfigsSeeder
 	- Crm\SalesFunnelModule\Seeders\SalesFunnelsSeeder
 	- Crm\SalesFunnelModule\Models\SalesFunnelPaymentCompleteRedirectResolver
+	- Crm\SalesFunnelModule\Models\SalesFunnelRenderer
 
 	paymentCompleteRedirect:
 		setup:

@@ -8,7 +8,6 @@ use Crm\ApplicationModule\Models\Authenticator\LoginCredentials;
 use Crm\ApplicationModule\Models\DataProvider\DataProviderManager;
 use Crm\ApplicationModule\Models\Request;
 use Crm\ApplicationModule\Presenters\FrontendPresenter;
-use Crm\ApplicationModule\Twig\Extensions\ContributteTranslationExtension;
 use Crm\PaymentsModule\Models\CannotProcessPayment;
 use Crm\PaymentsModule\Models\GatewayFactory;
 use Crm\PaymentsModule\Models\Gateways\ProcessResponse;
@@ -27,14 +26,13 @@ use Crm\SalesFunnelModule\DataProviders\UserStoredCardDataProviderInterface;
 use Crm\SalesFunnelModule\DataProviders\ValidateUserFunnelAccessDataProviderInterface;
 use Crm\SalesFunnelModule\Events\PaymentItemContainerReadyEvent;
 use Crm\SalesFunnelModule\Events\SalesFunnelEvent;
+use Crm\SalesFunnelModule\Models\SalesFunnelRenderer;
 use Crm\SalesFunnelModule\Repositories\SalesFunnelsMetaRepository;
 use Crm\SalesFunnelModule\Repositories\SalesFunnelsRepository;
 use Crm\SalesFunnelModule\Repositories\SalesFunnelsStatsRepository;
 use Crm\SegmentModule\Models\SegmentFactoryInterface;
 use Crm\SubscriptionsModule\Models\PaymentItem\SubscriptionTypePaymentItem;
-use Crm\SubscriptionsModule\Models\Subscription\ActualUserSubscription;
 use Crm\SubscriptionsModule\Models\Subscription\SubscriptionTypeHelper;
-use Crm\SubscriptionsModule\Repositories\ContentAccessRepository;
 use Crm\SubscriptionsModule\Repositories\SubscriptionTypesRepository;
 use Crm\UsersModule\Forms\SignInFormFactory;
 use Crm\UsersModule\Models\Auth\InvalidEmailException;
@@ -50,13 +48,10 @@ use Nette\Utils\DateTime;
 use Nette\Utils\Json;
 use Tomaj\Hermes\Emitter;
 use Tracy\Debugger;
-use Twig\Environment;
-use Twig\Extension\SandboxExtension;
-use Twig\Loader\ArrayLoader;
 
 class SalesFunnelFrontendPresenter extends FrontendPresenter
 {
-    public const DEFAULT_ACTION_LAYOUT_NAME = 'default_action_layout_name';
+    public const string DEFAULT_ACTION_LAYOUT_NAME = 'default_action_layout_name';
 
     public function __construct(
         private SalesFunnelsRepository $salesFunnelsRepository,
@@ -66,16 +61,14 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
         private PaymentsRepository $paymentsRepository,
         private PaymentProcessor $paymentProcessor,
         private SegmentFactoryInterface $segmentFactory,
-        private ActualUserSubscription $actualUserSubscription,
         private Emitter $hermesEmitter,
         private AddressesRepository $addressesRepository,
         private UserManager $userManager,
-        private ContentAccessRepository $contentAccessRepository,
         private SignInFormFactory $signInFormFactory,
         private DataProviderManager $dataProviderManager,
         private SubscriptionTypeHelper $subscriptionTypeHelper,
         private UnclaimedUser $unclaimedUser,
-        private SandboxExtension $sandboxExtension,
+        private SalesFunnelRenderer $salesFunnelRenderer,
         private OneStopShop $oneStopShop,
         private UserActionsLogRepository $userActionsLogRepository,
         private GatewayFactory $gatewayFactory,
@@ -135,160 +128,61 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
         }
     }
 
-    public function renderShow($funnel, $referer = null, $values = null, $errors = null, $body = null)
+    public function renderShow($funnel, $referer = null, $values = null, $errors = null)
     {
-        if (!isset($funnel)) {
-            $funnel = $this->request->getPost()['funnel'] ?? null;
-        }
-        if (!isset($body)) {
-            $body = $this->request->getPost()['body'] ?? null;
-        }
-
         $salesFunnel = $this->salesFunnelsRepository->findByUrlKey($funnel);
         if (!$salesFunnel) {
             throw new BadRequestException('Funnel not found');
         }
 
-        $preview = $this->request->query['preview'] ?? null;
+        $previewMode = $this->getPreviewMode();
+        $isPreview = $previewMode !== null;
 
-        if ($preview === null && $salesFunnel->redirect_funnel) {
+        if (!$isPreview && $salesFunnel->redirect_funnel) {
             $this->redirect('show', array_merge(['funnel' => $salesFunnel->redirect_funnel->url_key], $_GET));
         }
 
         $this->validateFunnel($salesFunnel);
 
-        $isLoggedIn = $this->getUser()->isLoggedIn();
-
         if (!$referer) {
             $referer = $this->getReferer();
         }
 
-        $gateways = $this->loadGateways($salesFunnel);
-        $subscriptionTypes = $this->getValidSubscriptionTypes($salesFunnel);
-
-        $addresses = [];
-        $body = $body ?? $salesFunnel->body;
-        $headEnd = $this->applicationConfig->get('header_block') . "\n\n" . $this->applicationConfig->get('sales_funnel_header_block') . "\n\n" . $salesFunnel->head_script;
-
-        $loader = new ArrayLoader([
-            'funnel_template' => $body,
-            'head_template' => $headEnd,
-        ]);
-
-        $twig = new Environment($loader);
-        $twig->addExtension(new ContributteTranslationExtension($this->translator));
-        $twig->addExtension($this->sandboxExtension);
-
-        if ($preview === 'no-user' && $this->isValidPreview()) {
-            $isLoggedIn = false;
+        $user = null;
+        if ($this->getUser()->isLoggedIn() && $previewMode !== 'no-user') {
+            $user = $this->userManager->loadUser($this->getUser());
         }
 
-        if ($isLoggedIn) {
-            $addresses = $this->addressesRepository->addresses($this->usersRepository->find($this->getUser()->id), 'print');
+        $subscriptionTypes = $this->salesFunnelRenderer->getPurchasableSubscriptionTypes($salesFunnel, $isPreview ? null : $user);
+        if ($subscriptionTypes === []) {
+            $this->redirect($isPreview ? 'noSubscriptionTypes' : 'limitReached', $salesFunnel->id);
         }
 
-        $contentAccess = [];
-        foreach ($subscriptionTypes as $index => $subscriptionType) {
-            $contentAccess[$subscriptionType['code']] = $this->contentAccessRepository->pairsForSubscriptionType(
-                subscriptionType: $subscriptionType,
-                key: 'name',
-                value: 'name',
-            );
-
-            // casting to array for backwards compatibility and easier Twig access
-            $subscriptionTypes[$index] = $subscriptionType->toArray();
-        }
-
-        $params = [
-            'headEnd' => $headEnd,
-            'funnel' => $salesFunnel,
-            'isLogged' => $isLoggedIn,
-            'gateways' => $gateways,
-            'subscriptionTypes' => $subscriptionTypes,
-            'contentAccess' => $contentAccess,
-            'addresses' => $addresses,
-            'meta' => $this->salesFunnelsMetaRepository->all($salesFunnel),
-            'actualUserSubscription' => $this->actualUserSubscription,
-            'referer' => isset($referer) ? urlencode($referer) : null,
-            'values' => $values ? Json::decode($values, Json::FORCE_ARRAY) : null,
-            'errors' => $errors ? Json::decode($errors, Json::FORCE_ARRAY) : null,
-            'locale' => $this->translator->getLocale(),
-        ];
-
-        /** @var SalesFunnelVariablesDataProviderInterface[] $providers */
-        $providers = $this->dataProviderManager->getProviders(
-            'sales_funnel.dataprovider.twig_variables',
-            SalesFunnelVariablesDataProviderInterface::class,
+        $template = $this->salesFunnelRenderer->render(
+            salesFunnel: $salesFunnel,
+            subscriptionTypes: $subscriptionTypes,
+            user: $user,
+            referer: $referer,
+            values: $values ? Json::decode($values, Json::FORCE_ARRAY) : null,
+            errors: $errors ? Json::decode($errors, Json::FORCE_ARRAY) : null,
         );
-        foreach ($providers as $provider) {
-            foreach ($provider->provide([
-                SalesFunnelVariablesDataProviderInterface::PARAM_SALES_FUNNEL => $salesFunnel,
-            ]) as $name => $value) {
-                $params[$name] = $value;
-            }
+
+        // Admin previews would increase show stats and fire `sales_funnel` scenario triggers.
+        if (!$isPreview) {
+            $this->emitter->emit(new SalesFunnelEvent(
+                $salesFunnel,
+                $this->getUser(),
+                SalesFunnelsStatsRepository::TYPE_SHOW,
+                Request::getUserAgent(),
+            ));
         }
-
-        if ($isLoggedIn) {
-            $params['email'] = $this->getUser()->getIdentity()->email;
-            $params['user_id'] = $this->getUser()->getIdentity()->getId();
-        }
-
-        $params['headEnd'] = $twig->render('head_template', $params);
-        $template = $twig->render('funnel_template', $params);
-
-        $ua = Request::getUserAgent();
-        $this->emitter->emit(new SalesFunnelEvent($salesFunnel, $this->getUser(), SalesFunnelsStatsRepository::TYPE_SHOW, $ua));
 
         $this->sendResponse(new TextResponse($template));
     }
 
-    private function loadGateways(ActiveRow $salesFunnel)
-    {
-        $gateways = [];
-        $gatewayRows = $this->salesFunnelsRepository->getSalesFunnelGateways($salesFunnel);
-        /** @var ActiveRow $gatewayRow */
-        foreach ($gatewayRows as $gatewayRow) {
-            $gateways[$gatewayRow->code] = $gatewayRow->toArray();
-        }
-        return $gateways;
-    }
-
-    private function loadSubscriptionTypes(ActiveRow $salesFunnel)
-    {
-        $subscriptionTypes = [];
-        $subscriptionTypesRows = $this->salesFunnelsRepository->getSalesFunnelSubscriptionTypes($salesFunnel);
-        /** @var ActiveRow $subscriptionTypesRow */
-        foreach ($subscriptionTypesRows as $subscriptionTypesRow) {
-            $subscriptionTypes[$subscriptionTypesRow->code] = $subscriptionTypesRow;
-        }
-        return $subscriptionTypes;
-    }
-
-    private function getValidSubscriptionTypes(ActiveRow $salesFunnel)
-    {
-        $subscriptionTypes = $this->loadSubscriptionTypes($salesFunnel);
-
-        $isLoggedIn = $this->getUser()->isLoggedIn();
-        if ($isLoggedIn && !$this->isValidPreview()) {
-            $subscriptionTypes = $this->filterSubscriptionTypes($subscriptionTypes, $this->getUser()->id);
-            if (count($subscriptionTypes) === 0) {
-                $this->redirect('limitReached', $salesFunnel->id);
-            }
-        }
-        if (count($subscriptionTypes) === 0) {
-            if ($this->isValidPreview()) {
-                $this->redirect('noSubscriptionTypes', $salesFunnel->id);
-            } else {
-                $this->redirect('limitReached', $salesFunnel->id);
-            }
-        }
-
-        return $subscriptionTypes;
-    }
-
     private function validateFunnel(?ActiveRow $funnel = null)
     {
-        if ($this->isValidPreview()) {
+        if ($this->getPreviewMode() !== null) {
             return;
         }
 
@@ -378,13 +272,6 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
             $this->emitter->emit(new SalesFunnelEvent($funnel, $this->getUser(), SalesFunnelsStatsRepository::TYPE_ERROR, $ua));
             $this->redirectOrSendJson('invalid');
         }
-
-        $subscriptionTypes = $this->loadSubscriptionTypes($funnel);
-
-        if (!isset($subscriptionTypes[$subscriptionType->code])) {
-            $this->emitter->emit(new SalesFunnelEvent($funnel, $this->getUser(), SalesFunnelsStatsRepository::TYPE_ERROR, $ua));
-            $this->redirectOrSendJson('invalid');
-        }
     }
 
     private function validateGateway(?ActiveRow $paymentGateway, ActiveRow $funnel)
@@ -400,13 +287,6 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
             ->where(['payment_gateway_id' => $paymentGateway->id])
             ->count('*');
         if (!$salesFunnelHasPaymentGateway) {
-            $this->emitter->emit(new SalesFunnelEvent($funnel, $this->getUser(), SalesFunnelsStatsRepository::TYPE_ERROR, $ua));
-            $this->redirectOrSendJson('invalid');
-        }
-
-        $gateways = $this->loadGateways($funnel);
-
-        if (!isset($gateways[$paymentGateway->code])) {
             $this->emitter->emit(new SalesFunnelEvent($funnel, $this->getUser(), SalesFunnelsStatsRepository::TYPE_ERROR, $ua));
             $this->redirectOrSendJson('invalid');
         }
@@ -748,23 +628,6 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
         return $form;
     }
 
-    private function filterSubscriptionTypes(array $subscriptionTypes, int $userId)
-    {
-        $userSubscriptionsTypesCount = $this->subscriptionsRepository->userSubscriptionTypesCounts($userId, array_column($subscriptionTypes, 'id'));
-        foreach ($subscriptionTypes as $code => $subscriptionType) {
-            if (!isset($userSubscriptionsTypesCount[$subscriptionType['id']])) {
-                continue;
-            }
-
-            if ($subscriptionType['limit_per_user'] !== null
-                && $subscriptionType['limit_per_user'] <= $userSubscriptionsTypesCount[$subscriptionType['id']]
-            ) {
-                unset($subscriptionTypes[$code]);
-            }
-        }
-        return $subscriptionTypes;
-    }
-
     private function validateFunnelLimitPerUserCount(ActiveRow $funnel, $userId)
     {
         if ($funnel->limit_per_user && $userId) {
@@ -819,10 +682,14 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
         ]);
     }
 
-    private function isValidPreview(): bool
+    private function getPreviewMode(): ?string
     {
-        return isset($this->request->query['preview']) &&
-            $this->getUser()->isAllowed('SalesFunnel:SalesFunnelsAdmin', 'preview');
+        $previewMode = $this->request->getQuery('preview');
+        if ($previewMode === null || !$this->getUser()->isAllowed('SalesFunnel:SalesFunnelsAdmin', 'preview')) {
+            return null;
+        }
+
+        return $previewMode;
     }
 
     private function displayCantAccessFunnel(
