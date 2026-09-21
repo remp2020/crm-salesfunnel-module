@@ -138,7 +138,7 @@ non-standard.
 * `custom`: Key-value pairs (i.e. `custom[key]=value`) which will be stored as text in payment's note field.
 * `allow_redirect`: Flag specifying whether the response should contain redirect headers or just JSON response
 with URL of payment gateway. Useful if you don't want to redirect user away from CRM, but only submit values via AJAX
-and display payment gateway within iframe of a modal window. 
+and display payment gateway within iframe of a modal window.
 
 If the form is valid, backend will create new unfinished payment for the user and the server response will contain
 redirection to payment gateway.

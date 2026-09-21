@@ -19,6 +19,7 @@ use Crm\PaymentsModule\Models\PaymentItem\PaymentItemContainer;
 use Crm\PaymentsModule\Models\PaymentProcessor;
 use Crm\PaymentsModule\Repositories\PaymentGatewaysRepository;
 use Crm\PaymentsModule\Repositories\PaymentsRepository;
+use Crm\SalesFunnelModule\DataProviders\SalesFunnelAccessDeniedException;
 use Crm\SalesFunnelModule\DataProviders\SalesFunnelPaymentFormDataProviderInterface;
 use Crm\SalesFunnelModule\DataProviders\SalesFunnelVariablesDataProviderInterface;
 use Crm\SalesFunnelModule\DataProviders\TrackerDataProviderInterface;
@@ -44,6 +45,7 @@ use Nette\Application\BadRequestException;
 use Nette\Application\Responses\TextResponse;
 use Nette\Database\Table\ActiveRow;
 use Nette\Security\AuthenticationException;
+use Nette\Security\IIdentity;
 use Nette\Utils\DateTime;
 use Nette\Utils\Json;
 use Tomaj\Hermes\Emitter;
@@ -229,17 +231,11 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
             $this->validateFunnelLimitPerUserCount($funnel, $this->getUser()->id);
         }
 
-        /** @var ValidateUserFunnelAccessDataProviderInterface[] $providers */
-        $providers = $this->dataProviderManager->getProviders('salesfunnel.dataprovider.validate_funnel', ValidateUserFunnelAccessDataProviderInterface::class);
-        foreach ($providers as $sorting => $provider) {
-            $canAccessFunnel = $provider->provide([
-                'user' => $this->getUser()->isLoggedIn() ? $this->getUser()->getIdentity() : null,
-                'sales_funnel' => $funnel,
-            ]);
-            if (!$canAccessFunnel) {
-                $this->displayCantAccessFunnel($funnel, $ua);
-            }
-        }
+        $this->validateFunnelAccess(
+            $funnel,
+            $this->getUser()->isLoggedIn() ? $this->getUser()->getIdentity() : null,
+            $ua,
+        );
     }
 
     private function validateFunnelSegment(ActiveRow $funnel, int $userId): bool
@@ -416,17 +412,7 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
             $this->redirectOrSendJson('noAccess', $funnel->id);
         }
 
-        /** @var ValidateUserFunnelAccessDataProviderInterface[] $providers */
-        $providers = $this->dataProviderManager->getProviders('salesfunnel.dataprovider.validate_funnel', ValidateUserFunnelAccessDataProviderInterface::class);
-        foreach ($providers as $sorting => $provider) {
-            $canAccessFunnel = $provider->provide([
-                'user' => $user,
-                'sales_funnel' => $funnel,
-            ]);
-            if (!$canAccessFunnel) {
-                $this->displayCantAccessFunnel($funnel, $ua);
-            }
-        }
+        $this->validateFunnelAccess($funnel, $user, $ua);
 
         if (!$this->subscriptionTypeHelper->validateSubscriptionTypeCounts($subscriptionType, $user)) {
             $this->redirectOrSendJson('limitReached', $funnel->id);
@@ -692,13 +678,42 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
         return $previewMode;
     }
 
+    private function validateFunnelAccess(ActiveRow $funnel, ActiveRow|IIdentity|null $user, string $userAgent): void
+    {
+        /** @var ValidateUserFunnelAccessDataProviderInterface[] $providers */
+        $providers = $this->dataProviderManager->getProviders(
+            'salesfunnel.dataprovider.validate_funnel',
+            ValidateUserFunnelAccessDataProviderInterface::class,
+        );
+        foreach ($providers as $provider) {
+            try {
+                if (!$provider->provide(['user' => $user, 'sales_funnel' => $funnel])) {
+                    $this->displayCantAccessFunnel($funnel, $userAgent);
+                }
+            } catch (SalesFunnelAccessDeniedException $e) {
+                $this->displayCantAccessFunnel($funnel, $userAgent, $e->getRedirectUrl());
+            }
+        }
+    }
+
     private function displayCantAccessFunnel(
         ActiveRow $funnel,
         string $userAgent,
+        ?string $redirectUrl = null,
     ): void {
         $this->emitter->emit(
             new SalesFunnelEvent($funnel, $this->getUser(), SalesFunnelsStatsRepository::TYPE_NO_ACCESS, $userAgent),
         );
+        if ($redirectUrl !== null) {
+            if ($this->isAllowedRedirect() === true) {
+                $this->redirectUrl($redirectUrl);
+            }
+
+            $this->sendJson([
+                'status' => 'error',
+                'url' => $redirectUrl,
+            ]);
+        }
         $this->redirectOrSendJson('noAccess', $funnel->id);
     }
 

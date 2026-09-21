@@ -12,6 +12,7 @@ interface ValidateUserFunnelAccessDataProviderInterface extends DataProviderInte
      * @param array{sales_funnel: ActiveRow, user?: ActiveRow} $params
      * @return bool
      * @throws DataProviderException
+     * @throws SalesFunnelAccessDeniedException when access is denied with a custom redirect URL
      */
     public function provide(array $params): bool;
 }
