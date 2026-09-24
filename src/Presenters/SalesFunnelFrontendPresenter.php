@@ -81,7 +81,7 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
     public function startup()
     {
         parent::startup();
-        if ($this->action != 'default') {
+        if ($this->getAction() != 'default') {
             if ($this->layoutManager->exists($this->getLayoutName() . '_plain')) {
                 $this->setLayout($this->getLayoutName() . '_plain');
             } else {

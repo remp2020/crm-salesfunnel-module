@@ -48,7 +48,7 @@ class NewSubscriptionWidget extends BaseLazyWidget
             throw new BadRequestException('invalid sales funnel urlKey: ' . $funnel);
         }
 
-        $linkParams = $this->presenter->getRequest()?->getParameters() ?? [];
+        $linkParams = $this->presenter->getRequest()->getParameters();
 
         $linkParams['funnel'] = $salesFunnel->url_key;
         $linkParams['referer'] = $this->presenter->getReferer();
