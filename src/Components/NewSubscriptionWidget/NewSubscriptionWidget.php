@@ -12,7 +12,7 @@ use Nette\Application\LinkGenerator;
 /**
  * Widget that renders page with iframe containing sales funnels.
  *
- * @property FrontendPresenter $presenter
+ * @method FrontendPresenter getPresenter()
  * @package Crm\SalesFunnelModule\Components
  */
 class NewSubscriptionWidget extends BaseLazyWidget
@@ -48,19 +48,19 @@ class NewSubscriptionWidget extends BaseLazyWidget
             throw new BadRequestException('invalid sales funnel urlKey: ' . $funnel);
         }
 
-        $linkParams = $this->presenter->getRequest()->getParameters();
+        $linkParams = $this->getPresenter()->getRequest()->getParameters();
 
         $linkParams['funnel'] = $salesFunnel->url_key;
-        $linkParams['referer'] = $this->presenter->getReferer();
+        $linkParams['referer'] = $this->getPresenter()->getReferer();
         $linkParams['payment_gateway_id'] = null;
         $linkParams['subscription_type_id'] = null;
 
-        $paymentGatewayId = $this->presenter->getParameter('payment_gateway_id');
+        $paymentGatewayId = $this->getPresenter()->getParameter('payment_gateway_id');
         if (isset($paymentGatewayId)) {
             $linkParams['payment_gateway_id'] = (int) $paymentGatewayId;
         }
 
-        $subscriptionTypeId = $this->presenter->getParameter('subscription_type_id');
+        $subscriptionTypeId = $this->getPresenter()->getParameter('subscription_type_id');
         if (isset($subscriptionTypeId)) {
             $linkParams['subscription_type_id'] = (int) $subscriptionTypeId;
         }
