@@ -60,6 +60,7 @@ services:
 	- Crm\SalesFunnelModule\Seeders\SalesFunnelsSeeder
 	- Crm\SalesFunnelModule\Models\SalesFunnelPaymentCompleteRedirectResolver
 	- Crm\SalesFunnelModule\Models\SalesFunnelRenderer
+	- Crm\SalesFunnelModule\Models\SalesFunnelAccessValidator
 
 	paymentCompleteRedirect:
 		setup:

@@ -19,19 +19,17 @@ use Crm\PaymentsModule\Models\PaymentItem\PaymentItemContainer;
 use Crm\PaymentsModule\Models\PaymentProcessor;
 use Crm\PaymentsModule\Repositories\PaymentGatewaysRepository;
 use Crm\PaymentsModule\Repositories\PaymentsRepository;
-use Crm\SalesFunnelModule\DataProviders\SalesFunnelAccessDeniedException;
 use Crm\SalesFunnelModule\DataProviders\SalesFunnelPaymentFormDataProviderInterface;
 use Crm\SalesFunnelModule\DataProviders\SalesFunnelVariablesDataProviderInterface;
 use Crm\SalesFunnelModule\DataProviders\TrackerDataProviderInterface;
 use Crm\SalesFunnelModule\DataProviders\UserStoredCardDataProviderInterface;
-use Crm\SalesFunnelModule\DataProviders\ValidateUserFunnelAccessDataProviderInterface;
 use Crm\SalesFunnelModule\Events\PaymentItemContainerReadyEvent;
 use Crm\SalesFunnelModule\Events\SalesFunnelEvent;
+use Crm\SalesFunnelModule\Models\SalesFunnelAccessValidator;
 use Crm\SalesFunnelModule\Models\SalesFunnelRenderer;
 use Crm\SalesFunnelModule\Repositories\SalesFunnelsMetaRepository;
 use Crm\SalesFunnelModule\Repositories\SalesFunnelsRepository;
 use Crm\SalesFunnelModule\Repositories\SalesFunnelsStatsRepository;
-use Crm\SegmentModule\Models\SegmentFactoryInterface;
 use Crm\SubscriptionsModule\Models\PaymentItem\SubscriptionTypePaymentItem;
 use Crm\SubscriptionsModule\Models\Subscription\SubscriptionTypeHelper;
 use Crm\SubscriptionsModule\Repositories\SubscriptionTypesRepository;
@@ -62,7 +60,6 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
         private PaymentGatewaysRepository $paymentGatewaysRepository,
         private PaymentsRepository $paymentsRepository,
         private PaymentProcessor $paymentProcessor,
-        private SegmentFactoryInterface $segmentFactory,
         private Emitter $hermesEmitter,
         private AddressesRepository $addressesRepository,
         private UserManager $userManager,
@@ -74,6 +71,7 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
         private OneStopShop $oneStopShop,
         private UserActionsLogRepository $userActionsLogRepository,
         private GatewayFactory $gatewayFactory,
+        private SalesFunnelAccessValidator $salesFunnelAccessValidator,
     ) {
         parent::__construct();
     }
@@ -195,20 +193,10 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
             $this->redirectOrSendJson('inactive');
         }
 
-        if (!$funnel->is_active) {
+        if (!$this->salesFunnelAccessValidator->isFunnelActive($funnel)) {
             $this->emitter->emit(new SalesFunnelEvent($funnel, $this->getUser(), SalesFunnelsStatsRepository::TYPE_NO_ACCESS, $ua));
             $this->redirectOrSendJson('inactive');
             return;
-        }
-
-        if ($funnel->start_at && $funnel->start_at > new DateTime()) {
-            $this->emitter->emit(new SalesFunnelEvent($funnel, $this->getUser(), SalesFunnelsStatsRepository::TYPE_NO_ACCESS, $ua));
-            $this->redirectOrSendJson('inactive');
-        }
-
-        if ($funnel->end_at && $funnel->end_at < new DateTime()) {
-            $this->emitter->emit(new SalesFunnelEvent($funnel, $this->getUser(), SalesFunnelsStatsRepository::TYPE_NO_ACCESS, $ua));
-            $this->redirectOrSendJson('inactive');
         }
 
         if ($funnel->only_logged && !$this->getUser()->isLoggedIn()) {
@@ -222,7 +210,7 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
 
         $this->validateFunnelPurchaseLimit($funnel);
 
-        if ($this->getUser()->isLoggedIn() && $this->validateFunnelSegment($funnel, $this->getUser()->getId()) === false) {
+        if ($this->getUser()->isLoggedIn() && !$this->salesFunnelAccessValidator->isUserInFunnelSegment($funnel, $this->getUser()->getId())) {
             $this->emitter->emit(new SalesFunnelEvent($funnel, $this->getUser(), SalesFunnelsStatsRepository::TYPE_NO_ACCESS, $ua));
             $this->redirectOrSendJson('noAccess', $funnel->id);
         }
@@ -236,20 +224,6 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
             $this->getUser()->isLoggedIn() ? $this->getUser()->getIdentity() : null,
             $ua,
         );
-    }
-
-    private function validateFunnelSegment(ActiveRow $funnel, int $userId): bool
-    {
-        if ($funnel->segment_id) {
-            $segmentRow = $funnel->segment;
-            if ($segmentRow) {
-                $segment = $this->segmentFactory->buildSegment($segmentRow->code);
-
-                return $segment->isIn('id', $userId);
-            }
-        }
-
-        return true;
     }
 
     private function validateSubscriptionType(?ActiveRow $subscriptionType, ActiveRow $funnel)
@@ -407,7 +381,7 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
 
         $this->validateFunnelPurchaseLimit($funnel);
 
-        if ($this->validateFunnelSegment($funnel, $user->id) === false) {
+        if (!$this->salesFunnelAccessValidator->isUserInFunnelSegment($funnel, $user->id)) {
             $this->emitter->emit(new SalesFunnelEvent($funnel, $user, SalesFunnelsStatsRepository::TYPE_NO_ACCESS, $ua));
             $this->redirectOrSendJson('noAccess', $funnel->id);
         }
@@ -614,37 +588,18 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
         return $form;
     }
 
-    private function validateFunnelLimitPerUserCount(ActiveRow $funnel, $userId)
+    private function validateFunnelLimitPerUserCount(ActiveRow $funnel, $userId): void
     {
-        if ($funnel->limit_per_user && $userId) {
-            $paidFrom = null;
-            if ($funnel->limit_per_user_for_period !== null) {
-                $paidFrom = DateTime::from("-{$funnel->limit_per_user_for_period} days");
-            }
-            $salesFunnelUserCount = $this->salesFunnelsRepository->getAllUserSalesFunnelPurchases(
-                $userId,
-                $funnel->id,
-                $paidFrom,
-            )->count(':payments.id');
-            if ($salesFunnelUserCount >= $funnel->limit_per_user) {
-                $this->redirectOrSendJson('limitReached', $funnel->id);
-            }
+        if ($userId && $this->salesFunnelAccessValidator->isUserLimitReached($funnel, (int) $userId)) {
+            $this->redirectOrSendJson('limitReached', $funnel->id);
         }
-        return true;
     }
 
-    private function validateFunnelPurchaseLimit(ActiveRow $funnel)
+    private function validateFunnelPurchaseLimit(ActiveRow $funnel): void
     {
-        $purchaseLimit = $this->salesFunnelsMetaRepository->get($funnel, 'funnel_purchase_limit');
-        if ($purchaseLimit) {
-            $purchases = $this->salesFunnelsRepository->getAllSalesFunnelPurchases($funnel->id)
-                                                      ->count(':payments.id');
-
-            if ($purchases >= (int) $purchaseLimit) {
-                $this->redirectOrSendJson('limitReached', $funnel->id);
-            }
+        if ($this->salesFunnelAccessValidator->isPurchaseLimitReached($funnel)) {
+            $this->redirectOrSendJson('limitReached', $funnel->id);
         }
-        return true;
     }
 
     private function isAllowedRedirect(): bool
@@ -680,19 +635,9 @@ class SalesFunnelFrontendPresenter extends FrontendPresenter
 
     private function validateFunnelAccess(ActiveRow $funnel, ActiveRow|IIdentity|null $user, string $userAgent): void
     {
-        /** @var ValidateUserFunnelAccessDataProviderInterface[] $providers */
-        $providers = $this->dataProviderManager->getProviders(
-            'salesfunnel.dataprovider.validate_funnel',
-            ValidateUserFunnelAccessDataProviderInterface::class,
-        );
-        foreach ($providers as $provider) {
-            try {
-                if (!$provider->provide(['user' => $user, 'sales_funnel' => $funnel])) {
-                    $this->displayCantAccessFunnel($funnel, $userAgent);
-                }
-            } catch (SalesFunnelAccessDeniedException $e) {
-                $this->displayCantAccessFunnel($funnel, $userAgent, $e->getRedirectUrl());
-            }
+        $denial = $this->salesFunnelAccessValidator->validateDataProviders($funnel, $user);
+        if ($denial !== null) {
+            $this->displayCantAccessFunnel($funnel, $userAgent, $denial->redirectUrl);
         }
     }
 
