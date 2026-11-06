@@ -1,6 +1,6 @@
 {block #head}
-    {control simpleWidget 'frontend.payment.success.head_tracking', $payment}
-    {control simpleWidget 'frontend.payment.success.head', $payment}
+    {control simpleWidget, 'frontend.payment.success.head_tracking', $payment}
+    {control simpleWidget, 'frontend.payment.success.head', $payment}
 
     <link rel="stylesheet" type="text/css" href="{$basePath}/layouts/default/css/thank-you.css?v=2">
 
@@ -24,7 +24,7 @@
 
         <div class="additionalform">
             {snippet paymentSuccessTop}
-                {control simpleWidget 'frontend.payment.success.top'}
+                {control simpleWidget, 'frontend.payment.success.top'}
             {/snippet}
         </div>
 
@@ -35,7 +35,7 @@
             {_sales_funnel.frontend.success_page.pass_sent, [
                 'email' => $subscription->user->email,
             ]}
-            {control snippet 'success-message'}
+            {control snippet, 'success-message'}
         </p>
     </div>
 
@@ -43,15 +43,15 @@
     <div class="col-md-12">
         <div class="additionalform">
             <div class="thank-you-warn hide-if-no-forms">
-                {control snippet 'success-attention'}
+                {control snippet, 'success-attention'}
             </div>
 
-            {control simpleWidget 'frontend.payment.success.bottom', $payment}
+            {control simpleWidget, 'frontend.payment.success.bottom', $payment}
 
             <hr class="hide-if-no-forms" />
 
             <div id="finish">
-                {control simpleWidget 'frontend.payment.success.finish_registration', $payment}
+                {control simpleWidget, 'frontend.payment.success.finish_registration', $payment}
             </div>
         </div>
     </div>

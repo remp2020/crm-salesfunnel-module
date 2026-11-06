@@ -19,14 +19,14 @@
     <hr>
   </div>
   <div class="col-md-12">
-    {control simpleWidget 'sales_funnels.admin.listing', $funnels->fetchAll()}
+    {control simpleWidget, 'sales_funnels.admin.listing', $funnels->fetchAll()}
   </div>
   <div class="col-md-12">
     <h3>
       {_'sales_funnel.admin.sales_funnels.default.inactive'}
       <small> / {_'system.total'} {$inactiveFunnels->count('*')}</small>
     </h3>
-    {control simpleWidget 'sales_funnels.admin.listing', $inactiveFunnels->fetchAll()}
+    {control simpleWidget, 'sales_funnels.admin.listing', $inactiveFunnels->fetchAll()}
   </div>
 </div>
 
